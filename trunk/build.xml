@@ -1,0 +1,85 @@
+<project name="sqlsheet" default="default" basedir=".">
+
+  <property file='build.properties'/>
+
+  <!-- put all of the lib jars into a path -->
+  <path id="project.lib.path.ref">
+    <fileset dir='${lib.dir}' >
+      <include name='*.jar'/>
+    </fileset>
+  </path>
+  
+  <property name='project.lib.path' refid='project.lib.path.ref' />
+  
+  <target name='default' depends='clean,compile,jar'/>
+  
+  <target name='clean'>
+    <delete dir='${local.dir}'/>
+  </target>
+
+  <target name='compile'>
+    <mkdir dir='${classes.dir}'/>
+    <javac srcdir='${basedir}/src'
+           source='1.5'
+           debug='true'
+           debuglevel='lines,vars,source'
+           destdir='${classes.dir}'
+           classpath='${project.lib.path}'
+           deprecation='no'
+           nowarn='yes' />
+  </target>
+
+  <target name='jar' depends='clean, compile, stamp'>
+	<jar destfile='${output.jar}' 
+		 basedir='${classes.dir}' 
+		 manifest='${classes.dir}/META-INF/MANIFEST.MF' />
+  </target>
+
+  <target name='javadoc'>
+    <javadoc packagenames='net.pcal.**'
+             overview='overview.html'
+		     destdir='${local.dir}/javadoc'
+			 failonerror='true'>
+      <fileset dir='src'>
+        <include name='**/*.java'/>
+      </fileset>
+    </javadoc>
+  </target>
+
+  <target name='distro' depends='jar, javadoc'>
+    <copy todir="${local.dir}">
+      <fileset dir="${basedir}">
+		<include name='src/**/*'/>
+      </fileset>
+      <fileset file="LICENSE"/>
+      <fileset file="README"/>
+      <fileset file="build.xml"/>
+      <fileset file="build.properties"/>
+    </copy>	
+	<delete dir='${classes.dir}'/>
+	<zip destfile='${output.zip}' 
+		 basedir='${local.dir}' />
+  </target>
+
+
+   <!--
+	stamp revision information into the jar
+   -->  
+  <target name='stamp'>
+    <exec executable='svnversion' outputproperty='revision'>
+      <arg line='-n'/>
+    </exec>
+    <tstamp>
+      <format property="timestamp" pattern="dd-MMM-yy HH:mm:ss" />
+    </tstamp>
+	<mkdir dir='${classes.dir}/META-INF'/>
+	<manifest file='${classes.dir}/META-INF/MANIFEST.MF'>
+      <attribute name="build-user" value="${user.name}"/>
+      <attribute name="build-revision" value="${revision}"/>
+      <attribute name="build-date" value="${timestamp}"/>
+    </manifest>
+  </target>
+
+
+
+</project>
