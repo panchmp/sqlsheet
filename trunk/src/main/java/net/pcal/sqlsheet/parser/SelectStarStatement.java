@@ -16,10 +16,14 @@
 package net.pcal.sqlsheet.parser;
 
 /**
- * Marker interface for objects which describe a SQL parsed statement.
- * 
+ * Handle on a parsed SQL statement of the form
+ * <p/>
+ * SELECT * FROM xxx.
+ *
  * @author <a href='http://www.pcal.net'>pcal</a>
  */
-public interface ParsedStatement {
+public interface SelectStarStatement extends ParsedStatement {
+
+    public String getTable();
 
 }

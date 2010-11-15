@@ -16,16 +16,10 @@
 package net.pcal.sqlsheet.parser;
 
 /**
- * Used to represent a jdbc parameter ('?') in a query for a PreparedSatement.
- * A singleton with no fields and no methods. Possibly dumbest class in the
- * world.
- * 
+ * Marker interface for objects which describe a SQL parsed statement.
+ *
  * @author <a href='http://www.pcal.net'>pcal</a>
  */
-public class JdbcParameter {
-
-  public static JdbcParameter INSTANCE = new JdbcParameter();
-
-  private JdbcParameter() {}
+public interface ParsedStatement {
 
 }
