@@ -4,9 +4,9 @@
 
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.pcal</groupId>
+    <groupId>com.google.code</groupId>
     <artifactId>sqlsheet</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.0-SNAPSHOT</version>
     <name>sqlsheet</name>
 
     <description>Jdbc API for xls/xlsx files using POI</description>
@@ -19,15 +19,14 @@
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>3.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.6</version>
+            <version>3.7</version>
         </dependency>
     </dependencies>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <build>
         <plugins>
@@ -56,6 +55,35 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.5</version>
             </plugin>
@@ -69,7 +97,49 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.5</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>2.1.1</version>
+            </plugin>
         </plugins>
     </build>
+
+    <developers>
+        <developer>
+            <name>Michael Panchenko</name>
+            <email>panchmp@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</connection>
+        <developerConnection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</developerConnection>
+        <url>https://sqlsheet.googlecode.com/svn/trunk/</url>
+    </scm>
+    <issueManagement>
+        <system>Google Code Issue Tracking</system>
+        <url>https://code.google.com/p/sqlsheet/issues/list</url>
+    </issueManagement>
+
+    <distributionManagement>
+        <!-- use the following if you're not using a snapshot version. -->
+        <repository>
+            <id>sqlsheet.googlecode.releases</id>
+            <name>sqlsheet.googlecode.releases</name>
+            <url>dav:https://sqlsheet.googlecode.com/svn/maven2/</url>
+        </repository>
+        <!-- use the following if you ARE using a snapshot version. -->
+        <snapshotRepository>
+            <id>sqlsheet.googlecode.snapshots</id>
+            <name>sqlsheet.googlecode.snapshots</name>
+            <url>dav:https://sqlsheet.googlecode.com/svn/maven2-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
