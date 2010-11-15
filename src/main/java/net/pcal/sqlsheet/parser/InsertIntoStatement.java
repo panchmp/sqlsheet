@@ -19,17 +19,17 @@ import java.util.List;
 
 /**
  * Handle on a parsed SQL statement of the form
- * 
+ * <p/>
  * INSERT INTO xxx (xxx) VALUE (xxx).
- * 
+ *
  * @author <a href='http://www.pcal.net'>pcal</a>
  */
 public interface InsertIntoStatement extends ParsedStatement {
 
-  public String getTable();
+    public String getTable();
 
-  public List<String> getColumns();
+    public List<String> getColumns();
 
-  public List<Object> getValues();
+    public List<Object> getValues();
 
 }
