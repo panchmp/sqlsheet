@@ -115,6 +115,10 @@
             <name>Michael Panchenko</name>
             <email>panchmp@gmail.com</email>
         </developer>
+        <developer>
+            <name>Ivan Vasyliev</name>
+            <email>vasilievip@gmail.com</email>
+        </developer>		
     </developers>
 
     <scm>
