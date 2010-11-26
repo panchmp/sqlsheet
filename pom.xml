@@ -14,6 +14,8 @@
             <groupId>net.sf</groupId>
             <artifactId>jsqlparser</artifactId>
             <version>0.6.2.a</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jsqlparser-0.6.2.a.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -139,5 +141,13 @@
             <url>dav:https://sqlsheet.googlecode.com/svn/maven2-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
+
+
+    <!--repositories>
+        <repository>
+          <id>private</id>
+          <url>file://${project.basedir}/lib/</url>
+        </repository>
+    </repositories-->
 
 </project>
