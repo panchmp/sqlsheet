@@ -21,6 +21,8 @@ package net.pcal.sqlsheet.parser;
  * world.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
+ *
  */
 public class JdbcParameter {
 

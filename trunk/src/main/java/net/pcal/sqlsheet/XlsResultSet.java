@@ -29,27 +29,17 @@ import java.util.Map;
  * SqlSheet implementation of java.sql.ResultSet.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsResultSet implements ResultSet {
 
-    // =========================================================================
-    // Constants
-
     private static final double BAD_DOUBLE = 0;
-
-    // =========================================================================
-    // Fields
-
     private Workbook workbook;
     private Sheet sheet;
     private XlsResultSetMetaData metadata;
-
     private int firstSheetRowOffset = 0;
     private int cursorSheetRow = firstSheetRowOffset - 1;
     private CellStyle dateStyle = null;
-
-    // =========================================================================
-    // Constructors
 
     public XlsResultSet(Workbook wb, Sheet s) throws SQLException {
         if (s == null) throw new IllegalArgumentException("null sheet");
@@ -75,9 +65,6 @@ public class XlsResultSet implements ResultSet {
         metadata = null;
     }
 
-    // =========================================================================
-    // Public methods
-
     /**
      * Set the style to be applied to updated or created Date cells.
      */
@@ -85,15 +72,9 @@ public class XlsResultSet implements ResultSet {
         this.dateStyle = style;
     }
 
-    // =========================================================================
-    // ResultSet implementation
-
     public ResultSetMetaData getMetaData() throws SQLException {
         return metadata;
     }
-
-    // =========================================================================
-    // ResultSet implementation - getters
 
     public boolean getBoolean(int jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
@@ -164,11 +145,8 @@ public class XlsResultSet implements ResultSet {
     }
 
     private static Object getObject(Cell cell) throws SQLException {
-
         try {
-
             if (cell == null) return null;
-
             switch (cell.getCellType()) {
                 case Cell.CELL_TYPE_BOOLEAN:
                     return cell.getBooleanCellValue();
@@ -184,9 +162,7 @@ public class XlsResultSet implements ResultSet {
                 default:
                     return null;
             }
-
         } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
             throw wrapped(e);
         }
     }
@@ -216,9 +192,6 @@ public class XlsResultSet implements ResultSet {
         Cell cell = getCell(jdbcColumn);
         return cell == null ? null : cell.getStringCellValue();
     }
-
-    // =========================================================================
-    // ResultSet implementation - update methods
 
     public void updateBoolean(int jdbcColumn, boolean x) throws SQLException {
         Cell cell = getCell(jdbcColumn);

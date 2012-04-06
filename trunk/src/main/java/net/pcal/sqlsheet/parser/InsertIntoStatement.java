@@ -23,6 +23,7 @@ import java.util.List;
  * INSERT INTO xxx (xxx) VALUE (xxx).
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public interface InsertIntoStatement extends ParsedStatement {
 

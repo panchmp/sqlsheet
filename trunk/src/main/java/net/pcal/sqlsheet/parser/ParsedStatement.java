@@ -19,6 +19,7 @@ package net.pcal.sqlsheet.parser;
  * Marker interface for objects which describe a SQL parsed statement.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public interface ParsedStatement {
 

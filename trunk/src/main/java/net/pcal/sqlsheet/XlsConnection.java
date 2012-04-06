@@ -22,24 +22,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  * SqlSheet implementation of java.sql.Connection.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 class XlsConnection implements Connection {
 
-    // =========================================================================
-    // Fields
+    private static final Logger logger = Logger.getLogger(XlsConnection.class.getName());
 
     private Workbook workbook = null;
-
     private File saveFile = null;
-
-    // =========================================================================
-    // Constructor
 
     XlsConnection(Workbook workbook) {
         if (workbook == null)
@@ -57,15 +55,9 @@ class XlsConnection implements Connection {
         this.saveFile = saveFile;
     }
 
-    // =========================================================================
-    // Package methods
-
     Workbook getWorkBook() {
         return workbook;
     }
-
-    // =========================================================================
-    // Interesting implementation
 
     public Statement createStatement() throws SQLException {
         return new XlsStatement(this);
@@ -94,15 +86,12 @@ class XlsConnection implements Connection {
                 if (fileOut != null)
                     try {
                         fileOut.close();
-                    } catch (IOException ohwell) {
-                        ohwell.printStackTrace();
+                    } catch (IOException e) {
+                        logger.log(Level.WARNING,e.getMessage(),e);
                     }
             }
         }
     }
-
-    // =========================================================================
-    // Boring implementation
 
     public boolean getAutoCommit() {
         return false;
@@ -143,12 +132,8 @@ class XlsConnection implements Connection {
     }
 
     public DatabaseMetaData getMetaData() throws SQLException {
-        // nyi();
         return null;
     }
-
-    // =========================================================================
-    // NYI
 
     public void setAutoCommit(boolean autoCommit) throws SQLException {
         nyi();
@@ -246,9 +231,6 @@ class XlsConnection implements Connection {
         nyi();
         return null;
     }
-
-    // =========================================================================
-    // Private methods
 
     private void nyi() throws SQLException {
         throw new SQLException("NYI");

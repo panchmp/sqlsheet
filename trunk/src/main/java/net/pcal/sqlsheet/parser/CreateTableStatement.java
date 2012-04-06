@@ -23,6 +23,7 @@ import java.util.List;
  * CREATE TABLE xxx (xxx xxx, xxx xxx)
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public interface CreateTableStatement extends ParsedStatement {
 

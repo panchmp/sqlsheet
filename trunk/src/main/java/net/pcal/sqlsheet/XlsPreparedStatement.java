@@ -26,23 +26,20 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * SqlSheet implementation of java.sql.PreparedStatement.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsPreparedStatement extends XlsStatement implements PreparedStatement {
 
-    // =========================================================================
-    // Fields
-
+    private static final Logger logger = Logger.getLogger(XlsPreparedStatement.class.getName());
     private ParsedStatement statement;
-
     private List<Object> parameters = new ArrayList<Object>();
-
-    // =========================================================================
-    // Constructors
 
     public XlsPreparedStatement(XlsConnection conn, String sql) throws SQLException {
         super(conn);
@@ -84,7 +81,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
             int paramIndex = 0;
             for (int i = 0; i < substitutedValues.size(); i++) {
                 Object val = substitutedValues.get(i);
-                System.out.println("execute Query Insertintostatement: =========" + substitutedValues.get(i));
+                logger.log(Level.FINE, "execute Query Insertintostatement: " + substitutedValues.get(i));
                 if (val instanceof JdbcParameter) {
                     substitutedValues.set(i, parameters.get(paramIndex++));
                 }
@@ -107,18 +104,12 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
         throw new IllegalStateException("Execute Query Exception:========= " + statement.getClass().getName());
     }
 
-    // =========================================================================
-    // Private methods
-
     private void setParameter(int p, Object val) {
         p = p - 1;
         while (parameters.size() <= p)
             parameters.add(null);
         parameters.set(p, val);
     }
-
-    // =========================================================================
-    // boring implementation
 
     public void setBigDecimal(int arg0, BigDecimal arg1) throws SQLException {
         setParameter(arg0, arg1);
@@ -165,7 +156,6 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     }
 
     public void setString(int arg0, String arg1) throws SQLException {
-        System.out.println("set string : ======= arg0: " + arg0 + " arg1: " + arg1);
         setParameter(arg0, arg1);
     }
 
@@ -195,8 +185,6 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
         setParameter(arg0, arg1);
     }
 
-    // =========================================================================
-    // NYI
 
     public void setTimestamp(int arg0, Timestamp arg1, Calendar arg2) throws SQLException {
         nyi();
@@ -227,12 +215,10 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     }
 
     public void setObject(int arg0, Object arg1, int arg2) throws SQLException {
-        System.out.println("set object1 : ======= arg0: " + arg0 + " arg1: " + arg1);
         nyi();
     }
 
     public void setObject(int arg0, Object arg1, int arg2, int arg3) throws SQLException {
-        System.out.println("set string 2: ======= arg0: " + arg0 + " arg1: " + arg1);
         nyi();
     }
 
