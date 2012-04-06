@@ -447,9 +447,6 @@ public class XlsResultSet implements ResultSet {
         return new IllegalStateException("NYI");
     }
 
-    // =========================================================================
-    // Beyond Here Be Unimplemented Methods
-
     public void cancelRowUpdates() throws SQLException {
         throw nyi();
     }
@@ -683,6 +680,198 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
+    public RowId getRowId(int columnIndex) throws SQLException {
+        throw nyi();
+    }
+
+    public RowId getRowId(String columnLabel) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateRowId(int columnIndex, RowId x) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateRowId(String columnLabel, RowId x) throws SQLException {
+        throw nyi();
+    }
+
+    public int getHoldability() throws SQLException {
+        throw nyi();
+    }
+
+    public boolean isClosed() throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNString(int columnIndex, String nString) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNString(String columnLabel, String nString) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
+        throw nyi();
+    }
+
+    public NClob getNClob(int columnIndex) throws SQLException {
+        throw nyi();
+    }
+
+    public NClob getNClob(String columnLabel) throws SQLException {
+        throw nyi();
+    }
+
+    public SQLXML getSQLXML(int columnIndex) throws SQLException {
+        throw nyi();
+    }
+
+    public SQLXML getSQLXML(String columnLabel) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+        throw nyi();
+    }
+
+    public String getNString(int columnIndex) throws SQLException {
+        throw nyi();
+    }
+
+    public String getNString(String columnLabel) throws SQLException {
+        throw nyi();
+    }
+
+    public Reader getNCharacterStream(int columnIndex) throws SQLException {
+        throw nyi();
+    }
+
+    public Reader getNCharacterStream(String columnLabel) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateAsciiStream(int columnIndex, InputStream x, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateBinaryStream(int columnIndex, InputStream x, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateAsciiStream(String columnLabel, InputStream x, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateBinaryStream(String columnLabel, InputStream x, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateBlob(int columnIndex, InputStream inputStream, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateBlob(String columnLabel, InputStream inputStream, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateClob(int columnIndex, Reader reader, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateClob(String columnLabel, Reader reader, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNClob(int columnIndex, Reader reader, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNClob(String columnLabel, Reader reader, long length) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNCharacterStream(int columnIndex, Reader x) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateAsciiStream(int columnIndex, InputStream x) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateBinaryStream(int columnIndex, InputStream x) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateCharacterStream(int columnIndex, Reader x) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateAsciiStream(String columnLabel, InputStream x) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateBinaryStream(String columnLabel, InputStream x) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateCharacterStream(String columnLabel, Reader reader) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateBlob(int columnIndex, InputStream inputStream) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateBlob(String columnLabel, InputStream inputStream) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateClob(int columnIndex, Reader reader) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateClob(String columnLabel, Reader reader) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNClob(int columnIndex, Reader reader) throws SQLException {
+        throw nyi();
+    }
+
+    public void updateNClob(String columnLabel, Reader reader) throws SQLException {
+        throw nyi();
+    }
+
     public void updateAsciiStream(int jdbcColumn, InputStream x, int length)
             throws SQLException {
         throw nyi();
@@ -800,4 +989,11 @@ public class XlsResultSet implements ResultSet {
     }
 
 
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        throw nyi();
+    }
+
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        throw nyi();
+    }
 }
