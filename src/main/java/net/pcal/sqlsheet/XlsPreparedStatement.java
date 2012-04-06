@@ -222,6 +222,46 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
         nyi();
     }
 
+    public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
+      nyi();
+    }
+
+    public void setBinaryStream(int parameterIndex, InputStream x, long length) throws SQLException {
+      nyi();
+    }
+
+    public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException {
+      nyi();
+    }
+
+    public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException {
+      nyi();
+    }
+
+    public void setBinaryStream(int parameterIndex, InputStream x) throws SQLException {
+      nyi();
+    }
+
+    public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException {
+      nyi();
+    }
+
+    public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException {
+      nyi();
+    }
+
+    public void setClob(int parameterIndex, Reader reader) throws SQLException {
+      nyi();
+    }
+
+    public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
+      nyi();
+    }
+
+    public void setNClob(int parameterIndex, Reader reader) throws SQLException {
+      nyi();
+    }
+
     public void setRef(int arg0, Ref arg1) throws SQLException {
         nyi();
     }
@@ -234,6 +274,38 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     public ParameterMetaData getParameterMetaData() throws SQLException {
         nyi();
         return null;
+    }
+
+    public void setRowId(int parameterIndex, RowId x) throws SQLException {
+      nyi();
+    }
+
+    public void setNString(int parameterIndex, String value) throws SQLException {
+      nyi();
+    }
+
+    public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
+      nyi();
+    }
+
+    public void setNClob(int parameterIndex, NClob value) throws SQLException {
+      nyi();
+    }
+
+    public void setClob(int parameterIndex, Reader reader, long length) throws SQLException {
+      nyi();
+    }
+
+    public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
+      nyi();
+    }
+
+    public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
+      nyi();
+    }
+
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+      nyi();
     }
 
     public void setBinaryStream(int arg0, InputStream arg1, int arg2) throws SQLException {

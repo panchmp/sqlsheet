@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -196,6 +197,57 @@ class XlsConnection implements Connection {
         return null;
     }
 
+    public Clob createClob() throws SQLException {
+        nyi();
+        return null;
+    }
+
+    public Blob createBlob() throws SQLException {
+        nyi();
+        return null;
+    }
+
+    public NClob createNClob() throws SQLException {
+        nyi();
+        return null;
+    }
+
+    public SQLXML createSQLXML() throws SQLException {
+        nyi();
+        return null;
+    }
+
+    public boolean isValid(int timeout) throws SQLException {
+        nyi();
+        return false;
+    }
+
+    public void setClientInfo(String name, String value) throws SQLClientInfoException {
+    }
+
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
+    }
+
+    public String getClientInfo(String name) throws SQLException {
+        nyi();
+        return null;
+    }
+
+    public Properties getClientInfo() throws SQLException {
+        nyi();
+        return null;
+    }
+
+    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+        nyi();
+        return null;
+    }
+
+    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+        nyi();
+        return null;
+    }
+
     public PreparedStatement prepareStatement(String str, int param, int param2, int param3) throws SQLException {
         nyi();
         return null;
@@ -238,5 +290,15 @@ class XlsConnection implements Connection {
 
     public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
         nyi();
+    }
+
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        nyi();
+        return null;
+    }
+
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        nyi();
+        return false;
     }
 }
