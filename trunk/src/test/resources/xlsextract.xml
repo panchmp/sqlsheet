@@ -1,0 +1,36 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+	<connection id="xls" url="jdbc:xls:${filePath}" />
+	<connection id="java" driver="janino" />
+
+	<query connection-id="java">
+		import java.util.*;
+		
+		List arrayList = new ArrayList();
+		set("results", arrayList);
+		
+		Map params = (Map) get("params");
+		params.put("results", arrayList);
+	
+	</query>
+	
+	<query connection-id="xls">
+		SELECT * FROM "2009";
+		<script connection-id="java">
+			import net.pcal.sqlsheet.ResultMock;
+			import java.util.*;
+	
+			List arrayList = (List) get("results");
+	
+			ResultMock employee = new ResultMock();
+			
+			employee.setId(((Double)get("COL1")).intValue());
+			/*Make sure that access by index works*/
+			employee.setName((String)get("2"));
+			employee.setDate((Date) get("COL3"));
+
+			arrayList.add(employee);
+		</script>
+	</query>		
+</etl>
+
