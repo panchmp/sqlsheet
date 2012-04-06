@@ -1,0 +1,35 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+	<connection id="xls" url="jdbc:xls:${filePath}" />
+	<connection id="java" driver="janino" />
+
+    <script connection-id="xls">
+        CREATE TABLE "2009"(
+                    COL1 INT,
+                    COL2 VARCHAR(255),
+                    COL3 DATE
+            );
+    </script>
+
+	<query connection-id="java">
+        import net.pcal.sqlsheet.ResultMock;
+        import java.util.*;
+		
+		List list = (List) get("POJO");
+		Iterator itr = list.iterator();
+	 
+		while(itr.hasNext()) {
+ 			ResultMock value = (ResultMock)itr.next();
+			set("COL1", value.getID()); 			
+			set("COL2", value.getName());
+			set("COL3", (Date) value.getDate());
+
+			next();
+		}	
+        <script connection-id="xls">
+           	INSERT INTO "2009" (COL1, COL2, COL3) VALUES(?COL1, ?COL2, ?COL3);
+        </script>
+        			
+	</query>
+</etl>
+
