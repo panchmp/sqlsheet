@@ -30,29 +30,19 @@ import java.util.Map;
  * SqlSheet implementation of java.sql.Statement.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsStatement implements Statement {
 
-    // =========================================================================
-    // Fields
-
     private XlsConnection connection;
-
     private Map<String, XlsResultSet> sheet2rs = new HashMap<String, XlsResultSet>();
-
     private SqlSheetParser parser;
-
-    // =========================================================================
-    // Constructors
 
     public XlsStatement(XlsConnection c) {
         if (c == null)
             throw new IllegalArgumentException();
         this.connection = c;
     }
-
-    // =========================================================================
-    // Interesting implementation
 
     public Connection getConnection() throws SQLException {
         return connection;
@@ -84,9 +74,6 @@ public class XlsStatement implements Statement {
         }
     }
 
-    // =========================================================================
-    // Protected methods
-
     protected ParsedStatement parse(String sql) throws SQLException {
         if (sql == null)
             throw new IllegalArgumentException();
@@ -117,14 +104,10 @@ public class XlsStatement implements Statement {
 
         rs.moveToInsertRow();
         for (int i = 0; i < insert.getColumns().size(); i++) {
-            System.out.println("insert get values: " + insert.getValues().get(i));
             rs.updateObject(i + 1, insert.getValues().get(i));
         }
         return rs;
     }
-
-    // =========================================================================
-    // Private methods
 
     private XlsResultSet findOrCreateResultSetFor(String tableName) throws SQLException {
         tableName = tableName.trim().toUpperCase();
@@ -157,9 +140,6 @@ public class XlsStatement implements Statement {
         }
         throw new SQLException("No sheet named '" + name + "'");
     }
-
-    // =========================================================================
-    // All NYI below here
 
     public void setMaxFieldSize(int p0) throws SQLException {
         nyi();
@@ -313,35 +293,26 @@ public class XlsStatement implements Statement {
         return -1;
     }
 
-    // =========================================================================
-    // Private methods
-
     protected void nyi() throws SQLException {
         throw new SQLException("NYI");
     }
 
     public boolean isClosed() throws SQLException {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public boolean isPoolable() throws SQLException {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public void setPoolable(boolean poolable) throws SQLException {
-        // TODO Auto-generated method stub
-
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        // TODO Auto-generated method stub
         return null;
     }
 

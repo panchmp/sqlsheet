@@ -21,6 +21,7 @@ package net.pcal.sqlsheet.parser;
  * SELECT * FROM xxx.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public interface SelectStarStatement extends ParsedStatement {
 

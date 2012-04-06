@@ -27,16 +27,11 @@ import java.sql.SQLException;
  * SqlSheet implementation of java.sql.ResultSetMetaData.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsResultSetMetaData implements ResultSetMetaData {
 
-    // =========================================================================
-    // Fields
-
     private String[] columnNames;
-
-    // =========================================================================
-    // Constructors
 
     public XlsResultSetMetaData(Sheet sheet) throws SQLException {
         if (sheet == null) throw new IllegalArgumentException();
@@ -100,32 +95,26 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     }
 
     public boolean isAutoIncrement(int arg0) throws SQLException {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public boolean isCaseSensitive(int arg0) throws SQLException {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public boolean isCurrency(int arg0) throws SQLException {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public boolean isDefinitelyWritable(int arg0) throws SQLException {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public int isNullable(int arg0) throws SQLException {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     public boolean isReadOnly(int arg0) throws SQLException {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -142,12 +131,10 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        // TODO Auto-generated method stub
         return null;
     }
 

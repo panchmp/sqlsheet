@@ -36,16 +36,11 @@ import java.util.List;
  * parent package from the particulars of a particular parser.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class SqlSheetParser {
 
-    // =========================================================================
-    // Fields
-
     private CCJSqlParserManager parser;
-
-    // =========================================================================
-    // Public methods
 
     public ParsedStatement parse(String sql) throws SQLException {
         if (parser == null) parser = new CCJSqlParserManager();
@@ -143,7 +138,6 @@ public class SqlSheetParser {
                     List<Expression> exps = ((ExpressionList) ilist).getExpressions();
                     for (Expression exp : exps) {
                         // java.lang.String
-                        System.out.println("get class for the expression type: " + exp.toString());
                         if (exp instanceof StringValue) {
                             values.add(((StringValue) exp).getValue());
                             continue;
@@ -211,12 +205,8 @@ public class SqlSheetParser {
 
     }
 
-    // =========================================================================
-    // Private methods
-
     // support for workaround until we get a fix for
     // http://sourceforge.net/forum/forum.php?thread_id=1975052&forum_id=360150
-
     private static String stripUnderscores(String columnName) {
         return columnName.replace('_', ' ');
     }

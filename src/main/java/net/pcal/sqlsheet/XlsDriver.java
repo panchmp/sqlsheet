@@ -27,33 +27,27 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * SqlSheet implementation of java.sql.Driver.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
+ * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsDriver implements Driver {
 
-    // =========================================================================
-    // Constants
-
-    private final static String URL_SCHEME = "jdbc:xls:";
-
-    // =========================================================================
-    // Static initializer
+    private static final String URL_SCHEME = "jdbc:xls:";
+    private static final Logger logger = Logger.getLogger(XlsDriver.class.getName());
 
     static {
         try {
             DriverManager.registerDriver(new XlsDriver());
         } catch (SQLException e) {
-            System.err.println("Couldn't register " + XlsDriver.class.getName());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Couldn't register " + XlsDriver.class.getName(), e);
         }
     }
-
-    // =========================================================================
-    // Driver implementation
 
     public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) {
         return new DriverPropertyInfo[0];
@@ -91,8 +85,8 @@ public class XlsDriver implements Driver {
                         if (fileOut != null) {
                             try {
                                 fileOut.close();
-                            } catch (IOException ohwell) {
-                                ohwell.printStackTrace();
+                            } catch (IOException e) {
+                                logger.log(Level.WARNING,e.getMessage(),e);
                             }
                         }
                     }
