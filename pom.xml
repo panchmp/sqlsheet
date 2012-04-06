@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code</groupId>
     <artifactId>sqlsheet</artifactId>
-    <version>6</version>
+    <version>7-SNAPSHOT</version>
     <name>sqlsheet</name>
 
     <description>Jdbc API for xls/xlsx files using POI</description>
@@ -198,9 +198,9 @@
     </developers>
 
     <scm>
-        <connection>scm:svn:https://sqlsheet.googlecode.com/svn/tags/sqlsheet-6</connection>
-        <developerConnection>scm:svn:https://sqlsheet.googlecode.com/svn/tags/sqlsheet-6</developerConnection>
-        <url>https://sqlsheet.googlecode.com/svn/tags/sqlsheet-6</url>
+        <connection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</connection>
+        <developerConnection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</developerConnection>
+        <url>https://sqlsheet.googlecode.com/svn/trunk/</url>
     </scm>
     <issueManagement>
         <system>Google Code Issue Tracking</system>
