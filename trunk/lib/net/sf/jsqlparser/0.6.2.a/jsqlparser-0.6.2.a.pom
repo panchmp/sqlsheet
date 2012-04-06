@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.sf</groupId>
   <artifactId>jsqlparser</artifactId>
-  <version>0.7.0</version>
+  <version>0.6.2.a</version>
   <packaging>jar</packaging>
   <description>JSqlParser parses an SQL statement and translate it into a hierarchy of Java classes.</description>
   <url>http://jsqlparser.sourceforge.net/</url>
