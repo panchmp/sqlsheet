@@ -1,0 +1,35 @@
+#summary How to get dependecies?
+#labels Featured
+
+=How to get dependecies?=
+ * Use [http://poi.apache.org/download.html POI] distribution and [http://code.google.com/p/sqlsheet/downloads/list check downloads]
+ * Compile sources with [http://maven.apache.org/download.html maven]
+  # [http://tortoisesvn.net/downloads.html Chekout] [http://code.google.com/p/sqlsheet/source/checkout sources]
+  # Compile
+{{{
+     mvn clean install
+}}}
+  # Go to ${sources}/target/libs
+  # Grab jars
+
+==Requirements for [http://code.google.com/p/sqlsheet/downloads/detail?name=sqlsheet-5.jar sqlsheet-5.jar]==
+ * java5+
+ * [http://code.google.com/p/sqlsheet/downloads/detail?name=jsqlparser-0.6.2.a.jar jsqlparser-0.6.2.a.jar]
+ * [http://poi.apache.org/download.html Latest POI]
+
+==Requirements for [http://code.google.com/p/sqlsheet/downloads/detail?name=sqlsheet-6.jar sqlsheet-6.jar]==
+ * java6+
+ * [http://code.google.com/p/sqlsheet/downloads/detail?name=jsqlparser-0.7.0.jar jsqlparser-0.7.0.jar]
+ * [http://poi.apache.org/download.html Latest POI]
+
+
+===Requirements for [http://poi.apache.org/download.html XLS]===
+ * poi-3.8.jar
+
+===Requirements for [http://poi.apache.org/download.html XLSX]===
+ * poi-3.8.jar
+ * dom4j-1.6.1.jar
+ * poi-ooxml-3.8.jar
+ * poi-ooxml-schemas-3.8.jar
+ * stax-api-1.0.1.jar
+ * xmlbeans-2.3.0.jar
