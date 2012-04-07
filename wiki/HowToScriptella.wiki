@@ -3,7 +3,7 @@
 
 = Introduction =
 
-You need to download [http://scriptella.javaforge.com/tutorial.html scriptella], driver and it's [HowToGetDependecies dependencies].
+You need to download [http://scriptella.javaforge.com/tutorial.html scriptella], [sqlsheet-6.jar sqlsheet driver] and it's [HowToGetDependecies dependencies].
 
 
 = Details =
