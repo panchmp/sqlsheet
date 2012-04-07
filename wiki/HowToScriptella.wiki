@@ -22,4 +22,5 @@ Follow the steps:
   * Download [http://code.google.com/p/sqlsheet/downloads/detail?name=xls_test.xml test] script
   * Execute test script:
 {{{ scriptella xls_test.xml }}}
+  * Check generated XLS/XLSX files
   * Enjoy! 
