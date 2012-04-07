@@ -1,4 +1,5 @@
 #summary This page provides info on how to get dependencies for classpath
+#labels Featured
 
 =How to get dependecies?=
  * Use [http://poi.apache.org/download.html POI] distribution and [http://code.google.com/p/sqlsheet/downloads/list check downloads]
