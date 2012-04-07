@@ -3,23 +3,14 @@
 
 = Introduction =
 
-You need to download [http://scriptella.javaforge.com/tutorial.html scriptella], [http://code.google.com/p/sqlsheet/downloads sqlsheet driver] and it's [HowToGetDependecies dependencies].
+You need to download [http://scriptella.javaforge.com/download.html scriptella], [http://code.google.com/p/sqlsheet/downloads sqlsheet driver] and it's [HowToGetDependecies dependencies].
 
 
 = Details =
 
 Install scriptella:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
-
-Copy dependencies:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
-
-
-Test:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  * Folllow this [http://scriptella.javaforge.com/tutorial.html tutorial]
+  * Put sqlsheet driver to <SCRIPTELLA_DIR>/lib directory
+  * Put sqlsheet driver [HowToGetDependecies dependencies] to <SCRIPTELLA_DIR>/lib directory
+  * Download test scripts
+  * Enjoy! 
