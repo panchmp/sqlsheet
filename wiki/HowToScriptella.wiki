@@ -10,7 +10,7 @@ You need to download [http://scriptella.javaforge.com/download.html scriptella],
 
 Install scriptella:
   * Folllow this [http://scriptella.javaforge.com/tutorial.html tutorial]
-  * Put sqlsheet driver to [SCRIPTELLA_DIR]/lib directory
-  * Put sqlsheet driver [HowToGetDependecies dependencies] to <SCRIPTELLA_DIR>/lib directory
+  * Put sqlsheet driver to ${SCRIPTELLA_DIR}/lib directory
+  * Put sqlsheet driver [HowToGetDependecies dependencies] to ${SCRIPTELLA_DIR}/lib directory
   * Download test scripts
   * Enjoy! 
