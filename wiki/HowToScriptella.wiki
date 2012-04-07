@@ -13,8 +13,7 @@ Follow the steps:
   * Unpack it and add a ${SCRIPTELLA_DIR}/bin to a system PATH variable
    # Use set PATH=%PATH%;SCRIPTELLA_DIR\bin for Windows
    # Use export PATH=${PATH}:SCRIPTELLA_DIR/bin for Unix
-  * Check if JRE has been installed correctly by running 
- {{{ java -version }}}
+  * Check if JRE has been installed correctly by running {{{ java -version }}}
   * Check if scriptella has been installed correctly by running
  {{{scriptella -version }}}
   * Put sqlsheet [http://code.google.com/p/sqlsheet/downloads sqlsheet driver] to ${SCRIPTELLA_DIR}/lib directory
