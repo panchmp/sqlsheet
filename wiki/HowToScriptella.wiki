@@ -3,7 +3,7 @@
 
 = Introduction =
 
-You need to download scriptella, driver and it's dependencies (details).
+You need to download [http://scriptella.javaforge.com/tutorial.html scriptella], driver and it's [HowToGetDependecies dependencies].
 
 
 = Details =
