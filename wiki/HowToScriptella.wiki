@@ -8,7 +8,7 @@ You need to download [http://scriptella.javaforge.com/download.html scriptella],
 
 = Details =
 
-Install scriptella:
+Follow the steps:
   * Download [http://scriptella.javaforge.com/download.html scriptella] binary distribution.
   * Unpack it and add a ${SCRIPTELLA_DIR}/bin to a system PATH variable.
    # Use set PATH=%PATH%;SCRIPTELLA_DIR\bin for Windows 
