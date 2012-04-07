@@ -17,9 +17,9 @@ Follow the steps:
 {{{ java -version }}}
   * Check if scriptella has been installed correctly by running:
 {{{ scriptella -version }}}
-  * Put sqlsheet [http://code.google.com/p/sqlsheet/downloads sqlsheet driver] to ${SCRIPTELLA_DIR}/lib directory
-  * Put sqlsheet driver [HowToGetDependecies dependencies] to ${SCRIPTELLA_DIR}/lib directory
-  * Put [http://dist.codehaus.org/janino/changelog.html janino.jar] and [http://dist.codehaus.org/janino/changelog.html commons-compiler.jar] to ${SCRIPTELLA_DIR}/lib directory
+  * Put [http://code.google.com/p/sqlsheet/downloads sqlsheet] driver to  the ${SCRIPTELLA_DIR}/lib directory
+  * Put sqlsheet driver [HowToGetDependecies dependencies] to the ${SCRIPTELLA_DIR}/lib directory
+  * Put [http://dist.codehaus.org/janino/changelog.html janino.jar] and [http://dist.codehaus.org/janino/changelog.html commons-compiler.jar] to the ${SCRIPTELLA_DIR}/lib directory
   * Download [http://code.google.com/p/sqlsheet/downloads/detail?name=xls_test.xml test] script
   * Execute test script:
 {{{ scriptella xls_test.xml }}}
