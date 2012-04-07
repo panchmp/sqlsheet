@@ -1,0 +1,25 @@
+#summary Page describes how to get this driver working with scriptella.
+#labels Featured
+
+= Introduction =
+
+You need to download scriptella, driver and it's dependencies (details).
+
+
+= Details =
+
+Install scriptella:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
+
+Copy dependencies:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
+
+
+Test:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
