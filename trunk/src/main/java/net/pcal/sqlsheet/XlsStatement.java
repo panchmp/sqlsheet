@@ -124,11 +124,6 @@ public class XlsStatement implements Statement {
         if (name == null)
             throw new IllegalArgumentException();
         name = name.trim();
-
-        // Workaround an apparent bug in POI - getNumberOfSheets() returns 0
-        // unless we do this first
-        wb.getSheetAt(0);
-
         int count = wb.getNumberOfSheets();
         for (int i = 0; i < count; i++) {
             String sheetName = wb.getSheetName(i);
