@@ -71,7 +71,6 @@ public class XlsDriver implements Driver {
                 if (!saveFile.exists() || (saveFile.length() == 0)) {
                     if (workbookUrl.toLowerCase().endsWith("x")) {
                         workbook = new XSSFWorkbook();
-                        workbook.createSheet();
                     } else {
                         workbook = new HSSFWorkbook();
                     }
