@@ -21,5 +21,5 @@ Follow the steps:
   * Put sqlsheet driver [HowToGetDependecies dependencies] to ${SCRIPTELLA_DIR}/lib directory
   * Download [http://code.google.com/p/sqlsheet/downloads/detail?name=xls_test.xml test] script
   * Execute test script:
-{{{ scriptella -xls_test.xml }}}
+{{{ scriptella xls_test.xml }}}
   * Enjoy! 
