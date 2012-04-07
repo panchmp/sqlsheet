@@ -17,7 +17,7 @@
  * [http://code.google.com/p/sqlsheet/downloads/detail?name=jsqlparser-0.6.2.a.jar jsqlparser-0.6.2.a.jar]
  * [http://poi.apache.org/download.html Latest POI]
 
-==Requirements for [http://code.google.com/p/sqlsheet/downloads/detail?name=sqlsheet-6.jar sqlsheet-6.jar]==
+==Requirements for [http://code.google.com/p/sqlsheet/downloads/detail?name=sqlsheet-6.1.jar sqlsheet-6.1.jar]==
  * java6+
  * [http://code.google.com/p/sqlsheet/downloads/detail?name=jsqlparser-0.7.0.jar jsqlparser-0.7.0.jar]
  * [http://poi.apache.org/download.html Latest POI]
