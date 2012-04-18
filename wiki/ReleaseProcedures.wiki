@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Steps to follow to release library.
 
 = Introduction =
 
@@ -8,7 +8,7 @@ Add your content here.
 = Details =
 
 Add your content here.  Format your content with:
-  * Add configuration in %USER_HOME%/.m2/settings.xml
+  * Add configuration to %USER_HOME%/.m2/settings.xml
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
