@@ -1,0 +1,32 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+Add your content here.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+            <id>sqlsheet.googlecode.snapshots</id>
+            <username>yourlogin</username>
+            <password>yourpassword</password>
+        </server>
+        <server>
+            <id>sqlsheet.googlecode.releases</id>
+            <username>yourlogin</username>
+            <password>yourpassword</password>
+        </server>
+    </servers>
+</settings>
+}}}
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
