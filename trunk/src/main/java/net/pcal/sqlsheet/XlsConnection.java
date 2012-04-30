@@ -18,8 +18,10 @@ package net.pcal.sqlsheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
@@ -39,6 +41,7 @@ class XlsConnection implements Connection {
 
     private Workbook workbook = null;
     private File saveFile = null;
+    private Boolean writeRequired =  false;
 
     XlsConnection(Workbook workbook) {
         if (workbook == null)
@@ -74,11 +77,15 @@ class XlsConnection implements Connection {
     }
 
     public void close() throws SQLException {
-        if (saveFile != null) {
+        if (saveFile != null && writeRequired) {
             FileOutputStream fileOut = null;
             try {
-                fileOut = new FileOutputStream(saveFile);
+                File newFile = File.createTempFile("xlsdriver","xlsx");
+                fileOut = new FileOutputStream(newFile);
                 workbook.write(fileOut);
+                File backup = backupFile(saveFile);
+                saveFile.delete();
+                moveFile(newFile,saveFile);
             } catch (IOException ioe) {
                 SQLException sqe = new SQLException(ioe.getMessage());
                 sqe.initCause(sqe);
@@ -90,6 +97,42 @@ class XlsConnection implements Connection {
                     } catch (IOException e) {
                         logger.log(Level.WARNING,e.getMessage(),e);
                     }
+            }
+        }
+    }
+
+    private File backupFile(File input) throws IOException{
+        File output = null;
+        if (input != null) {
+            output = File.createTempFile(input.getName()+".",".bkp",null);
+            moveFile(input, output);
+        }
+        return output;
+    }
+
+    private void moveFile(File sourceFile, File destFile) throws IOException {
+        boolean moved;
+        moved = sourceFile.renameTo(destFile);
+        if (!moved) {
+            FileChannel source = null;
+            FileChannel destination = null;
+            try {
+                source = new FileInputStream(sourceFile).getChannel();
+                destination = new FileOutputStream(destFile).getChannel();
+
+                // previous code: destination.transferFrom(source, 0, source.size());
+                // to avoid infinite loops, should be:
+                long count = 0;
+                long size = source.size();
+                while((count += destination.transferFrom(source, 0, size-count))<size);
+            }
+            finally {
+                if(source != null) {
+                    source.close();
+                }
+                if(destination != null) {
+                    destination.close();
+                }
             }
         }
     }
@@ -300,5 +343,13 @@ class XlsConnection implements Connection {
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         nyi();
         return false;
+    }
+
+    public Boolean getWriteRequired() {
+        return writeRequired;
+    }
+
+    public void setWriteRequired(Boolean writeRequired) {
+        this.writeRequired = writeRequired;
     }
 }

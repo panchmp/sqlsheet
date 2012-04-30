@@ -101,7 +101,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
                 }
             });
         }
-        throw new IllegalStateException("Execute Query Exception:========= " + statement.getClass().getName());
+        throw new IllegalStateException("Execute Query Exception: " + statement.getClass().getName());
     }
 
     private void setParameter(int p, Object val) {

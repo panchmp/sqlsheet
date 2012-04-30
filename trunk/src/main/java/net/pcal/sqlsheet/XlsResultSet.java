@@ -51,18 +51,7 @@ public class XlsResultSet implements ResultSet {
         metadata = new XlsResultSetMetaData(s);
         // set the default date cell format
         dateStyle = workbook.createCellStyle();
-
         dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
-    }
-
-    @Deprecated
-    public XlsResultSet(Sheet s, boolean b) {
-        if (b == true) throw new IllegalStateException();
-        if (s == null) throw new IllegalArgumentException();
-        this.sheet = s;
-        firstSheetRowOffset = 0;
-        cursorSheetRow = firstSheetRowOffset - 1;
-        metadata = null;
     }
 
     /**

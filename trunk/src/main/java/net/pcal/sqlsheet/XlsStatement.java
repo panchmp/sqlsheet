@@ -89,6 +89,7 @@ public class XlsStatement implements Statement {
     }
 
     protected ResultSet doCreateTable(CreateTableStatement cts) throws SQLException {
+        connection.setWriteRequired(true);
         String tableName = cts.getTable().replace("\"", "");
         Sheet newSheet = connection.getWorkBook().createSheet(tableName);
         Row row = newSheet.createRow(0);
@@ -100,8 +101,8 @@ public class XlsStatement implements Statement {
     }
 
     protected ResultSet doInsert(InsertIntoStatement insert) throws SQLException {
+        connection.setWriteRequired(true);
         XlsResultSet rs = findOrCreateResultSetFor(insert.getTable());
-
         rs.moveToInsertRow();
         for (int i = 0; i < insert.getColumns().size(); i++) {
             rs.updateObject(i + 1, insert.getValues().get(i));
