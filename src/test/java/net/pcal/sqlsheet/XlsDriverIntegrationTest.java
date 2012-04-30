@@ -17,7 +17,7 @@ import java.util.*;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
-public class XlsDriverTest {
+public class XlsDriverIntegrationTest {
 
     private static final String extractXlsScriptFile = "xlsextract.xml";
     private static final String loadXlsScriptFile = "xlsload.xml";
