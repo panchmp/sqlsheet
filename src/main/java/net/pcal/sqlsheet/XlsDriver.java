@@ -18,6 +18,7 @@ package net.pcal.sqlsheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
@@ -72,7 +73,7 @@ public class XlsDriver implements Driver {
                     if (workbookUrl.toLowerCase().endsWith("x")) {
                         workbook = new XSSFWorkbook();
                     } else {
-                        workbook = new HSSFWorkbook();
+                        workbook = new SXSSFWorkbook(null,1000,true);
                     }
 
                     FileOutputStream fileOut = null;
@@ -91,15 +92,7 @@ public class XlsDriver implements Driver {
                     }
                 }
 
-                FileInputStream fin = null;
-                try {
-                    fin = new FileInputStream(saveFile);
-                    workbook = WorkbookFactory.create(fin);
-                } finally {
-                    if (fin != null)
-                        fin.close();
-                }
-
+                workbook = WorkbookFactory.create(saveFile);
                 return new XlsConnection(workbook, saveFile);
             } else {
                 URL url = new URL(workbookUrl);
