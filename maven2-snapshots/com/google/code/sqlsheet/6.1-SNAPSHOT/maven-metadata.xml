@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.google.code</groupId>
+  <artifactId>sqlsheet</artifactId>
+  <version>6.1-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20120502.200702</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20120502200702</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>6.1-20120502.200702-1</value>
+        <updated>20120502200702</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>6.1-20120502.200702-1</value>
+        <updated>20120502200702</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
