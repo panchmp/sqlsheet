@@ -2,6 +2,7 @@
 #labels Featured
 
 =How to get dependecies?=
+ * Use as maven dependency
  * Use [http://poi.apache.org/download.html POI] distribution and [http://code.google.com/p/sqlsheet/downloads/list check downloads]
  * Compile sources with [http://maven.apache.org/download.html maven]
   # [http://tortoisesvn.net/downloads.html Chekout] [http://code.google.com/p/sqlsheet/source/checkout sources]
