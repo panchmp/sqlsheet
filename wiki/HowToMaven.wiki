@@ -2,12 +2,12 @@
 
 = Introduction =
 
-This page describes maven comfiguration required to get dependecies
+This page describes maven configuration required to get dependecies
 
 
 = Details =
 
-  * Setup maven repositories in pom.xml or settings.xml
+  * Setup maven repositories to your pom.xml or M2_HOME/config/settings.xml or M2_REPO/.m2/settings.xml
 {{{
     <repositories>
         <repository>
@@ -26,3 +26,10 @@ This page describes maven comfiguration required to get dependecies
 }}}
 
   * Add required dependencies
+{{{
+      <dependency>
+          <groupId>com.google.code</groupId>
+          <artifactId>sqlsheet</artifactId>
+          <version>6</version>
+      </dependency>
+}}}
