@@ -8,9 +8,9 @@ When reading/writing excel file with POI it consumes a lot of memory for parsing
 = Details =
 
 There are streaming API which enables streaming for reading and streaming for writing.
-http://poi.apache.org/spreadsheet/how-to.html#event_api
-http://poi.apache.org/spreadsheet/how-to.html#xssf_sax_api
-http://poi.apache.org/spreadsheet/how-to.html#sxssf
+# http://poi.apache.org/spreadsheet/how-to.html#event_api
+# http://poi.apache.org/spreadsheet/how-to.html#xssf_sax_api
+# http://poi.apache.org/spreadsheet/how-to.html#sxssf
 
 sqlsheet supports both modes, to enable streaming you need to pass specific preference in JDBC url
 === Read streaming ===
