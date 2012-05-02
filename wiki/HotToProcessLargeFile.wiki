@@ -15,7 +15,10 @@ There are streaming API which enables streaming for reading and streaming for wr
 [http://code.google.com/p/sqlsheet sqlsheet] supports both modes. To enable streaming you need to pass specific preference in JDBC url:
 
 === Read streaming ===
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  * Parameter to enable read streaming
+{{{
+jdbc:xls:file:test.xls?readStreaming=true
+}}}
+  * When read streaming enabled - you cannot modify excel file, eow connection is read-only
+  * Works for both XLS and XSLX formats
 === Write streaming ===
