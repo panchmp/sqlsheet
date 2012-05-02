@@ -12,7 +12,7 @@ There are streaming API which enables streaming for reading and streaming for wr
  * http://poi.apache.org/spreadsheet/how-to.html#xssf_sax_api
  * http://poi.apache.org/spreadsheet/how-to.html#sxssf
 
-sqlsheet supports both modes, to enable streaming you need to pass specific preference in JDBC url
+[http://code.google.com/p/sqlsheet sqlsheet] supports both modes. To enable streaming you need to pass specific preference in JDBC url:
 
 === Read streaming ===
   * Text in *bold* or _italic_
