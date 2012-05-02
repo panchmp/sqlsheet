@@ -17,7 +17,7 @@
 	<query connection-id="xls">
 		SELECT * FROM "2009";
 		<script connection-id="java">
-			import net.pcal.sqlsheet.ResultMock;
+			import com.googlecode.sqlsheet.ResultMock;
 			import java.util.*;
 	
 			List arrayList = (List) get("results");
