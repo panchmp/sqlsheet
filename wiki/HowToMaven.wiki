@@ -21,7 +21,7 @@ This page describes maven configuration required to get dependecies
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-            <url>http://sqlsheet.googlecode.com/svn/maven2</url>
+            <url>http://sqlsheet.googlecode.com/svn/maven2/</url>
         </repository>
     </repositories>
 }}}
