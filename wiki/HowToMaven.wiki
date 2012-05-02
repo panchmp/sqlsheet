@@ -1,4 +1,4 @@
-# How to setup maven dependencies
+#summary How to setup maven dependencies
 
 = Introduction =
 
