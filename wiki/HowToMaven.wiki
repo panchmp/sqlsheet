@@ -1,4 +1,5 @@
 #summary How to setup maven dependencies
+#labels Featured
 
 = Introduction =
 
