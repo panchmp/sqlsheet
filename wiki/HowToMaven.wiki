@@ -30,12 +30,12 @@ This page describes maven configuration required to get dependecies
       <dependency>
           <groupId>com.google.code</groupId>
           <artifactId>sqlsheet</artifactId>
-          <version>6</version>
+          <version>6.1</version>
       </dependency>
 }}}
   * Use it
 {{{
-Class.forName("net.pcal.sqlsheet.XlsDriver");
+Class.forName("com.googlecode.sqlsheet.Driver");
 
 Connection writeConnection = DriverManager.getConnection("jdbc:xls:file:test.xlsx");
 
