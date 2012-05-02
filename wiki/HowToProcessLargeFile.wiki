@@ -7,7 +7,7 @@ When reading/writing excel file with POI it consumes a lot of memory for parsing
 
 = Details =
 
-There are streaming API which enables streaming for reading and streaming for writing.
+There are streaming API which enables streaming for reading and streaming for writing. Streaming allows excel files processing with very low memory footprint.
  * http://poi.apache.org/spreadsheet/how-to.html#event_api
  * http://poi.apache.org/spreadsheet/how-to.html#xssf_sax_api
  * http://poi.apache.org/spreadsheet/how-to.html#sxssf
