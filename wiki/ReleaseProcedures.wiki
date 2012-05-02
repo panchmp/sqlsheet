@@ -2,7 +2,7 @@
 
 = Introduction =
 
-Add your content here.
+Steps to follow to release library.
 
 
 = Details =
@@ -23,4 +23,3 @@ Add your content here.
 mvn release:prepare
 mvn release:perform
 }}}
-  * Automatic links to other wiki pages
