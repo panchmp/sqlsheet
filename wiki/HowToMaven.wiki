@@ -1,0 +1,28 @@
+#How to setup maven to get dependencies
+
+= Introduction =
+
+This page describes maven comfiguration required to get dependecies
+
+
+= Details =
+
+  * Setup maven repositories in pom.xml or settings.xml
+{{{
+    <repositories>
+        <repository>
+            <id>sqlsheet.googlecode.com</id>
+            <name>sqlsheet.googlecode.com</name>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <url>https://sqlsheet.googlecode.com/svn/maven2</url>
+        </repository>
+    </repositories>
+}}}
+
+  * Add required dependencies
