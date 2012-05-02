@@ -23,7 +23,7 @@ url="jdbc:xls:file:test.xls?readStreaming=true"
   * Works for both XLS and XSLX formats
 
 === Write streaming ===
-  * Parameter to enable write streaming
+  * Parameter to enable write streaming: *writeStreaming*
 {{{
 url="jdbc:xls:file:test.xlsx?writeStreaming=true"
 }}}
