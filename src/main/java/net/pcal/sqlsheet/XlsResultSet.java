@@ -351,7 +351,7 @@ public class XlsResultSet implements ResultSet {
     }
 
     public void moveToInsertRow() throws SQLException {
-        for (cursorSheetRow = 1; true; cursorSheetRow++) {
+        for (; true; cursorSheetRow++) {
             Row row = sheet.getRow(cursorSheetRow);
             if (row == null || (row.getCell((short) 0) == null)) {
                 sheet.createRow(cursorSheetRow);
@@ -364,12 +364,9 @@ public class XlsResultSet implements ResultSet {
         cursorSheetRow++;
     }
 
-    // =========================================================================
-    // Private methods
-
     private void updateObject(Cell cell, Object x) throws SQLException {
         if (x instanceof String) {
-            cell.setCellValue((String) x);
+            cell.setCellValue((String)x);
         } else if (x instanceof char[]) {
             cell.setCellValue(new String((char[]) x));
         } else if (x instanceof Double) {
@@ -399,6 +396,9 @@ public class XlsResultSet implements ResultSet {
     }
 
     private Row getCurrentRow() {
+        if(sheet.getRow(cursorSheetRow) == null){
+            sheet.createRow(cursorSheetRow);
+        }
         return sheet.getRow(cursorSheetRow);
     }
 

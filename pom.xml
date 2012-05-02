@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code</groupId>
     <artifactId>sqlsheet</artifactId>
-    <version>6.2-SNAPSHOT</version>
+    <version>6.1-SNAPSHOT</version>
     <name>sqlsheet</name>
 
     <description>Jdbc API for xls/xlsx files using POI</description>
@@ -39,13 +39,13 @@
         <dependency>
             <groupId>com.javaforge.scriptella</groupId>
             <artifactId>scriptella-core</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.javaforge.scriptella</groupId>
             <artifactId>scriptella-drivers</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -67,6 +67,13 @@
     </properties>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.8</version>
+            </extension>
+        </extensions>    
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -212,30 +219,30 @@
         <repository>
             <id>sqlsheet.googlecode.releases</id>
             <name>sqlsheet.googlecode.releases</name>
-            <url>dav:https://sqlsheet.googlecode.com/svn/maven2/</url>
+            <url>svn:https://sqlsheet.googlecode.com/svn/maven2/</url>
         </repository>
         <!-- use the following if you ARE using a snapshot version. -->
         <snapshotRepository>
             <id>sqlsheet.googlecode.snapshots</id>
             <name>sqlsheet.googlecode.snapshots</name>
-            <url>dav:https://sqlsheet.googlecode.com/svn/maven2-snapshots/</url>
+            <url>svn:https://sqlsheet.googlecode.com/svn/maven2-snapshots/</url>
+            <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>
 
 
     <repositories>
         <repository>
-            <id>lib</id>
-            <name>lib</name>
+            <id>sqlsheet.googlecode.com</id>
+            <name>sqlsheet.googlecode.com</name>
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>ignore</checksumPolicy>
             </releases>
             <snapshots>
-
                 <enabled>true</enabled>
             </snapshots>
-            <url>file://${project.basedir}/lib</url>
+            <url>http://sqlsheet.googlecode.com/svn/maven2/</url>
         </repository>
     </repositories>
 
