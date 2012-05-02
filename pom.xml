@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code</groupId>
     <artifactId>sqlsheet</artifactId>
-    <version>6.1-SNAPSHOT</version>
+    <version>6.1</version>
     <name>sqlsheet</name>
 
     <description>Jdbc API for xls/xlsx files using POI</description>
@@ -39,13 +39,13 @@
         <dependency>
             <groupId>com.javaforge.scriptella</groupId>
             <artifactId>scriptella-core</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.javaforge.scriptella</groupId>
             <artifactId>scriptella-drivers</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -205,9 +205,9 @@
     </developers>
 
     <scm>
-        <connection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</connection>
-        <developerConnection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</developerConnection>
-        <url>https://sqlsheet.googlecode.com/svn/trunk/</url>
+        <connection>scm:svn:https://sqlsheet.googlecode.com/svn/tags/sqlsheet-6.1</connection>
+        <developerConnection>scm:svn:https://sqlsheet.googlecode.com/svn/tags/sqlsheet-6.1</developerConnection>
+        <url>https://sqlsheet.googlecode.com/svn/tags/sqlsheet-6.1</url>
     </scm>
     <issueManagement>
         <system>Google Code Issue Tracking</system>
