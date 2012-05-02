@@ -3,11 +3,12 @@
   <groupId>com.google.code</groupId>
   <artifactId>sqlsheet</artifactId>
   <versioning>
-    <release>5</release>
+    <release>6</release>
     <versions>
       <version>0.1</version>
       <version>5</version>
+      <version>6</version>
     </versions>
-    <lastUpdated>20120502184913</lastUpdated>
+    <lastUpdated>20120502190057</lastUpdated>
   </versioning>
 </metadata>
