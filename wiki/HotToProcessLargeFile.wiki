@@ -12,7 +12,7 @@ There are streaming API which enables streaming for reading and streaming for wr
  * http://poi.apache.org/spreadsheet/how-to.html#xssf_sax_api
  * http://poi.apache.org/spreadsheet/how-to.html#sxssf
 
-[http://code.google.com/p/sqlsheet sqlsheet] supports both modes. To enable streaming you need to pass specific preference in JDBC url:
+[http://code.google.com/p/sqlsheet sqlsheet] starting from [http://sqlsheet.googlecode.com/svn/maven2/com/google/code/sqlsheet/ version 6.1] supports both modes. To enable streaming you need to pass specific preference in JDBC url:
 
 === Read streaming ===
   * Parameter to enable read streaming: *readStreaming*
@@ -30,6 +30,3 @@ url="jdbc:xls:file:test.xlsx?writeStreaming=true"
   * When write streaming enabled - you cannot query existing excel file, eow connection is write-only
   * Works for only for XSLX formats
   * You can provide existing but onlly as template which needs to be filled, if you will provide large existing file - you will get memory issue
-
-
-
