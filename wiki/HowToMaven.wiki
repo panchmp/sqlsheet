@@ -25,12 +25,12 @@ This page describes maven configuration required to get dependecies
         </repository>
     </repositories>
 }}}
-  * Add required dependencies
+  * [http://sqlsheet.googlecode.com/svn/maven2/com/google/code/sqlsheet/ Check latest version] and add required dependencies
 {{{
       <dependency>
           <groupId>com.google.code</groupId>
           <artifactId>sqlsheet</artifactId>
-          <version>6.1</version>
+          <version>6.?</version>
       </dependency>
 }}}
   * Use it
