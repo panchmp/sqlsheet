@@ -28,6 +28,6 @@ url="jdbc:xls:file:test.xls?readStreaming=true"
 url="jdbc:xls:file:test.xlsx?writeStreaming=true"
 }}}
   * When write streaming enabled - you cannot query existing excel file, eow connection is write-only
-  * You still can create tables (sheets) in file
-  * Write streaming works for only for XSLX formats
-  * You can provide existing file, but onlly as template which needs to be filled, if you will provide large existing file - you will get memory issue
+  * You can create tables (sheets) in file using JDBC and write data, each 1k of rows excel file will be flushed to disk and memory cleaned
+  * Write streaming works only for XSLX formats
+  * You can provide existing file, but only as template which needs to be filled, if you will provide large existing file - you will get memory issue
