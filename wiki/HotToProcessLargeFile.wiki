@@ -3,12 +3,18 @@
 
 = Introduction =
 
-Add your content here.
-
+When reading/writing excel file with POI it consumes a lot of memory for parsing content, making a memory requirement ~3Gb processing of large excel ~20Mb. Provided details below on how to make use of streaming API provided by POI to process large file.
 
 = Details =
 
-Add your content here.  Format your content with:
+There are streaming API which enables streaming for reading and streaming for writing.
+http://poi.apache.org/spreadsheet/how-to.html#event_api
+http://poi.apache.org/spreadsheet/how-to.html#xssf_sax_api
+http://poi.apache.org/spreadsheet/how-to.html#sxssf
+
+sqlsheet supports both modes, to enable streaming you need to pass specific preference in JDBC url
+=== Read streaming ===
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
   * Automatic links to other wiki pages
+=== Write streaming ===
