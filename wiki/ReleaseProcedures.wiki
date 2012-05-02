@@ -6,27 +6,21 @@ Add your content here.
 
 
 = Details =
-
-Add your content here.  Format your content with:
-  * Add configuration to %USER_HOME%/.m2/settings.xml
+  * Add configuration to %USER_HOME%/.m2/settings.xml or %M2_HOME%/conf/settings.xml
 {{{
-<?xml version="1.0" encoding="UTF-8"?>
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+...
     <servers>
-        <server>
-            <id>sqlsheet.googlecode.snapshots</id>
-            <username>yourlogin</username>
-            <password>yourpassword</password>
-        </server>
-        <server>
-            <id>sqlsheet.googlecode.releases</id>
-            <username>yourlogin</username>
-            <password>yourpassword</password>
-        </server>
+      <server>
+       <id>googlecode</id>
+       <username>yourlogin</username>
+       <password>yourpassword</password>
+      </server>    
     </servers>
-</settings>
+...
 }}}
-  * Headings, paragraphs, and lists
+  * Run
+{{{
+mvn release:prepare
+mvn release:perform
+}}}
   * Automatic links to other wiki pages
