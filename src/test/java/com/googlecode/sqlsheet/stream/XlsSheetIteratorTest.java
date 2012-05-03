@@ -1,7 +1,5 @@
 package com.googlecode.sqlsheet.stream;
 
-import com.googlecode.sqlsheet.stream.XlsSheetIterator;
-import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
 import org.junit.Assert;
 import org.junit.Test;
 
