@@ -86,4 +86,26 @@ public class DriverTest {
         conn.close();
     }
 
+    public static void main(String[] args) throws Exception {
+        Class.forName("com.googlecode.sqlsheet.Driver");
+//        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test2.xls").getFile()+"?readStreaming=true");
+//        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test2.xls").getFile());
+        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test1.xlsx").getFile()+"?readStreaming=true");
+//        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test1.xlsx").getFile());
+        Statement stmt = conn.createStatement();
+        ResultSet results = stmt.executeQuery("select * from sheet1");
+        while (results.next()) {
+            for(int i=1;i<=results.getMetaData().getColumnCount();i++){
+             System.out.print(results.getObject(i)+" ");
+            }
+            System.out.println();
+        }
+        results.close();
+        stmt.close();
+        conn.close();
+
+
+    }
+
+
 }

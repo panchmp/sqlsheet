@@ -75,12 +75,12 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     private XlsSheetIterator.CellValueHolder getCell(int jdbcColumn) {
-        return iterator.rowValues.get(iterator.currentIteratorRowIndex).get(jdbcColumn-1);
+        return iterator.getCurrentRowValue(jdbcColumn-1);
     }
 
     private XlsSheetIterator.CellValueHolder getCell(String jdbcColumn) {
         int jdbcColumnIndex = iterator.columns.indexOf(jdbcColumn);
-        return iterator.rowValues.get(iterator.currentIteratorRowIndex).get(jdbcColumnIndex-1);
+        return iterator.getCurrentRowValue(jdbcColumnIndex-1);
     }
 
     public ResultSetMetaData getMetaData() throws SQLException {
