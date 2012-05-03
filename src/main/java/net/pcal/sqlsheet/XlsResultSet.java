@@ -341,7 +341,7 @@ public class XlsResultSet implements ResultSet {
     public boolean next() throws SQLException {
         if (isAfterLast()) return false;
         cursorSheetRow++;
-        return !isAfterLast();
+        return !isAfterLast() && (sheet.getRow(cursorSheetRow) != null);
     }
 
     public boolean previous() throws SQLException {

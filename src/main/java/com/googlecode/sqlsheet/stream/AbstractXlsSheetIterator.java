@@ -80,6 +80,16 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
         rowValues.get(currentSheetRowIndex).add(cellValue);
     }
 
+    CellValueHolder getCurrentRowValue(int column){
+         CellValueHolder result = new CellValueHolder();
+        if(rowValues.get(currentIteratorRowIndex)!=null){
+            if(column < rowValues.get(currentIteratorRowIndex).size()){
+                result = rowValues.get(currentIteratorRowIndex).get(column);
+            }
+        }
+        return result;
+    }
+
     public void remove() {
     }
 

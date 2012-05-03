@@ -16,6 +16,7 @@
 package net.pcal.sqlsheet;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -32,6 +33,7 @@ import java.sql.SQLException;
 public class XlsResultSetMetaData implements ResultSetMetaData {
 
     private String[] columnNames;
+    private final DataFormatter formatter;
 
     public XlsResultSetMetaData(Sheet sheet) throws SQLException {
         if (sheet == null) throw new IllegalArgumentException();
@@ -39,10 +41,11 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
         if (row == null) {
             throw new SQLException("No header row in sheet");
         }
+        formatter = new DataFormatter();
         columnNames = new String[row.getLastCellNum()];
         for (short c = 0; c < columnNames.length; c++) {
             Cell cell = row.getCell(c);
-            columnNames[c] = cell.getStringCellValue();
+            columnNames[c] = formatter.formatCellValue(cell);
         }
     }
 

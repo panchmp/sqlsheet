@@ -15,12 +15,10 @@
  */
 package com.googlecode.sqlsheet.stream;
 
-import org.apache.poi.hssf.record.CellValueRecordInterface;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
 import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.StylesTable;
@@ -34,7 +32,6 @@ import javax.xml.stream.events.*;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -180,9 +177,9 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
         private String formatString;
         private final DataFormatter formatter;
 
-        private int thisColumn = -1;
+        private int thisColumn;
         // The last column printed to the output stream
-        private int lastColumnNumber = -1;
+        private int lastColumnNumber;
 
         // Gathers characters as they are seen.
         private StringBuffer value;
@@ -195,6 +192,8 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
          */
         public XSSFSheetEventHandler(StylesTable styles,
                                      ReadOnlySharedStringsTable strings) {
+            thisColumn = -1;
+            lastColumnNumber = -1;
             this.stylesTable = styles;
             this.sharedStringsTable = strings;
             this.value = new StringBuffer();
@@ -315,22 +314,35 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                 if (lastColumnNumber == -1) {
                     lastColumnNumber = 0;
                 }
-                //TODO: Check if some actions required
+                //Fill empty columns if required
                 for (int i = lastColumnNumber; i < thisColumn; ++i) {
                     //  output.print(',');
+                    if (currentSheetRowIndex == 0) {
+                        if((thisColumn-lastColumnNumber) > columns.size()){
+                            columns.add("");
+                        }
+                    } else {
+                        if(rowValues.get(currentIteratorRowIndex)!=null
+                                && (thisColumn-lastColumnNumber) > rowValues.get(currentIteratorRowIndex).size()){
+                            CellValueHolder empty = new CellValueHolder();
+                            empty.stringValue = "";
+                            addCurrentRowValue(empty);
+                        }
+                    }
+
                 }
+                // Might be the empty string.
                 if (currentSheetRowIndex == 0) {
-                    columns.add(thisCellValue.stringValue);
+                    columns.add(thisCellValue.stringValue == null ? "" : thisCellValue.stringValue);
                 } else {
-                    // Might be the empty string.
                     addCurrentRowValue(thisCellValue);
                 }
                 // Update column
-                if (thisColumn > -1)
+                if (thisColumn > -1) {
                     lastColumnNumber = thisColumn;
+                }
             } else if ("row".equals(endElement.getName().getLocalPart())) {
                 // We're onto a new row
-                //output.println();
                 lastColumnNumber = -1;
                 currentSheetRowIndex++;
             }
