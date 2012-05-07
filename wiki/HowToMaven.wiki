@@ -8,7 +8,7 @@ This page describes maven configuration required to get dependecies
 
 = Details =
 
-  * Setup maven repositories to your pom.xml or M2_HOME/config/settings.xml or M2_REPO/.m2/settings.xml
+  * Setup maven repositories in your pom.xml or M2_HOME/config/settings.xml or M2_REPO/.m2/settings.xml
 {{{
     <repositories>
         <repository>
