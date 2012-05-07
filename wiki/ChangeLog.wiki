@@ -1,0 +1,18 @@
+#summary Page contains list of changes introduced from version to version.
+
+=Page contains list of changes introduced from version to version=
+== 6.2 ==
+  * Fixed bug with processing sheets not alligned as tables (e.g. free form formats)
+== 6.1 ==
+  * Introduced read/write streaming support
+  * Issue #2 fixed
+  * Issue #1 fixed
+== 6.0 ==
+  * compiled with jdk 6
+== 5.0 ==
+  * version updated to correlate with jdk 5 version
+== 0.1 ==
+  * Fixed obvious bugs
+  * Build system reworked to maven
+  * Added support for XLSX files
+  * Initial version taken from http://www.pcal.net/downloads/sqlsheet/
