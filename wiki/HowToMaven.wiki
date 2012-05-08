@@ -23,7 +23,7 @@ This page describes maven configuration required to get dependecies
         </repository>
     </repositories>
 }}}
-  * [http://sqlsheet.googlecode.com/svn/maven2/com/google/code/sqlsheet/ Check latest version] or [http://sqlsheet.googlecode.com/svn/maven2-snapshots/com/google/code/sqlsheet/ development build]and add required dependencies
+  * [http://sqlsheet.googlecode.com/svn/maven2/com/google/code/sqlsheet/ Check latest version] or [http://sqlsheet.googlecode.com/svn/maven2-snapshots/com/google/code/sqlsheet/ development build] and add required dependencies
 {{{
     <dependencies>
         <dependency>
