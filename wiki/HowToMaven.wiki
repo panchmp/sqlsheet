@@ -14,24 +14,24 @@ This page describes maven configuration required to get dependecies
         <repository>
             <id>sqlsheet.googlecode.com</id>
             <name>sqlsheet.googlecode.com</name>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
             <url>http://sqlsheet.googlecode.com/svn/maven2/</url>
+        </repository>
+        <repository>
+            <id>snaphots.sqlsheet.googlecode.com</id>
+            <name>snaphots.googlecode.com</name>
+            <url>http://sqlsheet.googlecode.com/svn/maven2-snapshots/</url>
         </repository>
     </repositories>
 }}}
   * [http://sqlsheet.googlecode.com/svn/maven2/com/google/code/sqlsheet/ Check latest version] and add required dependencies
 {{{
-      <dependency>
-          <groupId>com.google.code</groupId>
-          <artifactId>sqlsheet</artifactId>
-          <version>6.?</version>
-      </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code</groupId>
+            <artifactId>sqlsheet</artifactId>
+            <version>6.2</version>
+        </dependency>
+    </dependencies>
 }}}
   * Use it
 {{{
