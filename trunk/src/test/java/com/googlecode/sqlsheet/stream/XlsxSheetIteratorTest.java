@@ -27,6 +27,7 @@ public class XlsxSheetIteratorTest {
     }
 
 
+
     @Test
     public void testBigGrid() throws Exception {
         XlsxSheetIterator xlsSheet = new XlsxSheetIterator(ClassLoader.getSystemResource("big-grid.xlsx"), "Big Grid");
@@ -45,6 +46,22 @@ public class XlsxSheetIteratorTest {
             counter++;
         }
         Assert.assertEquals(65535L,counter);
+    }
+
+    @Test
+    public void testBugNo3() throws Exception {
+        XlsxSheetIterator xlsSheet = new XlsxSheetIterator(ClassLoader.getSystemResource("bug3.xlsx"), "bug3");
+        Assert.assertEquals(13, xlsSheet.columns.size());
+        long counter = 0L;
+        for (Object o : xlsSheet) {
+            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>)o;
+            Assert.assertEquals(13, rowValues.size());
+           // for(XlsSheetIterator.CellValueHolder value : rowValues){
+               // Assert.assertNotNull(value.stringValue);
+            //}
+            counter++;
+        }
+        Assert.assertEquals(1,counter);
     }
 
 }
