@@ -315,19 +315,13 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                     lastColumnNumber = 0;
                 }
                 //Fill empty columns if required
-                for (int i = lastColumnNumber; i < thisColumn; ++i) {
+                for (int i = lastColumnNumber + 1; i < thisColumn; ++i) {
                     //  output.print(',');
                     if (currentSheetRowIndex == 0) {
-                        if((thisColumn-lastColumnNumber) > columns.size()){
-                            columns.add("");
-                        }
+                        columns.add("");
                     } else {
-                        if(rowValues.get(currentIteratorRowIndex)!=null
-                                && (thisColumn-lastColumnNumber) > rowValues.get(currentIteratorRowIndex).size()){
-                            CellValueHolder empty = new CellValueHolder();
-                            empty.stringValue = "";
-                            addCurrentRowValue(empty);
-                        }
+                        CellValueHolder empty = new CellValueHolder();
+                        addCurrentRowValue(empty);
                     }
 
                 }
