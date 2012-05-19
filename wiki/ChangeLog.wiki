@@ -1,6 +1,8 @@
 #summary Page contains list of changes introduced from version to version.
 
 =Page contains list of changes introduced from version to version=
+== 6.3 ==
+  * Fixed bug #3
 == 6.2 ==
   * Fixed bug with processing sheets not alligned as tables (e.g. free form formats)
 == 6.1 ==
