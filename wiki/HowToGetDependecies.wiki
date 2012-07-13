@@ -25,10 +25,10 @@ You have several options:
  * [http://poi.apache.org/download.html Latest POI]
 
 
-===POI for [http://poi.apache.org/download.html XLS]===
+===POI required libs for [http://poi.apache.org/download.html XLS]===
  * poi-3.8.jar
 
-===POI Requirements for [http://poi.apache.org/download.html XLSX]===
+===POI required libs for [http://poi.apache.org/download.html XLSX]===
  * poi-3.8.jar
  * dom4j-1.6.1.jar
  * poi-ooxml-3.8.jar
