@@ -21,7 +21,7 @@ You have several options:
 
 ==Requirements for [http://code.google.com/p/sqlsheet/downloads sqlsheet 6+]==
  * java6+
- * [http://code.google.com/p/sqlsheet/downloads/detail?name=jsqlparser-0.7.0.jar jsqlparser-0.7.0.jar]
+ * [http://code.google.com/p/sqlsheet/downloads jsqlparser-0.7.0+]
  * [http://poi.apache.org/download.html Latest POI]
 
 
