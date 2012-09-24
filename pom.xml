@@ -13,7 +13,7 @@
         <dependency>
             <groupId>net.sf</groupId>
             <artifactId>jsqlparser</artifactId>
-            <version>0.7.1</version>
+            <version>0.8.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>

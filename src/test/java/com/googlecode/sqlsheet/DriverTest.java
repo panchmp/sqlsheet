@@ -13,8 +13,8 @@ public class DriverTest {
         Class.forName("com.googlecode.sqlsheet.Driver");
         Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile());
         Statement create = conn.createStatement();
-        create.executeUpdate("CREATE TABLE \"TEST_INSERT\"(COL1 INT, COL2 VARCHAR(255), COL3 DATE)");
-        PreparedStatement write = conn.prepareStatement("INSERT INTO TEST_INSERT(COL1, COL2, COL3) VALUES(?,?,?)");
+        create.executeUpdate("CREATE TABLE \"TEST_INSERT\"(\"COL1\" INT, COL2 VARCHAR(255), COL3 DATE)");
+        PreparedStatement write = conn.prepareStatement("INSERT INTO TEST_INSERT(COL1, \"COL2\", COL3) VALUES(?,?,?)");
         for (int i = 0; i < 3; i++) {
             write.setDouble(1, i);
             write.setString(2, "Row" + i);
