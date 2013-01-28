@@ -1,17 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.google.code</groupId>
+    <groupId>com.google.code.sqlsheet</groupId>
     <artifactId>sqlsheet</artifactId>
     <version>6.4-SNAPSHOT</version>
     <name>sqlsheet</name>
 
     <description>Jdbc API for xls/xlsx files using POI</description>
+    <url>http://code.google.com/p/sqlsheet/</url>
 
     <dependencies>
         <dependency>
-            <groupId>net.sf</groupId>
+            <groupId>net.sf.jsqlparser</groupId>
             <artifactId>jsqlparser</artifactId>
             <version>0.8.0</version>
         </dependency>
@@ -30,10 +32,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -64,6 +67,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <build>
@@ -73,7 +77,7 @@
                 <artifactId>wagon-svn</artifactId>
                 <version>1.8</version>
             </extension>
-        </extensions>    
+        </extensions>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -88,7 +92,7 @@
         </pluginManagement>
 
         <plugins>
-        
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -111,7 +115,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
@@ -201,7 +205,7 @@
         <developer>
             <name>Ivan Vasyliev</name>
             <email>vasilievip@gmail.com</email>
-        </developer>		
+        </developer>
     </developers>
 
     <scm>
@@ -215,35 +219,16 @@
     </issueManagement>
 
     <distributionManagement>
-        <!-- use the following if you're not using a snapshot version. -->
-        <repository>
-            <id>sqlsheet.googlecode.releases</id>
-            <name>sqlsheet.googlecode.releases</name>
-            <url>svn:https://sqlsheet.googlecode.com/svn/maven2/</url>
-        </repository>
-        <!-- use the following if you ARE using a snapshot version. -->
         <snapshotRepository>
-            <id>sqlsheet.googlecode.snapshots</id>
-            <name>sqlsheet.googlecode.snapshots</name>
-            <url>svn:https://sqlsheet.googlecode.com/svn/maven2-snapshots/</url>
-            <uniqueVersion>false</uniqueVersion>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
-    </distributionManagement>
-
-
-    <repositories>
         <repository>
-            <id>sqlsheet.googlecode.com</id>
-            <name>sqlsheet.googlecode.com</name>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <url>http://sqlsheet.googlecode.com/svn/maven2/</url>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-    </repositories>
+    </distributionManagement>
 
 </project>
