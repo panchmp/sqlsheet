@@ -13,7 +13,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.sf.jsqlparser</groupId>
+            <groupId>net.sf</groupId>
             <artifactId>jsqlparser</artifactId>
             <version>0.8.0</version>
         </dependency>
@@ -230,5 +230,20 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>sqlsheet.googlecode.com</id>
+            <name>sqlsheet.googlecode.com</name>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <url>http://sqlsheet.googlecode.com/svn/maven2/</url>
+        </repository>
+    </repositories>
 
 </project>
