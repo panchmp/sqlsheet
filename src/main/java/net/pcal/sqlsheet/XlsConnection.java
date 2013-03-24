@@ -25,6 +25,7 @@ import java.nio.channels.FileChannel;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -83,7 +84,8 @@ class XlsConnection implements Connection {
                 File newFile = File.createTempFile("xlsdriver","xlsx");
                 fileOut = new FileOutputStream(newFile);
                 workbook.write(fileOut);
-                File backup = backupFile(saveFile);
+               // File backup = backupFile(saveFile);
+                //TODO: result of delete ignored
                 saveFile.delete();
                 moveFile(newFile,saveFile);
             } catch (IOException ioe) {
@@ -176,7 +178,7 @@ class XlsConnection implements Connection {
     }
 
     public DatabaseMetaData getMetaData() throws SQLException {
-        return null;
+        return new XlsDatabaseMetaData();
     }
 
     public void setAutoCommit(boolean autoCommit) throws SQLException {
@@ -352,4 +354,24 @@ class XlsConnection implements Connection {
     public void setWriteRequired(Boolean writeRequired) {
         this.writeRequired = writeRequired;
     }
+
+	public void setSchema(String string) throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+}
+
+	public String getSchema() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void abort(Executor exctr) throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public int getNetworkTimeout() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

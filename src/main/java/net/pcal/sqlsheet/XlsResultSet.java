@@ -37,6 +37,7 @@ public class XlsResultSet implements ResultSet {
     private Workbook workbook;
     private Sheet sheet;
     private XlsResultSetMetaData metadata;
+	protected Statement statement;
     private int firstSheetRowOffset = 0;
     private int cursorSheetRow = firstSheetRowOffset - 1;
     private CellStyle dateStyle = null;
@@ -131,6 +132,14 @@ public class XlsResultSet implements ResultSet {
 
     public Object getObject(int jdbcColumn) throws SQLException {
         return getObject(getCell(jdbcColumn));
+    }
+
+    public <T> T getObject(int jdbcColumn, Class<T> type) throws SQLException {
+        return (T) getObject(jdbcColumn);
+    }
+
+    public <T> T getObject(String columnName, Class<T> type) throws SQLException {
+        return (T) getObject(columnName);
     }
 
     private static Object getObject(Cell cell) throws SQLException {
@@ -370,8 +379,8 @@ public class XlsResultSet implements ResultSet {
         } else if (x instanceof char[]) {
             cell.setCellValue(new String((char[]) x));
         } else if (x instanceof Double) {
-            if ((Double) x == Double.NEGATIVE_INFINITY
-                    || (Double) x == Double.POSITIVE_INFINITY || (Double) x == Double.NaN) {
+            if (x.equals(Double.NEGATIVE_INFINITY )
+                    || x.equals(Double.POSITIVE_INFINITY) || x.equals(Double.NaN)) {
                 cell.setCellValue(BAD_DOUBLE);
             } else {
                 cell.setCellValue((Double) x);
@@ -572,7 +581,7 @@ public class XlsResultSet implements ResultSet {
     }
 
     public Statement getStatement() throws SQLException {
-        throw nyi();
+        return statement;
     }
 
     public Time getTime(int jdbcColumn) throws SQLException {
@@ -658,7 +667,8 @@ public class XlsResultSet implements ResultSet {
     }
 
     public void setFetchSize(int rows) throws SQLException {
-        throw nyi();
+		// better just ignore it if configuration is not supported
+        //throw nyi();
     }
 
     public void updateArray(int jdbcColumn, Array x) throws SQLException {

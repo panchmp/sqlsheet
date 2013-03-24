@@ -19,7 +19,9 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 import java.util.logging.Logger;
+import net.pcal.sqlsheet.XlsDatabaseMetaData;
 
 
 /**
@@ -92,7 +94,7 @@ public class XlsStreamConnection implements Connection {
     }
 
     public DatabaseMetaData getMetaData() throws SQLException {
-        return null;
+        return new XlsDatabaseMetaData();
     }
 
     public void setAutoCommit(boolean autoCommit) throws SQLException {
@@ -260,5 +262,25 @@ public class XlsStreamConnection implements Connection {
         nyi();
         return false;
     }
+
+	public void setSchema(String string) throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+}
+
+	public String getSchema() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void abort(Executor exctr) throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public int getNetworkTimeout() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 }

@@ -323,4 +323,12 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     public void setUnicodeStream(int arg0, InputStream arg1, int arg2) throws SQLException {
         nyi();
     }
+
+	public void closeOnCompletion() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+}
+
+	public boolean isCloseOnCompletion() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

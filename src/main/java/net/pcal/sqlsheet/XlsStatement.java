@@ -85,6 +85,7 @@ public class XlsStatement implements Statement {
     protected ResultSet doSelect(SelectStarStatement sss) throws SQLException {
         XlsResultSet out = findOrCreateResultSetFor(sss.getTable());
         out.beforeFirst();
+		out.statement=this;
         return out;
     }
 
@@ -116,6 +117,7 @@ public class XlsStatement implements Statement {
         if (out == null) {
             Sheet sheet = getSheetNamed(connection.getWorkBook(), tableName);
             out = new XlsResultSet(connection.getWorkBook(), sheet);
+			out.statement=this;
             sheet2rs.put(tableName, out);
         }
         return out;
@@ -311,5 +313,13 @@ public class XlsStatement implements Statement {
     public <T> T unwrap(Class<T> iface) throws SQLException {
         return null;
     }
+
+	public void closeOnCompletion() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+}
+
+	public boolean isCloseOnCompletion() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 }
