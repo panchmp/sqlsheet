@@ -52,7 +52,7 @@ public class XlsStreamResultSet implements ResultSet {
                     throw new SQLException("Cannot detect type of XLS file");
             }
         } catch (IOException e) {
-            new SQLException(e.getMessage(), e);
+            throw new SQLException(e.getMessage(), e);
         }
         metadata = new XlsStreamingResultSetMetaData(iterator.columns.toArray(new String[]{}));
     }
@@ -85,6 +85,14 @@ public class XlsStreamResultSet implements ResultSet {
 
     public ResultSetMetaData getMetaData() throws SQLException {
         return metadata;
+    }
+
+    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+        return (T)getObject(columnIndex);
+    }
+
+    public <T> T getObject(String columnName, Class<T> type) throws SQLException {
+        return (T)getObject(columnName);
     }
 
     public boolean getBoolean(int jdbcColumn) throws SQLException {
@@ -328,11 +336,11 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     public void moveToInsertRow() throws SQLException {
-        nyi();
+        throw nyi();
     }
 
     public void insertRow() throws SQLException {
-        nyi();
+        throw nyi();
     }
 
     // Private methods

@@ -255,4 +255,12 @@ public class XlsStreamStatement implements Statement{
         return null;
     }
 
+	public void closeOnCompletion() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+}
+
+	public boolean isCloseOnCompletion() throws SQLException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 }

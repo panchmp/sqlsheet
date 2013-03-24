@@ -65,14 +65,14 @@ public class XlsDriver implements Driver {
             throw new IllegalArgumentException("URL is not " + URL_SCHEME + " (" + jdbcUrl + ")");
         }
         // strip any properties from end of URL and set them as additional properties
-        String urlProperties = "";
+        String urlProperties;
         int questionIndex = jdbcUrl.indexOf('?');
         if (questionIndex >= 0) {
             info = new Properties(info);
             urlProperties = jdbcUrl.substring(questionIndex);
             String[] split = urlProperties.substring(1).split("&");
-            for (int i = 0; i < split.length; i++) {
-                String[] property = split[i].split("=");
+            for (String each: split) {
+                String[] property = each.split("=");
                 try {
                     if (property.length == 2) {
                         String key = URLDecoder.decode(property[0], "UTF-8");
@@ -82,7 +82,7 @@ public class XlsDriver implements Driver {
                         String key = URLDecoder.decode(property[0], "UTF-8");
                         info.setProperty(key, Boolean.TRUE.toString());
                     } else {
-                        throw new SQLException("Invalid property: " + split[i]);
+                        throw new SQLException("Invalid property: " + each);
                     }
                 } catch (UnsupportedEncodingException e) {
                     // we know UTF-8 is available
@@ -173,6 +173,10 @@ public class XlsDriver implements Driver {
     public int getMinorVersion() {
         return 0;
     }
+
+	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 
 }
