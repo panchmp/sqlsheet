@@ -39,10 +39,9 @@ import java.util.logging.Logger;
 class XlsConnection implements Connection {
 
     private static final Logger logger = Logger.getLogger(XlsConnection.class.getName());
-
     private Workbook workbook = null;
     private File saveFile = null;
-    private Boolean writeRequired =  false;
+    private Boolean writeRequired = false;
 
     XlsConnection(Workbook workbook) {
         if (workbook == null)
@@ -79,34 +78,42 @@ class XlsConnection implements Connection {
 
     public void close() throws SQLException {
         if (saveFile != null && writeRequired) {
-            FileOutputStream fileOut = null;
+            FileOutputStream fileOut;
             try {
-                File newFile = File.createTempFile("xlsdriver","xlsx");
+                File newFile = File.createTempFile("xlsdriver", "xlsx");
                 fileOut = new FileOutputStream(newFile);
                 workbook.write(fileOut);
-               // File backup = backupFile(saveFile);
-                //TODO: result of delete ignored
-                saveFile.delete();
-                moveFile(newFile,saveFile);
+                if (fileOut != null) {
+                    try {
+                        fileOut.close();
+                    } catch (IOException e) {
+                        logger.log(Level.WARNING, e.getMessage(), e);
+                    }
+                }
+                //Move already existing data to not corrupt on fail
+                File backup = backupFile(saveFile);
+                logger.log(Level.INFO, "Created backup:" + backup.getAbsolutePath());
+                //Try to override file with new content
+                //backup should rename file or copy content into new one, handle second condition
+                if (saveFile.exists()) {
+                    if (!saveFile.delete()) {
+                        logger.log(Level.WARNING, "Unable to delete file:" + saveFile.getAbsolutePath()+", you may lose the results.");
+                    }
+                }
+                moveFile(newFile, saveFile);
             } catch (IOException ioe) {
                 SQLException sqe = new SQLException(ioe.getMessage());
                 sqe.initCause(sqe);
                 throw sqe;
-            } finally {
-                if (fileOut != null)
-                    try {
-                        fileOut.close();
-                    } catch (IOException e) {
-                        logger.log(Level.WARNING,e.getMessage(),e);
-                    }
             }
         }
     }
 
-    private File backupFile(File input) throws IOException{
+    private File backupFile(File input) throws IOException {
+
         File output = null;
         if (input != null) {
-            output = File.createTempFile(input.getName()+".",".bkp",null);
+            output = File.createTempFile(input.getName() + ".", ".bkp", null);
             moveFile(input, output);
         }
         return output;
@@ -116,23 +123,24 @@ class XlsConnection implements Connection {
         boolean moved;
         moved = sourceFile.renameTo(destFile);
         if (!moved) {
+            logger.log(Level.WARNING, "Unable to rename file during move:" + sourceFile.getAbsolutePath()+" to "+destFile.getAbsolutePath()+", performing full copy of data.");
             FileChannel source = null;
             FileChannel destination = null;
             try {
                 source = new FileInputStream(sourceFile).getChannel();
                 destination = new FileOutputStream(destFile).getChannel();
-
                 // previous code: destination.transferFrom(source, 0, source.size());
                 // to avoid infinite loops, should be:
                 long count = 0;
                 long size = source.size();
-                while((count += destination.transferFrom(source, 0, size-count))<size);
-            }
-            finally {
-                if(source != null) {
+                do {
+                    count += destination.transferFrom(source, 0, size - count);
+                } while (count < size);
+            } finally {
+                if (source != null) {
                     source.close();
                 }
-                if(destination != null) {
+                if (destination != null) {
                     destination.close();
                 }
             }
@@ -143,6 +151,10 @@ class XlsConnection implements Connection {
         return false;
     }
 
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+        nyi();
+    }
+
     public boolean isClosed() {
         return false;
     }
@@ -151,12 +163,24 @@ class XlsConnection implements Connection {
         return true;
     }
 
+    public void setReadOnly(boolean readOnly) throws SQLException {
+        nyi();
+    }
+
     public String getCatalog() {
         return null;
     }
 
+    public void setCatalog(String catalog) throws SQLException {
+        nyi();
+    }
+
     public int getTransactionIsolation() {
         return Connection.TRANSACTION_NONE;
+    }
+
+    public void setTransactionIsolation(int level) throws SQLException {
+        nyi();
     }
 
     public SQLWarning getWarnings() {
@@ -166,6 +190,10 @@ class XlsConnection implements Connection {
     @SuppressWarnings("unchecked")
     public Map getTypeMap() throws SQLException {
         return null;
+    }
+
+    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
+        nyi();
     }
 
     public void commit() throws SQLException {
@@ -179,22 +207,6 @@ class XlsConnection implements Connection {
 
     public DatabaseMetaData getMetaData() throws SQLException {
         return new XlsDatabaseMetaData();
-    }
-
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
-        nyi();
-    }
-
-    public void setReadOnly(boolean readOnly) throws SQLException {
-        nyi();
-    }
-
-    public void setCatalog(String catalog) throws SQLException {
-        nyi();
-    }
-
-    public void setTransactionIsolation(int level) throws SQLException {
-        nyi();
     }
 
     public CallableStatement prepareCall(String sql) throws SQLException {
@@ -220,6 +232,10 @@ class XlsConnection implements Connection {
     public int getHoldability() throws SQLException {
         nyi();
         return -1;
+    }
+
+    public void setHoldability(int param) throws SQLException {
+        nyi();
     }
 
     public CallableStatement prepareCall(String str, int param, int param2, int param3) throws SQLException {
@@ -270,9 +286,6 @@ class XlsConnection implements Connection {
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
     }
 
-    public void setClientInfo(Properties properties) throws SQLClientInfoException {
-    }
-
     public String getClientInfo(String name) throws SQLException {
         nyi();
         return null;
@@ -281,6 +294,9 @@ class XlsConnection implements Connection {
     public Properties getClientInfo() throws SQLException {
         nyi();
         return null;
+    }
+
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
     }
 
     public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
@@ -307,10 +323,6 @@ class XlsConnection implements Connection {
         nyi();
     }
 
-    public void setHoldability(int param) throws SQLException {
-        nyi();
-    }
-
     public Savepoint setSavepoint() throws SQLException {
         nyi();
         return null;
@@ -333,10 +345,6 @@ class XlsConnection implements Connection {
         throw new SQLException("NYI");
     }
 
-    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-        nyi();
-    }
-
     public <T> T unwrap(Class<T> iface) throws SQLException {
         nyi();
         return null;
@@ -355,23 +363,23 @@ class XlsConnection implements Connection {
         this.writeRequired = writeRequired;
     }
 
-	public void setSchema(String string) throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-}
+    public String getSchema() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public String getSchema() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public void setSchema(String string) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public void abort(Executor exctr) throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public void abort(Executor exctr) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public int getNetworkTimeout() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public int getNetworkTimeout() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
