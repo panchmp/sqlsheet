@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.sqlsheet</groupId>
     <artifactId>sqlsheet</artifactId>
-    <version>6.4-SNAPSHOT</version>
+    <version>6.4</version>
     <name>sqlsheet</name>
 
     <description>Jdbc API for xls/xlsx files using POI</description>
@@ -209,9 +208,9 @@
     </developers>
 
     <scm>
-        <connection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</connection>
-        <developerConnection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</developerConnection>
-        <url>https://sqlsheet.googlecode.com/svn/trunk/</url>
+        <connection>scm:svn:https://sqlsheet.googlecode.com/svn/tags/sqlsheet-6.4</connection>
+        <developerConnection>scm:svn:https://sqlsheet.googlecode.com/svn/tags/sqlsheet-6.4</developerConnection>
+        <url>https://sqlsheet.googlecode.com/svn/tags/sqlsheet-6.4</url>
     </scm>
     <issueManagement>
         <system>Google Code Issue Tracking</system>
