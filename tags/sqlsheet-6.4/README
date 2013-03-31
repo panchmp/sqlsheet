@@ -1,0 +1,38 @@
+
+                      sqlsheet
+ 
+
+  What is it? 
+  -----------
+  
+  A JDBC driver which operates on Excel spreadsheets. Currently supports 
+  basic SELECT, CREATE, DROP, INSERT operations. The driver is pure Java -
+  no native Windows components are required.
+
+
+
+  The Latest Version
+  ------------------
+
+  Details of the latest version can be found on
+  
+  http://www.pcal.net
+
+
+  Documentation
+  -------------
+
+  Please read the package documentation in the javadoc directory.
+
+  Licensing
+  ---------
+
+  This software is licensed under the terms you may find in the file 
+  named "LICENSE" in this directory.
+  
+
+  Have fun!
+  
+  Patrick Calahan
+  http://www.pcal.net
+
