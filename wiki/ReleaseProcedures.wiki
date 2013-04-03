@@ -6,20 +6,6 @@ Steps to follow to release library.
 
 
 = Details =
-  * Add configuration to %USER_HOME%/.m2/settings.xml or %M2_HOME%/conf/settings.xml
-{{{
-...
-    <servers>
-      <server>
-       <id>googlecode</id>
-       <username>yourlogin</username>
-       <password>yourpassword</password>
-      </server>    
-    </servers>
-...
-}}}
-  * Run
-{{{
-mvn release:prepare
-mvn release:perform
-}}}
+ * Open Jenkins http://dev.mikl.org.ua/jenkins/job/SQLSheet/
+ * run Perform Maven Release 
+ * enter your login & password for SVN
