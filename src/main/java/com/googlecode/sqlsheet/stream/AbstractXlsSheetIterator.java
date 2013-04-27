@@ -17,7 +17,6 @@ package com.googlecode.sqlsheet.stream;
 
 import org.apache.poi.ss.usermodel.DateUtil;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
@@ -38,11 +37,18 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
                     '}';
         }
 
+        public Class getType(){
+            if (this.dateValue != null) return dateValue.getClass();
+            if (this.doubleValue != null) return doubleValue.getClass();
+            if (this.stringValue != null) return stringValue.getClass();
+            return Object.class;
+        }
+
     }
 
     URL fileName;
     String sheetName;
-    List<String> columns = new ArrayList<String>();
+    List<CellValueHolder> columns = new ArrayList<CellValueHolder>();
     Map<Long, List<CellValueHolder>> rowValues = new HashMap<Long, List<CellValueHolder>>();
 
     //Counter includes columns row
@@ -99,6 +105,17 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
         if(rowValues.get(currentIteratorRowIndex)!=null){
             if(column < rowValues.get(currentIteratorRowIndex).size()){
                 result = rowValues.get(currentIteratorRowIndex).get(column);
+            }
+        }
+        return result;
+    }
+
+
+    CellValueHolder getNextRowValue(int column){
+        CellValueHolder result = new CellValueHolder();
+        if(rowValues.get(currentIteratorRowIndex+1)!=null){
+            if(column < rowValues.get(currentIteratorRowIndex+1).size()){
+                result = rowValues.get(currentIteratorRowIndex+1).get(column);
             }
         }
         return result;

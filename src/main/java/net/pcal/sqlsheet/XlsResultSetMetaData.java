@@ -22,6 +22,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Date;
 
 
 /**
@@ -34,9 +36,11 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
 
     private String[] columnNames;
     private final DataFormatter formatter;
+    private XlsResultSet resultset;
 
-    public XlsResultSetMetaData(Sheet sheet) throws SQLException {
+    public XlsResultSetMetaData(Sheet sheet, XlsResultSet resultset) throws SQLException {
         if (sheet == null) throw new IllegalArgumentException();
+        this.resultset = resultset;
         Row row = sheet.getRow(0);
         if (row == null) {
             throw new SQLException("No header row in sheet");
@@ -65,20 +69,27 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
         return null;
     }
 
-    public String getColumnClassName(int arg0) throws SQLException {
-        return null;
+    public String getColumnClassName(int jdbcColumn) throws SQLException {
+        return resultset.getNextRowObject(jdbcColumn).getClass().getName();
     }
 
     public int getColumnDisplaySize(int arg0) {
         return 0;
     }
 
-    public int getColumnType(int arg0) throws SQLException {
-        return 0;
+    public int getColumnType(int jdbcColumn) throws SQLException {
+        if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(String.class)) {
+            return Types.VARCHAR;
+        } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Double.class)) {
+            return Types.DOUBLE;
+        } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Date.class)) {
+            return Types.DATE;
+        }
+        return Types.OTHER;
     }
 
-    public String getColumnTypeName(int arg0) throws SQLException {
-        return null;
+    public String getColumnTypeName(int jdbcColumn) throws SQLException {
+        return resultset.getNextRowObject(jdbcColumn).getClass().getName();
     }
 
     public int getPrecision(int arg0) throws SQLException {

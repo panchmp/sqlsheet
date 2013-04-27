@@ -107,6 +107,32 @@ public class DriverTest {
         Assert.assertEquals(results.getLong("Zone ID"), results.getLong(1));
     }
 
+    @Test
+    public void testBugNo6() throws Exception {
+        Class.forName("com.googlecode.sqlsheet.Driver");
+        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=true");
+        Statement stmt = conn.createStatement();
+        ResultSet results = stmt.executeQuery("SELECT * FROM SHEET1");
+        Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
+
+        ResultSetMetaData resultSetMetaData = results.getMetaData();
+        Assert.assertEquals("java.lang.Double", resultSetMetaData.getColumnTypeName(1));
+        Assert.assertEquals("java.lang.String", resultSetMetaData.getColumnTypeName(2));
+        Assert.assertEquals("java.util.Date", resultSetMetaData.getColumnTypeName(3));
+
+        conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=no");
+        stmt = conn.createStatement();
+        results = stmt.executeQuery("SELECT * FROM SHEET1");
+        Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
+
+        resultSetMetaData = results.getMetaData();
+        Assert.assertEquals("java.lang.Double", resultSetMetaData.getColumnTypeName(1));
+        Assert.assertEquals("java.lang.String", resultSetMetaData.getColumnTypeName(2));
+        Assert.assertEquals("java.util.Date", resultSetMetaData.getColumnTypeName(3));
+
+    }
+
+
     private void processBaseResultset(Connection conn, String sql) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery(sql);

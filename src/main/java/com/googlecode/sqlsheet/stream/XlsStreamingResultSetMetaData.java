@@ -17,6 +17,8 @@ package com.googlecode.sqlsheet.stream;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Date;
 
 
 /**
@@ -27,45 +29,53 @@ import java.sql.SQLException;
  */
 public class XlsStreamingResultSetMetaData implements ResultSetMetaData {
 
-    private String[] columnNames;
+    private AbstractXlsSheetIterator iterator;
 
-    public XlsStreamingResultSetMetaData(String[] columnNames) throws SQLException {
-        this.columnNames = new String[columnNames.length];
-        for (short c = 0; c < columnNames.length; c++) {
-            this.columnNames[c] = columnNames[c];
-        }
+    public XlsStreamingResultSetMetaData(AbstractXlsSheetIterator iterator) throws SQLException {
+        this.iterator = iterator;
     }
 
     public int getColumnCount() {
-        return columnNames.length;
+        return iterator.columns.size();
     }
 
     public String getColumnLabel(int jdbcCol) {
-        return columnNames[jdbcCol - 1];
+        return iterator.columns.get(jdbcCol - 1).stringValue;
     }
 
     public String getColumnName(int jdbcCol) {
-        return columnNames[jdbcCol - 1];
+        return iterator.columns.get(jdbcCol - 1).stringValue;
     }
 
     public String getCatalogName(int arg0) throws SQLException {
-        return null;
+        return "";
     }
 
-    public String getColumnClassName(int arg0) throws SQLException {
-        return null;
+    public String getColumnClassName(int jdbcCol) throws SQLException {
+        return iterator.getCurrentRowValue(jdbcCol - 1).getType().getName();
     }
 
     public int getColumnDisplaySize(int arg0) {
         return 0;
     }
 
-    public int getColumnType(int arg0) throws SQLException {
-        return 0;
+    public int getColumnType(int jdbcCol) throws SQLException {
+        if (iterator.getCurrentRowValue(jdbcCol - 1).getType().isAssignableFrom(String.class)) {
+            return Types.VARCHAR;
+        } else if (iterator.getCurrentRowValue(jdbcCol - 1).getType().isAssignableFrom(Double.class)) {
+            return Types.DOUBLE;
+        } else if (iterator.getCurrentRowValue(jdbcCol - 1).getType().isAssignableFrom(Date.class)) {
+            return Types.DATE;
+        }
+        return Types.OTHER;
     }
 
-    public String getColumnTypeName(int arg0) throws SQLException {
-        return null;
+    public String getColumnTypeName(int jdbcCol) throws SQLException {
+        if(iterator.currentIteratorRowIndex ==0) {
+            return iterator.getNextRowValue(jdbcCol - 1).getType().getName();
+        } else{
+            return iterator.getCurrentRowValue(jdbcCol - 1).getType().getName();
+        }
     }
 
     public int getPrecision(int arg0) throws SQLException {
@@ -77,11 +87,11 @@ public class XlsStreamingResultSetMetaData implements ResultSetMetaData {
     }
 
     public String getSchemaName(int arg0) throws SQLException {
-        return null;
+        return "";
     }
 
     public String getTableName(int arg0) throws SQLException {
-        return null;
+        return iterator.sheetName;
     }
 
     public boolean isAutoIncrement(int arg0) throws SQLException {
