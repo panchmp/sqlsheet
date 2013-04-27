@@ -87,6 +87,22 @@ public class DriverTest {
         processBaseResultset(conn, "SELECT * FROM SHEET1");
     }
 
+    @Test
+    public void testBugNo7() throws Exception {
+        Class.forName("com.googlecode.sqlsheet.Driver");
+        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("bug7.xlsx").getFile() + "?readStreaming=true");
+        Statement stmt = conn.createStatement();
+        ResultSet results = stmt.executeQuery("SELECT * FROM bug7");
+        Assert.assertEquals(results.getMetaData().getColumnCount(), 13L);
+        Assert.assertEquals(results.getString("Zone ID"), results.getString(1));
+
+        conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("bug7.xlsx").getFile() + "?readStreaming=no");
+        stmt = conn.createStatement();
+        results = stmt.executeQuery("SELECT * FROM bug7");
+        Assert.assertEquals(results.getMetaData().getColumnCount(), 13L);
+        Assert.assertEquals(results.getString("Zone ID"), results.getString(1));
+    }
+
 
     private void processBaseResultset(Connection conn, String sql) throws SQLException {
         Statement stmt = conn.createStatement();
