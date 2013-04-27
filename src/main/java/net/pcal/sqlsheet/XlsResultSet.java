@@ -34,33 +34,61 @@ import java.util.Map;
 public class XlsResultSet implements ResultSet {
 
     private static final double BAD_DOUBLE = 0;
+    protected Statement statement;
     private Workbook workbook;
     private Sheet sheet;
     private XlsResultSetMetaData metadata;
-	protected Statement statement;
     private int firstSheetRowOffset = 0;
     private int cursorSheetRow = firstSheetRowOffset - 1;
     private CellStyle dateStyle = null;
 
     public XlsResultSet(Workbook wb, Sheet s) throws SQLException {
-        if (s == null) throw new IllegalArgumentException("null sheet");
-        if (wb == null) throw new IllegalArgumentException("null workbook");
+        if (s == null){
+            throw new IllegalArgumentException("null sheet");
+        }
+        if (wb == null){
+            throw new IllegalArgumentException("null workbook");
+        }
         this.workbook = wb;
         this.sheet = s;
         firstSheetRowOffset = 1;
         cursorSheetRow = firstSheetRowOffset - 1;
-        metadata = new XlsResultSetMetaData(s,this);
+        metadata = new XlsResultSetMetaData(s, this);
         // set the default date cell format
         dateStyle = workbook.createCellStyle();
         dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
     }
 
-    /**
-     * Set the style to be applied to updated or created Date cells.
-     */
-    public void setOutputDateStyle(CellStyle style) {
-        this.dateStyle = style;
+    private static Object getObject(Cell cell) throws SQLException {
+        try {
+            if (cell == null){
+                return null;
+            }
+            switch (cell.getCellType()) {
+                case Cell.CELL_TYPE_BOOLEAN:
+                    return cell.getBooleanCellValue();
+                case Cell.CELL_TYPE_STRING:
+                    return cell.getStringCellValue();
+                case Cell.CELL_TYPE_NUMERIC:
+                    if (DateUtil.isCellDateFormatted(cell)) {
+                        return cell.getDateCellValue();
+                    }
+                    return cell.getNumericCellValue();
+
+                default:
+                    return null;
+            }
+        } catch (Exception e) {
+            throw wrapped(e);
+        }
     }
+
+    private static SQLException wrapped(Throwable t) {
+        SQLException out = new SQLException(t.getMessage());
+        out.initCause(t);
+        return out;
+    }
+
 
     public ResultSetMetaData getMetaData() throws SQLException {
         return metadata;
@@ -68,12 +96,12 @@ public class XlsResultSet implements ResultSet {
 
     public boolean getBoolean(int jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        return cell == null ? false : cell.getBooleanCellValue();
+        return cell != null && cell.getBooleanCellValue();
     }
 
     public boolean getBoolean(String jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        return cell == null ? false : cell.getBooleanCellValue();
+        return cell != null && cell.getBooleanCellValue();
     }
 
     public double getDouble(int jdbcColumn) throws SQLException {
@@ -150,48 +178,12 @@ public class XlsResultSet implements ResultSet {
         return getObject(jdbcColumn);
     }
 
-    Object getNextRowObject(String jdbcColumn) throws SQLException {
-        if (sheet.getRow(cursorSheetRow + 1) != null) {
-            Cell cell = sheet.getRow(cursorSheetRow + 1).getCell(getSheetColumnNamed(jdbcColumn));
-            return getObject(cell);
-        }
-        return getObject(jdbcColumn);
-    }
-
-    private static Object getObject(Cell cell) throws SQLException {
-        try {
-            if (cell == null) return null;
-            switch (cell.getCellType()) {
-                case Cell.CELL_TYPE_BOOLEAN:
-                    return cell.getBooleanCellValue();
-                case Cell.CELL_TYPE_STRING:
-                    return cell.getStringCellValue();
-                case Cell.CELL_TYPE_NUMERIC:
-
-                    if (DateUtil.isCellDateFormatted(cell)) {
-                        return cell.getDateCellValue();
-                    }
-                    return cell.getNumericCellValue();
-
-                default:
-                    return null;
-            }
-        } catch (Exception e) {
-            throw wrapped(e);
-        }
-    }
-
-    private static SQLException wrapped(Throwable t) {
-        SQLException out = new SQLException(t.getMessage());
-        out.initCause(t);
-        return out;
-    }
     public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
-        return new  Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
+        return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
     }
 
     public Timestamp getTimestamp(String jdbcColumn) throws SQLException {
-        return new  Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
+        return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
     }
 
     public Timestamp getTimestamp(int jdbcColumn, Calendar cal)
@@ -203,7 +195,6 @@ public class XlsResultSet implements ResultSet {
             throws SQLException {
         throw nyi();
     }
-
 
     public short getShort(int jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
@@ -347,8 +338,17 @@ public class XlsResultSet implements ResultSet {
         return FETCH_UNKNOWN;
     }
 
+    public void setFetchDirection(int direction) throws SQLException {
+        throw nyi();
+    }
+
     public int getFetchSize() throws SQLException {
         return 0;
+    }
+
+    public void setFetchSize(int rows) throws SQLException {
+        // better just ignore it if configuration is not supported
+        //throw nyi();
     }
 
     public int getRow() throws SQLException {
@@ -408,11 +408,11 @@ public class XlsResultSet implements ResultSet {
 
     private void updateObject(Cell cell, Object x) throws SQLException {
         if (x instanceof String) {
-            cell.setCellValue((String)x);
+            cell.setCellValue((String) x);
         } else if (x instanceof char[]) {
             cell.setCellValue(new String((char[]) x));
         } else if (x instanceof Double) {
-            if (x.equals(Double.NEGATIVE_INFINITY )
+            if (x.equals(Double.NEGATIVE_INFINITY)
                     || x.equals(Double.POSITIVE_INFINITY) || x.equals(Double.NaN)) {
                 cell.setCellValue(BAD_DOUBLE);
             } else {
@@ -438,7 +438,7 @@ public class XlsResultSet implements ResultSet {
     }
 
     private Row getCurrentRow() {
-        if(sheet.getRow(cursorSheetRow) == null){
+        if (sheet.getRow(cursorSheetRow) == null) {
             sheet.createRow(cursorSheetRow);
         }
         return sheet.getRow(cursorSheetRow);
@@ -460,7 +460,6 @@ public class XlsResultSet implements ResultSet {
     private Cell getCell(int jdbcColumn) {
         return sheet.getRow(cursorSheetRow).getCell((short) (jdbcColumn - 1));
     }
-
 
     private Cell getCell(String named) {
         return sheet.getRow(cursorSheetRow).getCell(getSheetColumnNamed(named));
@@ -634,7 +633,6 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-
     public URL getURL(int jdbcColumn) throws SQLException {
         throw nyi();
     }
@@ -677,15 +675,6 @@ public class XlsResultSet implements ResultSet {
 
     public boolean rowUpdated() throws SQLException {
         throw nyi();
-    }
-
-    public void setFetchDirection(int direction) throws SQLException {
-        throw nyi();
-    }
-
-    public void setFetchSize(int rows) throws SQLException {
-		// better just ignore it if configuration is not supported
-        //throw nyi();
     }
 
     public void updateArray(int jdbcColumn, Array x) throws SQLException {
@@ -1003,7 +992,6 @@ public class XlsResultSet implements ResultSet {
     public boolean wasNull() throws SQLException {
         throw nyi();
     }
-
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
         throw nyi();
