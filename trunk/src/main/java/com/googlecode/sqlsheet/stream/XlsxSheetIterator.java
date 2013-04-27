@@ -99,7 +99,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
     @Override
     protected void processNextRecords() throws SQLException {
         Long nextRowIndex = currentSheetRowIndex + 2L;
-        while (reader.hasNext() && (currentSheetRowIndex != nextRowIndex)) {
+        while (reader.hasNext() && (!currentSheetRowIndex.equals(nextRowIndex))) {
             try {
                 processNextEvent();
             } catch (XMLStreamException e) {
@@ -118,7 +118,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                 reader.close();
             }
         } catch (Exception e) {
-            new SQLException(e.getMessage(), e);
+            throw new SQLException(e.getMessage(), e);
         }
     }
 
