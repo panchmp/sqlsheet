@@ -107,7 +107,6 @@ public class DriverTest {
         Assert.assertEquals(results.getLong("Zone ID"), results.getLong(1));
     }
 
-
     private void processBaseResultset(Connection conn, String sql) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery(sql);
