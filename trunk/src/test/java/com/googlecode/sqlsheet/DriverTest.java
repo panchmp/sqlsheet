@@ -94,13 +94,17 @@ public class DriverTest {
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM bug7");
         Assert.assertEquals(results.getMetaData().getColumnCount(), 13L);
+        Assert.assertEquals(results.next(), true);
+        Assert.assertEquals(results.next(), true);
         Assert.assertEquals(results.getString("Zone ID"), results.getString(1));
 
         conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("bug7.xlsx").getFile() + "?readStreaming=no");
         stmt = conn.createStatement();
         results = stmt.executeQuery("SELECT * FROM bug7");
         Assert.assertEquals(results.getMetaData().getColumnCount(), 13L);
-        Assert.assertEquals(results.getString("Zone ID"), results.getString(1));
+        Assert.assertEquals(results.next(), true);
+        Assert.assertEquals(results.next(), true);
+        Assert.assertEquals(results.getLong("Zone ID"), results.getLong(1));
     }
 
 
