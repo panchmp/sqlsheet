@@ -80,7 +80,7 @@ public class XlsStreamResultSet implements ResultSet {
 
     private XlsSheetIterator.CellValueHolder getCell(String jdbcColumn) {
         int jdbcColumnIndex = iterator.columns.indexOf(jdbcColumn);
-        return iterator.getCurrentRowValue(jdbcColumnIndex-1);
+        return iterator.getCurrentRowValue(jdbcColumnIndex);
     }
 
     public ResultSetMetaData getMetaData() throws SQLException {
