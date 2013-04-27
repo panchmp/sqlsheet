@@ -8,30 +8,13 @@ This page describes maven configuration required to get dependecies
 
 = Details =
 
-  * Setup maven repositories in your pom.xml or M2_HOME/config/settings.xml or M2_REPO/.m2/settings.xml
+  * [http://mvnrepository.com/search.html?query=sqlsheet Check latest version] and add required dependencies
 {{{
-    <repositories>
-        <repository>
-            <id>sqlsheet.googlecode.com</id>
-            <name>sqlsheet.googlecode.com</name>
-            <url>http://sqlsheet.googlecode.com/svn/maven2/</url>
-        </repository>
-        <repository>
-            <id>snaphots.sqlsheet.googlecode.com</id>
-            <name>snaphots.googlecode.com</name>
-            <url>http://sqlsheet.googlecode.com/svn/maven2-snapshots/</url>
-        </repository>
-    </repositories>
-}}}
-  * [http://sqlsheet.googlecode.com/svn/maven2/com/google/code/sqlsheet/ Check latest version] or [http://sqlsheet.googlecode.com/svn/maven2-snapshots/com/google/code/sqlsheet/ development build] and add required dependencies
-{{{
-    <dependencies>
-        <dependency>
-            <groupId>com.google.code</groupId>
-            <artifactId>sqlsheet</artifactId>
-            <version>6.3</version>
-        </dependency>
-    </dependencies>
+      <dependency>
+          <groupId>com.google.code.sqlsheet</groupId>
+          <artifactId>sqlsheet</artifactId>
+          <version>6.4</version>
+      </dependency>
 }}}
   * Use it
 {{{
