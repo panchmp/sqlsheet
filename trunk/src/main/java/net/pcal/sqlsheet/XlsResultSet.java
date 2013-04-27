@@ -49,7 +49,7 @@ public class XlsResultSet implements ResultSet {
         this.sheet = s;
         firstSheetRowOffset = 1;
         cursorSheetRow = firstSheetRowOffset - 1;
-        metadata = new XlsResultSetMetaData(s);
+        metadata = new XlsResultSetMetaData(s,this);
         // set the default date cell format
         dateStyle = workbook.createCellStyle();
         dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
@@ -142,6 +142,22 @@ public class XlsResultSet implements ResultSet {
         return (T) getObject(columnName);
     }
 
+    Object getNextRowObject(int jdbcColumn) throws SQLException {
+        if (sheet.getRow(cursorSheetRow + 1) != null) {
+            Cell cell = sheet.getRow(cursorSheetRow + 1).getCell((short) (jdbcColumn - 1));
+            return getObject(cell);
+        }
+        return getObject(jdbcColumn);
+    }
+
+    Object getNextRowObject(String jdbcColumn) throws SQLException {
+        if (sheet.getRow(cursorSheetRow + 1) != null) {
+            Cell cell = sheet.getRow(cursorSheetRow + 1).getCell(getSheetColumnNamed(jdbcColumn));
+            return getObject(cell);
+        }
+        return getObject(jdbcColumn);
+    }
+
     private static Object getObject(Cell cell) throws SQLException {
         try {
             if (cell == null) return null;
@@ -170,6 +186,24 @@ public class XlsResultSet implements ResultSet {
         out.initCause(t);
         return out;
     }
+    public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
+        return new  Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
+    }
+
+    public Timestamp getTimestamp(String jdbcColumn) throws SQLException {
+        return new  Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
+    }
+
+    public Timestamp getTimestamp(int jdbcColumn, Calendar cal)
+            throws SQLException {
+        throw nyi();
+    }
+
+    public Timestamp getTimestamp(String jdbcColumn, Calendar cal)
+            throws SQLException {
+        throw nyi();
+    }
+
 
     public short getShort(int jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
@@ -289,7 +323,6 @@ public class XlsResultSet implements ResultSet {
         if (cell != null) cell.setCellValue(x);
     }
 
-    // =========================================================================
     // ResultSet implementation - everything else
 
     public boolean absolute(int row) throws SQLException {
@@ -427,6 +460,7 @@ public class XlsResultSet implements ResultSet {
     private Cell getCell(int jdbcColumn) {
         return sheet.getRow(cursorSheetRow).getCell((short) (jdbcColumn - 1));
     }
+
 
     private Cell getCell(String named) {
         return sheet.getRow(cursorSheetRow).getCell(getSheetColumnNamed(named));
@@ -600,23 +634,6 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
-        throw nyi();
-    }
-
-    public Timestamp getTimestamp(String jdbcColumn) throws SQLException {
-        throw nyi();
-    }
-
-    public Timestamp getTimestamp(int jdbcColumn, Calendar cal)
-            throws SQLException {
-        throw nyi();
-    }
-
-    public Timestamp getTimestamp(String jdbcColumn, Calendar cal)
-            throws SQLException {
-        throw nyi();
-    }
 
     public URL getURL(int jdbcColumn) throws SQLException {
         throw nyi();

@@ -294,7 +294,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
         if (thisCellValue.stringValue != null) {
             //If we are on the first row - fill column names
             if (currentSheetRowIndex == 0L && inRequiredSheet) {
-                columns.add(thisCellValue.stringValue);
+                columns.add(thisCellValue);
             } else if (inRequiredSheet) {
                 addCurrentRowValue(thisCellValue);
             }

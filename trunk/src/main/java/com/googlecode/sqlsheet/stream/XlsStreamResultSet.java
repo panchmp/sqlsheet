@@ -54,7 +54,7 @@ public class XlsStreamResultSet implements ResultSet {
         } catch (IOException e) {
             throw new SQLException(e.getMessage(), e);
         }
-        metadata = new XlsStreamingResultSetMetaData(iterator.columns.toArray(new String[]{}));
+        metadata = new XlsStreamingResultSetMetaData(iterator);
     }
 
     XlsType getXlsType(URL inputXls) throws IOException {
@@ -93,6 +93,14 @@ public class XlsStreamResultSet implements ResultSet {
 
     public <T> T getObject(String columnName, Class<T> type) throws SQLException {
         return (T)getObject(columnName);
+    }
+
+    public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
+        return new  Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
+    }
+
+    public Timestamp getTimestamp(String jdbcColumn) throws SQLException {
+        return new  Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
     }
 
     public boolean getBoolean(int jdbcColumn) throws SQLException {
@@ -502,14 +510,6 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     public Time getTime(String jdbcColumn, Calendar cal) throws SQLException {
-        throw nyi();
-    }
-
-    public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
-        throw nyi();
-    }
-
-    public Timestamp getTimestamp(String jdbcColumn) throws SQLException {
         throw nyi();
     }
 

@@ -318,7 +318,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                 for (int i = lastColumnNumber + 1; i < thisColumn; ++i) {
                     //  output.print(',');
                     if (currentSheetRowIndex == 0) {
-                        columns.add("");
+                        columns.add(new CellValueHolder());
                     } else {
                         CellValueHolder empty = new CellValueHolder();
                         addCurrentRowValue(empty);
@@ -327,7 +327,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                 }
                 // Might be the empty string.
                 if (currentSheetRowIndex == 0) {
-                    columns.add(thisCellValue.stringValue == null ? "" : thisCellValue.stringValue);
+                    columns.add(thisCellValue);
                 } else {
                     addCurrentRowValue(thisCellValue);
                 }
