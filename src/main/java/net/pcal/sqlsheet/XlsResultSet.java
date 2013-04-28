@@ -41,6 +41,7 @@ public class XlsResultSet implements ResultSet {
     private int firstSheetRowOffset = 0;
     private int cursorSheetRow = firstSheetRowOffset - 1;
     private CellStyle dateStyle = null;
+    private DataFormatter formatter;
 
     public XlsResultSet(Workbook wb, Sheet s) throws SQLException {
         if (s == null){
@@ -49,8 +50,9 @@ public class XlsResultSet implements ResultSet {
         if (wb == null){
             throw new IllegalArgumentException("null workbook");
         }
-        this.workbook = wb;
-        this.sheet = s;
+        formatter = new DataFormatter();
+        workbook = wb;
+        sheet = s;
         firstSheetRowOffset = 1;
         cursorSheetRow = firstSheetRowOffset - 1;
         metadata = new XlsResultSetMetaData(s, this);
@@ -208,12 +210,12 @@ public class XlsResultSet implements ResultSet {
 
     public String getString(int jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        return cell == null ? null : cell.getStringCellValue();
+        return cell == null ? null : formatter.formatCellValue(cell);
     }
 
     public String getString(String jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        return cell == null ? null : cell.getStringCellValue();
+        return cell == null ? null : formatter.formatCellValue(cell);
     }
 
     public void updateBoolean(int jdbcColumn, boolean x) throws SQLException {

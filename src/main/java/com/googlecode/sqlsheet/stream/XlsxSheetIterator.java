@@ -311,9 +311,6 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                 }
                 // Output after we've seen the string contents
                 // Emit commas for any fields that were missing on this row
-                if (lastColumnNumber == -1) {
-                    lastColumnNumber = 0;
-                }
                 //Fill empty columns if required
                 for (int i = lastColumnNumber + 1; i < thisColumn; ++i) {
                     //  output.print(',');
@@ -324,6 +321,9 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                         addCurrentRowValue(empty);
                     }
 
+                }
+                if (lastColumnNumber == -1) {
+                    lastColumnNumber = 0;
                 }
                 // Might be the empty string.
                 if (currentSheetRowIndex == 0) {
@@ -355,7 +355,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
         /**
          * Converts an Excel column name like "C" to a zero-based index.
          *
-         * @param name
+         * @param name  column name
          * @return Index corresponding to the specified name
          */
         private int nameToColumn(String name) {

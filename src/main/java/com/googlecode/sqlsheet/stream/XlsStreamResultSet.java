@@ -34,14 +34,12 @@ import java.util.Map;
  */
 public class XlsStreamResultSet implements ResultSet {
 
-    private static enum XlsType {XLS, XLSX}
-
     AbstractXlsSheetIterator iterator;
     private XlsStreamingResultSetMetaData metadata;
 
     public XlsStreamResultSet(String tableName, XlsStreamConnection connection) throws SQLException {
         try {
-            switch (getXlsType(connection.xlsFile)){
+            switch (getXlsType(connection.xlsFile)) {
                 case XLS:
                     iterator = new XlsSheetIterator(connection.xlsFile, tableName);
                     break;
@@ -55,6 +53,14 @@ public class XlsStreamResultSet implements ResultSet {
             throw new SQLException(e.getMessage(), e);
         }
         metadata = new XlsStreamingResultSetMetaData(iterator);
+    }
+
+    private static Object getObject(XlsSheetIterator.CellValueHolder cell) throws SQLException {
+        if (cell == null) return null;
+        if (cell.dateValue != null) return cell.dateValue;
+        if (cell.doubleValue != null) return cell.doubleValue;
+        if (cell.stringValue != null) return cell.stringValue;
+        return null;
     }
 
     XlsType getXlsType(URL inputXls) throws IOException {
@@ -75,11 +81,23 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     private XlsSheetIterator.CellValueHolder getCell(int jdbcColumn) {
-        return iterator.getCurrentRowValue(jdbcColumn-1);
+        return iterator.getCurrentRowValue(jdbcColumn - 1);
     }
 
     private XlsSheetIterator.CellValueHolder getCell(String jdbcColumn) {
-        int jdbcColumnIndex = iterator.columns.indexOf(jdbcColumn);
+        int jdbcColumnIndex = -1;
+        boolean found = false;
+        for (AbstractXlsSheetIterator.CellValueHolder valueHolder : iterator.columns) {
+            jdbcColumnIndex++;
+            if (jdbcColumn.equalsIgnoreCase(valueHolder.stringValue)) {
+                found = true;
+                break;
+            }
+
+        }
+        if (!found) {
+            throw new IllegalArgumentException("Column with name " + jdbcColumn + " not found");
+        }
         return iterator.getCurrentRowValue(jdbcColumnIndex);
     }
 
@@ -88,29 +106,29 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
-        return (T)getObject(columnIndex);
+        return (T) getObject(columnIndex);
     }
 
     public <T> T getObject(String columnName, Class<T> type) throws SQLException {
-        return (T)getObject(columnName);
+        return (T) getObject(columnName);
     }
 
     public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
-        return new  Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
+        return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
     }
 
     public Timestamp getTimestamp(String jdbcColumn) throws SQLException {
-        return new  Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
+        return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
     }
 
     public boolean getBoolean(int jdbcColumn) throws SQLException {
         XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
-        return cell == null ? false : Boolean.parseBoolean(cell.stringValue);
+        return cell != null && Boolean.parseBoolean(cell.stringValue);
     }
 
     public boolean getBoolean(String jdbcColumn) throws SQLException {
         XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
-        return cell == null ? false : Boolean.parseBoolean(cell.stringValue);
+        return cell != null && Boolean.parseBoolean(cell.stringValue);
     }
 
     public double getDouble(int jdbcColumn) throws SQLException {
@@ -189,14 +207,6 @@ public class XlsStreamResultSet implements ResultSet {
     public String getString(String jdbcColumn) throws SQLException {
         XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
         return cell == null ? null : cell.stringValue;
-    }
-
-    private static Object getObject(XlsSheetIterator.CellValueHolder cell) throws SQLException {
-        if (cell == null) return null;
-        if (cell.dateValue != null) return cell.dateValue;
-        if (cell.doubleValue != null) return cell.doubleValue;
-        if (cell.stringValue != null) return cell.stringValue;
-        return null;
     }
 
     public void updateBoolean(int jdbcColumn, boolean x) throws SQLException {
@@ -298,8 +308,16 @@ public class XlsStreamResultSet implements ResultSet {
         return FETCH_FORWARD;
     }
 
+    public void setFetchDirection(int direction) throws SQLException {
+        throw nyi();
+    }
+
     public int getFetchSize() throws SQLException {
         return 0;
+    }
+
+    public void setFetchSize(int rows) throws SQLException {
+        throw nyi();
     }
 
     public int getRow() throws SQLException {
@@ -347,11 +365,11 @@ public class XlsStreamResultSet implements ResultSet {
         throw nyi();
     }
 
+    // Private methods
+
     public void insertRow() throws SQLException {
         throw nyi();
     }
-
-    // Private methods
 
     private IllegalStateException nyi() {
         return new IllegalStateException("NYI");
@@ -564,14 +582,6 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     public boolean rowUpdated() throws SQLException {
-        throw nyi();
-    }
-
-    public void setFetchDirection(int direction) throws SQLException {
-        throw nyi();
-    }
-
-    public void setFetchSize(int rows) throws SQLException {
         throw nyi();
     }
 
@@ -891,7 +901,6 @@ public class XlsStreamResultSet implements ResultSet {
         throw nyi();
     }
 
-
     public <T> T unwrap(Class<T> iface) throws SQLException {
         throw nyi();
     }
@@ -899,4 +908,6 @@ public class XlsStreamResultSet implements ResultSet {
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         throw nyi();
     }
+
+    private static enum XlsType {XLS, XLSX}
 }
