@@ -25,6 +25,6 @@ package net.pcal.sqlsheet.parser;
  */
 public interface SelectStarStatement extends ParsedStatement {
 
-    public String getTable();
+    String getTable();
 
 }

@@ -27,10 +27,10 @@ import java.util.List;
  */
 public interface InsertIntoStatement extends ParsedStatement {
 
-    public String getTable();
+    String getTable();
 
-    public List<String> getColumns();
+    List<String> getColumns();
 
-    public List<Object> getValues();
+    List<Object> getValues();
 
 }
