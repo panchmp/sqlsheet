@@ -13,7 +13,7 @@ This page describes maven configuration required to get dependecies
       <dependency>
           <groupId>com.google.code.sqlsheet</groupId>
           <artifactId>sqlsheet</artifactId>
-          <version>6.4</version>
+          <version>6.5</version>
       </dependency>
 }}}
   * Use it
