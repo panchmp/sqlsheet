@@ -220,72 +220,100 @@ public class XlsResultSet implements ResultSet {
 
     public void updateBoolean(int jdbcColumn, boolean x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateBoolean(String jdbcColumn, boolean x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateByte(int jdbcColumn, byte x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateByte(String jdbcColumn, byte x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateDouble(int jdbcColumn, double x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateDouble(String jdbcColumn, double x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateFloat(int jdbcColumn, float x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateFloat(String jdbcColumn, float x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateInt(int jdbcColumn, int x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateInt(String jdbcColumn, int x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateLong(int jdbcColumn, long x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateLong(String jdbcColumn, long x) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateNull(int jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue((String) null); // REVIEW
+        if (cell != null) {
+            cell.setCellValue((String) null); // REVIEW
+        }
     }
 
     public void updateNull(String jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
-        if (cell != null) cell.setCellValue((String) null); // REVIEW
+        if (cell != null) {
+            cell.setCellValue((String) null); // REVIEW
+        }
     }
 
     public void updateObject(int jdbcColumn, Object x) throws SQLException {
@@ -298,22 +326,30 @@ public class XlsResultSet implements ResultSet {
 
     public void updateShort(int jdbcColumn, short x) throws SQLException {
         Cell cell = findOrCreateCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateShort(String jdbcColumn, short x) throws SQLException {
         Cell cell = findOrCreateCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateString(int jdbcColumn, String x) throws SQLException {
         Cell cell = findOrCreateCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     public void updateString(String jdbcColumn, String x) throws SQLException {
         Cell cell = findOrCreateCell(jdbcColumn);
-        if (cell != null) cell.setCellValue(x);
+        if (cell != null) {
+            cell.setCellValue(x);
+        }
     }
 
     // ResultSet implementation - everything else
@@ -383,13 +419,17 @@ public class XlsResultSet implements ResultSet {
     }
 
     public boolean next() throws SQLException {
-        if (isAfterLast()) return false;
+        if (isAfterLast()) {
+            return false;
+        }
         cursorSheetRow++;
         return !isAfterLast() && (sheet.getRow(cursorSheetRow) != null);
     }
 
     public boolean previous() throws SQLException {
-        if (isBeforeFirst()) return false;
+        if (isBeforeFirst()) {
+            return false;
+        }
         cursorSheetRow--;
         return isBeforeFirst();
     }
@@ -471,7 +511,9 @@ public class XlsResultSet implements ResultSet {
         int count = metadata.getColumnCount();
         for (short i = 0; i < count; i++) {
             String col = metadata.getColumnName(i + 1);
-            if (col.equalsIgnoreCase(name)) return i;
+            if (col.equalsIgnoreCase(name)){
+                return i;
+            }
         }
         return -1;
     }
