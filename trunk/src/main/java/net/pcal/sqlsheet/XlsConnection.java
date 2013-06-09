@@ -95,10 +95,8 @@ class XlsConnection implements Connection {
                 logger.log(Level.INFO, "Created backup:" + backup.getAbsolutePath());
                 //Try to override file with new content
                 //backup should rename file or copy content into new one, handle second condition
-                if (saveFile.exists()) {
-                    if (!saveFile.delete()) {
-                        logger.log(Level.WARNING, "Unable to delete file:" + saveFile.getAbsolutePath()+", you may lose the results.");
-                    }
+                if (saveFile.exists() && !saveFile.delete()) {
+                    logger.log(Level.WARNING, "Unable to delete file:" + saveFile.getAbsolutePath() + ", you may lose the results.");
                 }
                 moveFile(newFile, saveFile);
             } catch (IOException ioe) {
