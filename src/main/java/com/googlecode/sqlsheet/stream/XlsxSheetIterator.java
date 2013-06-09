@@ -70,7 +70,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
     protected void postConstruct() throws SQLException {
         try {
             //Open and pre process XLSX file
-            xlsxPackage = OPCPackage.open(fileName.getPath(), PackageAccess.READ);
+            xlsxPackage = OPCPackage.open(getFileName().getPath(), PackageAccess.READ);
             strings = new ReadOnlySharedStringsTable(this.xlsxPackage);
             XSSFReader xssfReader = new XSSFReader(this.xlsxPackage);
             styles = xssfReader.getStylesTable();
@@ -79,13 +79,13 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
             while (iter.hasNext()) {
                 InputStream stream = iter.next();
                 String currentSheetName = iter.getSheetName();
-                if (currentSheetName.equalsIgnoreCase(sheetName) ||
-                        ("\"" + currentSheetName + "\"").equalsIgnoreCase(sheetName)) {
+                if (currentSheetName.equalsIgnoreCase(getSheetName()) ||
+                        ("\"" + currentSheetName + "\"").equalsIgnoreCase(getSheetName())) {
                     handler = new XSSFSheetEventHandler(styles, strings);
                     XMLInputFactory factory = XMLInputFactory.newInstance();
                     reader = factory.createXMLEventReader(stream);
                     //Start sheet processing
-                    while (reader.hasNext() && currentSheetRowIndex == 0) {
+                    while (reader.hasNext() && getCurrentSheetRowIndex() == 0) {
                         processNextEvent();
                     }
                     processNextRecords();
@@ -98,8 +98,8 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
 
     @Override
     protected void processNextRecords() throws SQLException {
-        Long nextRowIndex = currentSheetRowIndex + 2L;
-        while (reader.hasNext() && (!currentSheetRowIndex.equals(nextRowIndex))) {
+        Long nextRowIndex = getCurrentSheetRowIndex() + 2L;
+        while (reader.hasNext() && (!getCurrentSheetRowIndex().equals(nextRowIndex))) {
             try {
                 processNextEvent();
             } catch (XMLStreamException e) {
@@ -314,8 +314,8 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                 //Fill empty columns if required
                 for (int i = lastColumnNumber + 1; i < thisColumn; ++i) {
                     //  output.print(',');
-                    if (currentSheetRowIndex == 0) {
-                        columns.add(new CellValueHolder());
+                    if (getCurrentSheetRowIndex() == 0) {
+                        getColumns().add(new CellValueHolder());
                     } else {
                         CellValueHolder empty = new CellValueHolder();
                         addCurrentRowValue(empty);
@@ -326,8 +326,8 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                     lastColumnNumber = 0;
                 }
                 // Might be the empty string.
-                if (currentSheetRowIndex == 0) {
-                    columns.add(thisCellValue);
+                if (getCurrentSheetRowIndex() == 0) {
+                    getColumns().add(thisCellValue);
                 } else {
                     addCurrentRowValue(thisCellValue);
                 }
@@ -338,7 +338,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
             } else if ("row".equals(endElement.getName().getLocalPart())) {
                 // We're onto a new row
                 lastColumnNumber = -1;
-                currentSheetRowIndex++;
+                setCurrentSheetRowIndex(getCurrentSheetRowIndex() + 1);
             }
 
         }

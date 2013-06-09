@@ -36,15 +36,15 @@ public class XlsStreamingResultSetMetaData implements ResultSetMetaData {
     }
 
     public int getColumnCount() {
-        return iterator.columns.size();
+        return iterator.getColumns().size();
     }
 
     public String getColumnLabel(int jdbcCol) {
-        return iterator.columns.get(jdbcCol - 1).stringValue;
+        return iterator.getColumns().get(jdbcCol - 1).stringValue;
     }
 
     public String getColumnName(int jdbcCol) {
-        return iterator.columns.get(jdbcCol - 1).stringValue;
+        return iterator.getColumns().get(jdbcCol - 1).stringValue;
     }
 
     public String getCatalogName(int arg0) throws SQLException {
@@ -71,7 +71,7 @@ public class XlsStreamingResultSetMetaData implements ResultSetMetaData {
     }
 
     public String getColumnTypeName(int jdbcCol) throws SQLException {
-        if(iterator.currentIteratorRowIndex ==0) {
+        if(iterator.getCurrentIteratorRowIndex() ==0) {
             return iterator.getNextRowValue(jdbcCol - 1).getType().getName();
         } else{
             return iterator.getCurrentRowValue(jdbcCol - 1).getType().getName();
@@ -91,7 +91,7 @@ public class XlsStreamingResultSetMetaData implements ResultSetMetaData {
     }
 
     public String getTableName(int arg0) throws SQLException {
-        return iterator.sheetName;
+        return iterator.getSheetName();
     }
 
     public boolean isAutoIncrement(int arg0) throws SQLException {

@@ -23,6 +23,142 @@ import java.util.*;
 
 public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iterator<Object> {
 
+    private URL fileName;
+    private String sheetName;
+    private List<CellValueHolder> columns = new ArrayList<CellValueHolder>();
+    private Map<Long, List<CellValueHolder>> rowValues = new HashMap<Long, List<CellValueHolder>>();
+
+    //Counter includes columns row
+    private Long currentSheetRowIndex = 0L;
+    private Long currentIteratorRowIndex = 0L;
+
+    /**
+     * @param filename The file to postConstruct
+     */
+    public AbstractXlsSheetIterator(URL filename, String sheetName) throws SQLException {
+        this.setFileName(filename);
+        this.setSheetName(sheetName);
+        postConstruct();
+    }
+
+    protected abstract void postConstruct() throws SQLException;
+
+    protected abstract void processNextRecords() throws SQLException;
+
+    protected abstract void onClose() throws SQLException;
+
+    public Iterator<Object> iterator() {
+        return this;
+    }
+
+    public boolean hasNext() {
+        return getRowValues().get(getCurrentIteratorRowIndex() + 1) != null;
+    }
+
+    public Object next(){
+        try {
+            getRowValues().remove(getCurrentIteratorRowIndex());
+            setCurrentIteratorRowIndex(getCurrentIteratorRowIndex() + 1);
+            //Fill current row
+            processNextRecords();
+            if (getRowValues().get(getCurrentIteratorRowIndex() + 1L) == null) {
+                processNextRecords();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage(),e);
+        }
+        return getRowValues().get(getCurrentIteratorRowIndex());
+    }
+
+    void addCurrentRowValue(CellValueHolder cellValue) {
+        if (getRowValues().get(getCurrentSheetRowIndex()) == null) {
+            getRowValues().put(getCurrentSheetRowIndex(), new ArrayList<CellValueHolder>());
+        }
+        getRowValues().get(getCurrentSheetRowIndex()).add(cellValue);
+    }
+
+    CellValueHolder getCurrentRowValue(int column){
+         CellValueHolder result = new CellValueHolder();
+        if(getRowValues().get(getCurrentIteratorRowIndex())!=null){
+            if(column < getRowValues().get(getCurrentIteratorRowIndex()).size()){
+                result = getRowValues().get(getCurrentIteratorRowIndex()).get(column);
+            }
+        }
+        return result;
+    }
+
+
+    CellValueHolder getNextRowValue(int column){
+        CellValueHolder result = new CellValueHolder();
+        if(getRowValues().get(getCurrentIteratorRowIndex() + 1)!=null){
+            if(column < getRowValues().get(getCurrentIteratorRowIndex() + 1).size()){
+                result = getRowValues().get(getCurrentIteratorRowIndex() + 1).get(column);
+            }
+        }
+        return result;
+    }
+
+    public void remove() {
+    }
+
+    Date convertDateValue(double value,int formatIndex,String formatString) {
+        // Get the built in format, if there is one
+        if (DateUtil.isADateFormat(formatIndex, formatString)) {
+            if (DateUtil.isValidExcelDate(value)) {
+                return DateUtil.getJavaDate(value, false);
+            }
+        }
+        return null;
+    }
+
+    protected URL getFileName() {
+        return fileName;
+    }
+
+    protected void setFileName(URL fileName) {
+        this.fileName = fileName;
+    }
+
+    protected String getSheetName() {
+        return sheetName;
+    }
+
+    protected void setSheetName(String sheetName) {
+        this.sheetName = sheetName;
+    }
+
+    protected List<CellValueHolder> getColumns() {
+        return columns;
+    }
+
+    protected void setColumns(List<CellValueHolder> columns) {
+        this.columns = columns;
+    }
+
+    protected Map<Long, List<CellValueHolder>> getRowValues() {
+        return rowValues;
+    }
+
+    protected void setRowValues(Map<Long, List<CellValueHolder>> rowValues) {
+        this.rowValues = rowValues;
+    }
+
+    protected Long getCurrentSheetRowIndex() {
+        return currentSheetRowIndex;
+    }
+
+    protected void setCurrentSheetRowIndex(Long currentSheetRowIndex) {
+        this.currentSheetRowIndex = currentSheetRowIndex;
+    }
+
+    protected Long getCurrentIteratorRowIndex() {
+        return currentIteratorRowIndex;
+    }
+
+    protected void setCurrentIteratorRowIndex(Long currentIteratorRowIndex) {
+        this.currentIteratorRowIndex = currentIteratorRowIndex;
+    }
+
     class CellValueHolder {
         String stringValue;
         Double doubleValue;
@@ -46,91 +182,4 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
 
     }
 
-    URL fileName;
-    String sheetName;
-    List<CellValueHolder> columns = new ArrayList<CellValueHolder>();
-    Map<Long, List<CellValueHolder>> rowValues = new HashMap<Long, List<CellValueHolder>>();
-
-    //Counter includes columns row
-    Long currentSheetRowIndex = 0L;
-    Long currentIteratorRowIndex = 0L;
-
-    /**
-     * @param filename The file to postConstruct
-     */
-    public AbstractXlsSheetIterator(URL filename, String sheetName) throws SQLException {
-        this.fileName = filename;
-        this.sheetName = sheetName;
-        postConstruct();
-    }
-
-    protected abstract void postConstruct() throws SQLException;
-
-    protected abstract void processNextRecords() throws SQLException;
-
-    protected abstract void onClose() throws SQLException;
-
-    public Iterator<Object> iterator() {
-        return this;
-    }
-
-    public boolean hasNext() {
-        return rowValues.get(currentIteratorRowIndex + 1) != null;
-    }
-
-    public Object next(){
-        try {
-            rowValues.remove(currentIteratorRowIndex);
-            currentIteratorRowIndex++;
-            //Fill current row
-            processNextRecords();
-            if (rowValues.get(currentIteratorRowIndex + 1L) == null) {
-                processNextRecords();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage(),e);
-        }
-        return rowValues.get(currentIteratorRowIndex);
-    }
-
-    void addCurrentRowValue(CellValueHolder cellValue) {
-        if (rowValues.get(currentSheetRowIndex) == null) {
-            rowValues.put(currentSheetRowIndex, new ArrayList<CellValueHolder>());
-        }
-        rowValues.get(currentSheetRowIndex).add(cellValue);
-    }
-
-    CellValueHolder getCurrentRowValue(int column){
-         CellValueHolder result = new CellValueHolder();
-        if(rowValues.get(currentIteratorRowIndex)!=null){
-            if(column < rowValues.get(currentIteratorRowIndex).size()){
-                result = rowValues.get(currentIteratorRowIndex).get(column);
-            }
-        }
-        return result;
-    }
-
-
-    CellValueHolder getNextRowValue(int column){
-        CellValueHolder result = new CellValueHolder();
-        if(rowValues.get(currentIteratorRowIndex+1)!=null){
-            if(column < rowValues.get(currentIteratorRowIndex+1).size()){
-                result = rowValues.get(currentIteratorRowIndex+1).get(column);
-            }
-        }
-        return result;
-    }
-
-    public void remove() {
-    }
-
-    Date convertDateValue(double value,int formatIndex,String formatString) {
-        // Get the built in format, if there is one
-        if (DateUtil.isADateFormat(formatIndex, formatString)) {
-            if (DateUtil.isValidExcelDate(value)) {
-                return DateUtil.getJavaDate(value, false);
-            }
-        }
-        return null;
-    }
 }
