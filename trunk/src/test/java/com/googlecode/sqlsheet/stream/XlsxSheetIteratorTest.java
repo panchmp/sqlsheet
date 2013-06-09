@@ -11,7 +11,7 @@ public class XlsxSheetIteratorTest {
     @Test
     public void testMain() throws Exception {
         XlsxSheetIterator xlsSheet = new XlsxSheetIterator(ClassLoader.getSystemResource("test.xlsx"), "2009");
-        Assert.assertEquals(3, xlsSheet.columns.size());
+        Assert.assertEquals(3, xlsSheet.getColumns().size());
         long counter = 0L;
         for (Object o : xlsSheet) {
             List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>)o;
@@ -31,7 +31,7 @@ public class XlsxSheetIteratorTest {
     @Test
     public void testBigGrid() throws Exception {
         XlsxSheetIterator xlsSheet = new XlsxSheetIterator(ClassLoader.getSystemResource("big-grid.xlsx"), "Big Grid");
-        Assert.assertEquals(20, xlsSheet.columns.size());
+        Assert.assertEquals(20, xlsSheet.getColumns().size());
         long counter = 0L;
         for (Object o : xlsSheet) {
             List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>)o;
@@ -51,7 +51,7 @@ public class XlsxSheetIteratorTest {
     @Test
     public void testBugNo3() throws Exception {
         XlsxSheetIterator xlsSheet = new XlsxSheetIterator(ClassLoader.getSystemResource("bug3.xlsx"), "bug3");
-        Assert.assertEquals(13, xlsSheet.columns.size());
+        Assert.assertEquals(13, xlsSheet.getColumns().size());
         long counter = 0L;
         for (Object o : xlsSheet) {
             List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>)o;

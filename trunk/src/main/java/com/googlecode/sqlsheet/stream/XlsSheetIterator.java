@@ -83,7 +83,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
             inRequiredSheet = false;
             outputFormulaValues = true;
 
-            fileSystem = new NPOIFSFileSystem(fileName.openStream());
+            fileSystem = new NPOIFSFileSystem(getFileName().openStream());
             recordStream = new RecordFactoryInputStream(fileSystem.getRoot().createDocumentInputStream("Workbook"), false);
             MissingRecordAwareHSSFListener listener = new MissingRecordAwareHSSFListener(this);
             formatListener = new FormatTrackingHSSFListener(listener);
@@ -112,7 +112,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
                 }
             }
             //Flush rows counter
-            currentSheetRowIndex = 0L;
+            setCurrentSheetRowIndex(0L);
             //Fill current row
             processNextRecords();
         } catch (IOException e) {
@@ -126,8 +126,8 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
      * into memory
      */
     protected void processNextRecords() throws SQLException {
-        Long nextRowIndex = currentSheetRowIndex + 2L;
-        while (inRequiredSheet && (!currentSheetRowIndex.equals(nextRowIndex))) {
+        Long nextRowIndex = getCurrentSheetRowIndex() + 2L;
+        while (inRequiredSheet && (!getCurrentSheetRowIndex().equals(nextRowIndex))) {
             Record r = recordStream.nextRecord();
             if (r == null) {
                 break;
@@ -170,8 +170,8 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
                     if (orderedBSRs == null) {
                         orderedBSRs = BoundSheetRecord.orderByBofPosition(boundSheetRecords);
                     }
-                    inRequiredSheet = sheetName.equalsIgnoreCase(orderedBSRs[sheetIndex].getSheetname())
-                            || ("\"" + orderedBSRs[sheetIndex].getSheetname() + "\"").equalsIgnoreCase(sheetName);
+                    inRequiredSheet = getSheetName().equalsIgnoreCase(orderedBSRs[sheetIndex].getSheetname())
+                            || ("\"" + orderedBSRs[sheetIndex].getSheetname() + "\"").equalsIgnoreCase(getSheetName());
                 }
                 break;
 
@@ -280,8 +280,8 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
         // If we got something to print out, do so
         if (thisCellValue.stringValue != null) {
             //If we are on the first row - fill column names
-            if (currentSheetRowIndex.equals(0L) && inRequiredSheet) {
-                columns.add(thisCellValue);
+            if (getCurrentSheetRowIndex().equals(0L) && inRequiredSheet) {
+                getColumns().add(thisCellValue);
             } else if (inRequiredSheet) {
                 addCurrentRowValue(thisCellValue);
             }
@@ -296,7 +296,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
             // We're onto a new row
             lastColumnNumber = -1;
             // End the row
-            currentSheetRowIndex++;
+            setCurrentSheetRowIndex(getCurrentSheetRowIndex() + 1);
         }
     }
 

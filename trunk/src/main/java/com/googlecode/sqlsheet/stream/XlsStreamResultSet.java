@@ -87,7 +87,7 @@ public class XlsStreamResultSet implements ResultSet {
     private XlsSheetIterator.CellValueHolder getCell(String jdbcColumn) {
         int jdbcColumnIndex = -1;
         boolean found = false;
-        for (AbstractXlsSheetIterator.CellValueHolder valueHolder : iterator.columns) {
+        for (AbstractXlsSheetIterator.CellValueHolder valueHolder : iterator.getColumns()) {
             jdbcColumnIndex++;
             if (jdbcColumn.equalsIgnoreCase(valueHolder.stringValue)) {
                 found = true;
@@ -321,7 +321,7 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     public int getRow() throws SQLException {
-        return iterator.currentIteratorRowIndex.intValue();
+        return iterator.getCurrentIteratorRowIndex().intValue();
     }
 
     public int getType() throws SQLException {
@@ -333,11 +333,11 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     public boolean isBeforeFirst() throws SQLException {
-        return iterator.currentIteratorRowIndex == 0;
+        return iterator.getCurrentIteratorRowIndex() == 0;
     }
 
     public boolean isFirst() throws SQLException {
-        return iterator.currentIteratorRowIndex == 1;
+        return iterator.getCurrentIteratorRowIndex() == 1;
     }
 
     public boolean isLast() throws SQLException {
