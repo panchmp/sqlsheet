@@ -162,7 +162,7 @@ public class XlsDriverStreamingTest {
             Assert.assertEquals(Date.class, results2.getObject(3).getClass());
             count2++;
         }
-        Assert.assertEquals(3L, count.longValue());
+        Assert.assertEquals(3L, count2.longValue());
         results2.close();
         readStatementstmt2.close();
         readConnection2.close();
