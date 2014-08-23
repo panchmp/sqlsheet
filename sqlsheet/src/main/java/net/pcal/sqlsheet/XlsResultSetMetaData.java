@@ -38,10 +38,10 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     private final DataFormatter formatter;
     private XlsResultSet resultset;
 
-    public XlsResultSetMetaData(Sheet sheet, XlsResultSet resultset) throws SQLException {
+    public XlsResultSetMetaData(Sheet sheet, XlsResultSet resultset, int firstSheetRowOffset) throws SQLException {
         if (sheet == null) throw new IllegalArgumentException();
         this.resultset = resultset;
-        Row row = sheet.getRow(0);
+        Row row = sheet.getRow(firstSheetRowOffset - 1);
         if (row == null) {
             throw new SQLException("No header row in sheet");
         }

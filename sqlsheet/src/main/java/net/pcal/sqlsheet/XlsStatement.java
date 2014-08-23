@@ -116,7 +116,7 @@ public class XlsStatement implements Statement {
         XlsResultSet out = sheet2rs.get(tableName);
         if (out == null) {
             Sheet sheet = getSheetNamed(connection.getWorkBook(), tableName);
-            out = new XlsResultSet(connection.getWorkBook(), sheet);
+            out = new XlsResultSet(connection.getWorkBook(), sheet, connection.getInt(XlsDriver.HEADLINE, 1));
 			out.statement=this;
             sheet2rs.put(tableName, out);
         }
