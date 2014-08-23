@@ -16,6 +16,7 @@
 package net.pcal.sqlsheet;
 
 import com.googlecode.sqlsheet.stream.XlsStreamConnection;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -40,8 +41,9 @@ import java.util.logging.Logger;
 public class XlsDriver implements Driver {
 
     private static final String URL_SCHEME = "jdbc:xls:";
-    private static final String READ_STREAMING = "readStreaming";
-    private static final String WRITE_STREAMING = "writeStreaming";
+    static final String READ_STREAMING = "readStreaming";
+    static final String WRITE_STREAMING = "writeStreaming";
+    static final String HEADLINE = "headLine";
     private static final Logger logger = Logger.getLogger(XlsDriver.class.getName());
 
     static {
@@ -93,23 +95,31 @@ public class XlsDriver implements Driver {
         try {
             URL workbookUrl = new URL(jdbcUrl.substring(URL_SCHEME.length()));
             //If streaming requested for read
-            if (info.get(READ_STREAMING) != null && info.get(READ_STREAMING).equals(Boolean.TRUE.toString())) {
+            if (has(info, READ_STREAMING)) {
                 return new XlsStreamConnection(workbookUrl);
             } else if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
                 //If streaming requested for write
-                if (info.get(WRITE_STREAMING) != null && info.get(WRITE_STREAMING).equals(Boolean.TRUE.toString())) {
-                    return new XlsConnection(getOrCreateXlsxStream(workbookUrl), new File(workbookUrl.getPath()));
+                if (has(info, WRITE_STREAMING)) {
+                    return new XlsConnection(getOrCreateXlsxStream(workbookUrl), new File(workbookUrl.getPath()), info);
                 }
-                return new XlsConnection(getOrCreateWorkbook(workbookUrl), new File(workbookUrl.getPath()));
+                return new XlsConnection(getOrCreateWorkbook(workbookUrl), new File(workbookUrl.getPath()), info);
             } else {
                 //If plain url provided
-                return new XlsConnection(WorkbookFactory.create(workbookUrl.openStream()));
+                return new XlsConnection(WorkbookFactory.create(workbookUrl.openStream()), info);
             }
         } catch (Exception e) {
             SQLException sqe = new SQLException(e.getMessage());
             sqe.initCause(e);
             throw sqe;
         }
+    }
+    
+    boolean has(Properties info, String key) {
+      Object value = info.get(key);
+      if (value == null) {
+        return false;
+      }
+      return value.equals(Boolean.TRUE.toString());
     }
 
     private SXSSFWorkbook getOrCreateXlsxStream(URL workbookUrl) throws IOException, InvalidFormatException {

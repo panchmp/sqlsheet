@@ -1,6 +1,8 @@
 #summary Page contains list of changes introduced from version to version.
 
 =Page contains list of changes introduced from version to version=
+== 6.6 ==
+  * introduce the connection parameter "headLine" to define the index of the first row within a sheet (if the the parameter is not specified the default of 1 will be used)
 == 6.3 ==
   * Fixed bug #3
 == 6.2 ==

@@ -39,24 +39,31 @@ import java.util.logging.Logger;
 class XlsConnection implements Connection {
 
     private static final Logger logger = Logger.getLogger(XlsConnection.class.getName());
-    private Workbook workbook = null;
-    private File saveFile = null;
-    private Boolean writeRequired = false;
+    private Workbook workbook;
+    private File saveFile;
+    private Properties info;
+    private boolean writeRequired;
 
-    XlsConnection(Workbook workbook) {
-        if (workbook == null)
-            throw new IllegalArgumentException();
-        this.workbook = workbook;
-        this.saveFile = null;
+    XlsConnection(Workbook workbook, Properties info) {
+        this(workbook, null, info);
     }
 
-    XlsConnection(Workbook workbook, File saveFile) {
-        if (workbook == null)
-            throw new IllegalArgumentException();
-        if (saveFile == null)
-            throw new IllegalArgumentException();
+    XlsConnection(Workbook workbook, File saveFile, Properties info) {
+        if (workbook == null) {
+          throw new IllegalArgumentException();
+        }
         this.workbook = workbook;
         this.saveFile = saveFile;
+        this.info = info;
+    }
+    
+    int getInt(String key, int defaultValue) {
+      Object value = info.get(key);
+      if (value == null) {
+        logger.fine(String.format("Key [%s] not present.", key));
+        return defaultValue;
+      }
+      return Integer.parseInt(value.toString());
     }
 
     Workbook getWorkBook() {

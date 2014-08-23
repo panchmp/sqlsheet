@@ -39,11 +39,11 @@ public class XlsResultSet implements ResultSet {
     private Sheet sheet;
     private XlsResultSetMetaData metadata;
     private int firstSheetRowOffset = 0;
-    private int cursorSheetRow = firstSheetRowOffset - 1;
+    private int cursorSheetRow;
     private CellStyle dateStyle = null;
     private DataFormatter formatter;
 
-    public XlsResultSet(Workbook wb, Sheet s) throws SQLException {
+    public XlsResultSet(Workbook wb, Sheet s, int firstSheetRowOffset) throws SQLException {
         if (s == null){
             throw new IllegalArgumentException("null sheet");
         }
@@ -53,9 +53,9 @@ public class XlsResultSet implements ResultSet {
         formatter = new DataFormatter();
         workbook = wb;
         sheet = s;
-        firstSheetRowOffset = 1;
-        cursorSheetRow = firstSheetRowOffset - 1;
-        metadata = new XlsResultSetMetaData(s, this);
+        this.firstSheetRowOffset = firstSheetRowOffset;
+        cursorSheetRow = this.firstSheetRowOffset - 1;
+        metadata = new XlsResultSetMetaData(s, this, firstSheetRowOffset);
         // set the default date cell format
         dateStyle = workbook.createCellStyle();
         dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
