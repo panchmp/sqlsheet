@@ -69,7 +69,7 @@ public class SqlSheetParser {
             if (((PlainSelect) body).getDistinct() != null) {
                 throw new SQLException("DISTINCT not supported on Excel sheets.");
             }
-            if (((PlainSelect) body).getInto() != null) {
+            if (((PlainSelect) body).getIntoTables() != null) {
                 throw new SQLException("SELECT INTO not supported on Excel sheets.");
             }
             if (((PlainSelect) body).getHaving() != null) {
