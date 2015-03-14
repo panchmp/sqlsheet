@@ -1,19 +1,19 @@
-# sqlsheet
-Automatically exported from code.google.com/p/sqlsheet
-
 Simple, POI based JDBC driver for XLS/XLSX files. Currently supports basic SELECT ( 'select `*`' only, w/o where clause), CREATE,  INSERT operations. The driver is pure Java - no native Windows components are required. From version 6.1 streaming implemented to process large files.
 
 Fork of http://www.pcal.net/downloads/sqlsheet/
 
-| Database | -> | XLS/XLSX file |
-| Table | ->  | Sheet in XLS/XLSX file |
-| Column | ->  | Column in sheet (first row must have column names) |
-| Row | ->  | Row in sheet starting from second |
 
-==Usage example:==
- * [http://code.google.com/p/sqlsheet/wiki/HowToMaven Java code example]
- * [http://scriptella.javaforge.com/docs/api/scriptella/driver/xls/package-summary.html#package_description Scriptella driver]
- * [https://code.google.com/p/sqlsheet/source/browse/trunk/sqlsheet/src/test/resources/xlsload.xml driver] in [https://code.google.com/p/sqlsheet/source/browse/trunk/sqlsheet/src/test/java/com/googlecode/sqlsheet/XlsDriverIntegrationTest.java unit test]
+First Header|Second Header
+-------------|-------------
+Database | XLS/XLSX file
+Table | Sheet in XLS/XLSX file
+Column | Column in sheet (first row must have column names)
+Row | Row in sheet starting from second
+
+## Usage example:
+ * [Java code example](http://code.google.com/p/sqlsheet/wiki/HowToMaven)
+ * [Scriptella driver](http://scriptella.javaforge.com/docs/api/scriptella/driver/xls/package-summary.html#package_description)
+ * [driver](https://code.google.com/p/sqlsheet/source/browse/trunk/sqlsheet/src/test/resources/xlsload.xml) in [ unit test](https://code.google.com/p/sqlsheet/source/browse/trunk/sqlsheet/src/test/java/com/googlecode/sqlsheet/XlsDriverIntegrationTest.java)
 
 ```java
 Class.forName("com.googlecode.sqlsheet.Driver");
