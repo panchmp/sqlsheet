@@ -1,12 +1,9 @@
-#summary Page describes how to get this driver working with scriptella.
-#labels Featured
-
-= Introduction =
+# Introduction
 
 You need to download [scriptella](http://scriptella.javaforge.com/download.html) , [sqlsheet driver](http://code.google.com/p/sqlsheet/downloads)  and it's [dependencies](HowToGetDependecies.md) .
 
 
-= Details =
+# Details
 
 Follow the steps:
 * Download [scriptella](http://scriptella.javaforge.com/download.html) binary distribution
@@ -17,17 +14,17 @@ Follow the steps:
 ```bash
 java -version
 ```
-  * Check if scriptella has been installed correctly by running:
+* Check if scriptella has been installed correctly by running:
 ```bash
 scriptella -version
 ```
-  * Put [ sqlsheet](http://code.google.com/p/sqlsheet/downloads) driver to  the ${SCRIPTELLA_DIR}/lib directory
-  * Put sqlsheet driver [dependencies](HowToGetDependecies.md)  to the ${SCRIPTELLA_DIR}/lib directory
-  * Put [janino.jar](http://dist.codehaus.org/janino/changelog.html) and [commons-compiler.jar](http://dist.codehaus.org/janino/changelog.html) to the ${SCRIPTELLA_DIR}/lib directory
-  * Download [test](http://code.google.com/p/sqlsheet/downloads/detail?name=xls_test.xml) script
-  * Execute test script:
+* Put [ sqlsheet](http://code.google.com/p/sqlsheet/downloads) driver to  the ${SCRIPTELLA_DIR}/lib directory
+* Put sqlsheet driver [dependencies](HowToGetDependecies.md)  to the ${SCRIPTELLA_DIR}/lib directory
+* Put [janino.jar](http://dist.codehaus.org/janino/changelog.html) and [commons-compiler.jar](http://dist.codehaus.org/janino/changelog.html) to the ${SCRIPTELLA_DIR}/lib directory
+* Download [test](http://code.google.com/p/sqlsheet/downloads/detail?name=xls_test.xml) script
+* Execute test script:
 ```bash
 scriptella xls_test.xml
 ```
-  * Check generated XLS/XLSX files
-  * Enjoy! 
+* Check generated XLS/XLSX files
+* Enjoy!
