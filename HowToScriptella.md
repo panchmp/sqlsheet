@@ -9,11 +9,11 @@ You need to download [scriptella](http://scriptella.javaforge.com/download.html)
 = Details =
 
 Follow the steps:
-  * Download [scriptella](http://scriptella.javaforge.com/download.html) binary distribution
-  * Unpack it and add a ${SCRIPTELLA_DIR}/bin to a system PATH variable
-   # Use set PATH=%PATH%;SCRIPTELLA_DIR\bin for Windows
-   # Use export PATH=${PATH}:SCRIPTELLA_DIR/bin for Unix
-  * Check if JRE has been installed correctly by running:
+* Download [scriptella](http://scriptella.javaforge.com/download.html) binary distribution
+* Unpack it and add a ${SCRIPTELLA_DIR}/bin to a system PATH variable
+ * Use set PATH=%PATH%;SCRIPTELLA_DIR\bin for Windows
+ * Use export PATH=${PATH}:SCRIPTELLA_DIR/bin for Unix
+* Check if JRE has been installed correctly by running:
 ```bash
 java -version
 ```
