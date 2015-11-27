@@ -12,8 +12,6 @@ public class DriverTest {
     public void testXlsSheetCRUD() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
         Connection conn = DriverManager.getConnection("jdbc:xls:file:" + DriverTest.class.getResource("/test.xls").getFile());
-        Statement drop = conn.createStatement();
-        drop.execute("DROP TABLE TEST_INSERT");
 
         Statement create = conn.createStatement();
         create.executeUpdate("CREATE TABLE \"TEST_INSERT\"(\"COL1\" INT, COL2 VARCHAR(255), COL3 DATE)");
@@ -25,6 +23,11 @@ public class DriverTest {
             write.execute();
         }
         processBaseResultset(conn, "SELECT * FROM \"TEST_INSERT\"");
+
+        Statement drop = conn.createStatement();
+        drop.execute("DROP TABLE TEST_INSERT");
+
+        drop.close();
         create.close();
         write.close();
         conn.close();
