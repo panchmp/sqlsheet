@@ -34,6 +34,8 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
 
     /**
      * @param filename The file to postConstruct
+     * @param sheetName The sheet name
+     * @throws SQLException if any problem
      */
     public AbstractXlsSheetIterator(URL filename, String sheetName) throws SQLException {
         this.setFileName(filename);

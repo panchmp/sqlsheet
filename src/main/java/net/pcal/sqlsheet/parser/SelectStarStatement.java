@@ -17,7 +17,7 @@ package net.pcal.sqlsheet.parser;
 
 /**
  * Handle on a parsed SQL statement of the form
- * <p/>
+ *
  * SELECT * FROM xxx.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>

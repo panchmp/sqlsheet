@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Handle on a parsed SQL statement of the form
- * <p/>
+ *
  * CREATE TABLE xxx (xxx xxx, xxx xxx)
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
