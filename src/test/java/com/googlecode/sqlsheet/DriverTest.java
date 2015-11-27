@@ -11,7 +11,10 @@ public class DriverTest {
     @Test
     public void testXlsSheetCRUD() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile());
+        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + DriverTest.class.getResource("/test.xls").getFile());
+        Statement drop = conn.createStatement();
+        drop.execute("DROP TABLE TEST_INSERT");
+
         Statement create = conn.createStatement();
         create.executeUpdate("CREATE TABLE \"TEST_INSERT\"(\"COL1\" INT, COL2 VARCHAR(255), COL3 DATE)");
         PreparedStatement write = conn.prepareStatement("INSERT INTO TEST_INSERT(COL1, \"COL2\", COL3) VALUES(?,?,?)");
@@ -150,26 +153,7 @@ public class DriverTest {
         conn.close();
     }
 
-    public static void main(String[] args) throws Exception {
-        Class.forName("com.googlecode.sqlsheet.Driver");
-//        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test2.xls").getFile()+"?readStreaming=true");
-//        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test2.xls").getFile());
-        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("sample.xls").getFile() + "?readStreaming=true");
-//        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test1.xlsx").getFile());
-        Statement stmt = conn.createStatement();
-        ResultSet results = stmt.executeQuery("select * from sample");
-        while (results.next()) {
-            for (int i = 1; i <= results.getMetaData().getColumnCount(); i++) {
-                System.out.print(results.getObject(i) + "|");
-            }
-            System.out.println();
-        }
-        results.close();
-        stmt.close();
-        conn.close();
 
-
-    }
 
 
 }

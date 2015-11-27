@@ -52,17 +52,16 @@ public class XlsStatement implements Statement {
     }
 
     public boolean execute(String sql) throws SQLException {
-        executeQuery(sql);
-        return false;
+        ParsedStatement parsed = parse(sql);
+        if (parsed instanceof DropTableStatement) {
+            doDropTable((DropTableStatement) parsed);
+        } else {
+            executeQuery(parsed);
+        }
+        return true;
     }
 
-    public int executeUpdate(String sql) throws SQLException {
-        executeQuery(sql);
-        return 1;
-    }
-
-    public ResultSet executeQuery(String query) throws SQLException {
-        ParsedStatement parsed = parse(query);
+    private ResultSet executeQuery(ParsedStatement parsed) throws SQLException {
         if (parsed instanceof SelectStarStatement) {
             return doSelect((SelectStarStatement) parsed);
         } else if (parsed instanceof InsertIntoStatement) {
@@ -72,6 +71,23 @@ public class XlsStatement implements Statement {
         } else {
             throw new IllegalStateException(parsed.getClass().getName());
         }
+    }
+
+    public int executeUpdate(String sql) throws SQLException {
+        executeQuery(sql);
+        return 1;
+    }
+
+    public ResultSet executeQuery(String query) throws SQLException {
+        ParsedStatement parsed = parse(query);
+        return executeQuery(parsed);
+    }
+
+    private void doDropTable(DropTableStatement dropTableStatement) {
+        connection.setWriteRequired(true);
+        String tableName = dropTableStatement.getTable();
+        int sheetIndexToRemove = connection.getWorkBook().getSheetIndex(tableName);
+        connection.getWorkBook().removeSheetAt(sheetIndexToRemove);
     }
 
     protected ParsedStatement parse(String sql) throws SQLException {
@@ -85,7 +101,7 @@ public class XlsStatement implements Statement {
     protected ResultSet doSelect(SelectStarStatement sss) throws SQLException {
         XlsResultSet out = findOrCreateResultSetFor(sss.getTable());
         out.beforeFirst();
-		out.statement=this;
+        out.statement = this;
         return out;
     }
 
@@ -117,7 +133,7 @@ public class XlsStatement implements Statement {
         if (out == null) {
             Sheet sheet = getSheetNamed(connection.getWorkBook(), tableName);
             out = new XlsResultSet(connection.getWorkBook(), sheet, connection.getInt(XlsDriver.HEADLINE, 1));
-			out.statement=this;
+            out.statement = this;
             sheet2rs.put(tableName, out);
         }
         return out;
@@ -314,12 +330,12 @@ public class XlsStatement implements Statement {
         return null;
     }
 
-	public void closeOnCompletion() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-}
+    public void closeOnCompletion() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public boolean isCloseOnCompletion() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public boolean isCloseOnCompletion() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }
