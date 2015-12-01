@@ -23,9 +23,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -36,7 +34,7 @@ import java.util.Map;
  */
 public class XlsResultSetMetaData implements ResultSetMetaData {
 
-    private String[] columnNames;
+    private List<String> columnNames;
     private final DataFormatter formatter;
     private XlsResultSet resultset;
 
@@ -53,23 +51,32 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
             throw new SQLException("No header row in sheet");
         }
         formatter = new DataFormatter();
-        columnNames = new String[row.getLastCellNum()];
-        for (short c = 0; c < columnNames.length; c++) {
+        columnNames = new ArrayList<String>();
+        for (short c = 0; c < row.getLastCellNum(); c++) {
             Cell cell = row.getCell(c);
-            columnNames[c] = formatter.formatCellValue(cell);
+            String columnName = formatter.formatCellValue(cell);
+
+            // Is it unique in the column name set
+            int suffix;
+            while (columnNames.contains(columnName)) {
+                suffix = 1;
+                columnName += "_" + suffix;
+            }
+
+            columnNames.add(columnName);
         }
     }
 
     public int getColumnCount() {
-        return columnNames.length;
+        return columnNames.size();
     }
 
     public String getColumnLabel(int jdbcCol) {
-        return columnNames[jdbcCol - 1];
+        return columnNames.get(jdbcCol - 1);
     }
 
     public String getColumnName(int jdbcCol) {
-        return columnNames[jdbcCol - 1];
+        return columnNames.get(jdbcCol - 1);
     }
 
     public String getCatalogName(int arg0) throws SQLException {
@@ -87,14 +94,14 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     public int getColumnType(int jdbcColumn) throws SQLException {
 
         Integer typeCode = columnTypeMap.get(jdbcColumn);
-        if (typeCode!=null) {
+        if (typeCode != null) {
             return typeCode;
         } else {
             try {
                 if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(String.class)) {
-                    typeCode= Types.VARCHAR;
+                    typeCode = Types.VARCHAR;
                 } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Double.class)) {
-                    typeCode=  Types.DOUBLE;
+                    typeCode = Types.DOUBLE;
                 } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Date.class)) {
                     typeCode = Types.DATE;
                 } else {
@@ -104,7 +111,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
                 // TODO: If the first cell of the first row is blank, we got a java.lang.RuntimeException: java.lang.NullPointerException
                 typeCode = Types.VARCHAR;
             }
-            columnTypeMap.put(jdbcColumn,typeCode);
+            columnTypeMap.put(jdbcColumn, typeCode);
             return typeCode;
         }
     }
