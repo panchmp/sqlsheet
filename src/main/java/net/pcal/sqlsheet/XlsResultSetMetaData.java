@@ -24,6 +24,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -37,6 +39,11 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     private String[] columnNames;
     private final DataFormatter formatter;
     private XlsResultSet resultset;
+
+    /**
+     * A map to get consistently the same data type
+     */
+    Map<Integer, Integer> columnTypeMap = new HashMap<Integer, Integer>();
 
     public XlsResultSetMetaData(Sheet sheet, XlsResultSet resultset, int firstSheetRowOffset) throws SQLException {
         if (sheet == null) throw new IllegalArgumentException();
@@ -78,14 +85,28 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     }
 
     public int getColumnType(int jdbcColumn) throws SQLException {
-        if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(String.class)) {
-            return Types.VARCHAR;
-        } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Double.class)) {
-            return Types.DOUBLE;
-        } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Date.class)) {
-            return Types.DATE;
+
+        Integer typeCode = columnTypeMap.get(jdbcColumn);
+        if (typeCode!=null) {
+            return typeCode;
+        } else {
+            try {
+                if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(String.class)) {
+                    typeCode= Types.VARCHAR;
+                } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Double.class)) {
+                    typeCode=  Types.DOUBLE;
+                } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Date.class)) {
+                    typeCode = Types.DATE;
+                } else {
+                    typeCode = Types.VARCHAR;
+                }
+            } catch (Exception e) {
+                // TODO: If the first cell of the first row is blank, we got a java.lang.RuntimeException: java.lang.NullPointerException
+                typeCode = Types.VARCHAR;
+            }
+            columnTypeMap.put(jdbcColumn,typeCode);
+            return typeCode;
         }
-        return Types.OTHER;
     }
 
     public String getColumnTypeName(int jdbcColumn) throws SQLException {
