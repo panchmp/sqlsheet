@@ -143,16 +143,28 @@ public class XlsStatement implements Statement {
         if (name == null)
             throw new IllegalArgumentException();
         name = name.trim();
+        String allSheetNames = "";
         int count = wb.getNumberOfSheets();
         for (int i = 0; i < count; i++) {
             String sheetName = wb.getSheetName(i);
+            allSheetNames += sheetName + ",";
             if (sheetName == null)
                 continue;
             if (sheetName.equalsIgnoreCase(name) || ("\"" + sheetName + "\"").equalsIgnoreCase(name)) {
                 return wb.getSheetAt(i);
             }
         }
-        throw new SQLException("No sheet named '" + name + "'");
+
+        String message = "No sheet named '" + name;
+        if (count == 0) {
+            message += " can be found. Are you sure of the Excel file path ?";
+        } else {
+            if (allSheetNames.length() > 2) {
+                allSheetNames = allSheetNames.substring(0, allSheetNames.length() - 1);
+            }
+            message += ". Only the following " + count + " sheets can be found (" + allSheetNames + ")";
+        }
+        throw new SQLException(message);
     }
 
     public void setMaxFieldSize(int p0) throws SQLException {
