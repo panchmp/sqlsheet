@@ -22,8 +22,8 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
-import java.util.Calendar;
-import java.util.Map;
+import java.sql.Date;
+import java.util.*;
 
 /**
  * SqlSheet implementation of java.sql.ResultSet.
@@ -61,29 +61,7 @@ public class XlsResultSet implements ResultSet {
         dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
     }
 
-    private static Object getObject(Cell cell) throws SQLException {
-        try {
-            if (cell == null){
-                return null;
-            }
-            switch (cell.getCellType()) {
-                case Cell.CELL_TYPE_BOOLEAN:
-                    return cell.getBooleanCellValue();
-                case Cell.CELL_TYPE_STRING:
-                    return cell.getStringCellValue();
-                case Cell.CELL_TYPE_NUMERIC:
-                    if (DateUtil.isCellDateFormatted(cell)) {
-                        return cell.getDateCellValue();
-                    }
-                    return cell.getNumericCellValue();
 
-                default:
-                    return null;
-            }
-        } catch (Exception e) {
-            throw wrapped(e);
-        }
-    }
 
     private static SQLException wrapped(Throwable t) {
         SQLException out = new SQLException(t.getMessage());
@@ -157,11 +135,51 @@ public class XlsResultSet implements ResultSet {
     }
 
     public Object getObject(String jdbcColumn) throws SQLException {
-        return getObject(getCell(jdbcColumn));
+        return getObject(jdbcColumn);
     }
 
     public Object getObject(int jdbcColumn) throws SQLException {
-        return getObject(getCell(jdbcColumn));
+        Cell cell = getCell(jdbcColumn);
+        int columnType = metadata.getColumnType(jdbcColumn);
+        try {
+            if (cell == null){
+                return null;
+            }
+            switch (cell.getCellType()) {
+
+                case Cell.CELL_TYPE_BOOLEAN:
+                    if (columnType == Types.VARCHAR) {
+                        return cell.getBooleanCellValue();
+                    } else {
+                        throw new RuntimeException("The cell ("+getCurrentRow()+","+jdbcColumn+") is a boolean and cannot be cast to ("+XlsResultSetMetaData.columnTypeNameMap.get(columnType)+".");
+                    }
+                case Cell.CELL_TYPE_STRING:
+                    if (columnType == Types.VARCHAR) {
+                        return cell.getStringCellValue();
+                    } else {
+                        throw new RuntimeException("The cell ("+getCurrentRow()+","+jdbcColumn+") is a string cell and cannot be cast to ("+XlsResultSetMetaData.columnTypeNameMap.get(columnType)+".");
+                    }
+                case Cell.CELL_TYPE_NUMERIC:
+                    if (columnType == Types.VARCHAR) {
+                        return String.valueOf(cell.getNumericCellValue());
+                    } else if (columnType == Types.DOUBLE) {
+                        return cell.getNumericCellValue();
+                    } else if (columnType == Types.DATE) {
+                        if (DateUtil.isCellDateFormatted(cell)) {
+                            java.util.Date value = cell.getDateCellValue();
+                            return new java.sql.Date(value.getTime());
+                        }
+                    } else {
+                        throw new RuntimeException("The cell ("+getCurrentRow()+","+jdbcColumn+") is a numeric cell and cannot be cast to ("+XlsResultSetMetaData.columnTypeNameMap.get(columnType)+".");
+                    }
+
+
+                default:
+                    return null;
+            }
+        } catch (Exception e) {
+            throw wrapped(e);
+        }
     }
 
     public <T> T getObject(int jdbcColumn, Class<T> type) throws SQLException {
@@ -172,13 +190,13 @@ public class XlsResultSet implements ResultSet {
         return (T) getObject(columnName);
     }
 
-    Object getNextRowObject(int jdbcColumn) throws SQLException {
-        if (sheet.getRow(cursorSheetRow + 1) != null) {
-            Cell cell = sheet.getRow(cursorSheetRow + 1).getCell((short) (jdbcColumn - 1));
-            return getObject(cell);
-        }
-        return getObject(jdbcColumn);
-    }
+//    Object getNextRowObject(int jdbcColumn) throws SQLException {
+//        if (sheet.getRow(cursorSheetRow + 1) != null) {
+//            Cell cell = sheet.getRow(cursorSheetRow + 1).getCell((short) (jdbcColumn - 1));
+//            return getObject(cell);
+//        }
+//        return getObject(jdbcColumn);
+//    }
 
     public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
         return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
@@ -499,7 +517,12 @@ public class XlsResultSet implements ResultSet {
         return findOrCreateCell(col);
     }
 
-    private Cell getCell(int jdbcColumn) {
+    /**
+     * Protected becasue used also in the resultset metadata to scan the column type
+     * @param jdbcColumn
+     * @return the Cell
+     */
+    protected Cell getCell(int jdbcColumn) {
         return sheet.getRow(cursorSheetRow).getCell((short) (jdbcColumn - 1));
     }
 

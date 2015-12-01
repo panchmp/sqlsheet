@@ -21,7 +21,7 @@ public class XlsDriverStreamingTest {
         while (results.next()) {
             Assert.assertEquals(Double.class, results.getObject(1).getClass());
             Assert.assertEquals(String.class, results.getObject(2).getClass());
-            Assert.assertEquals(Date.class, results.getObject(3).getClass());
+            Assert.assertEquals(java.sql.Date.class, results.getObject(3).getClass());
             count++;
         }
         Assert.assertEquals(count.longValue(), 3L);

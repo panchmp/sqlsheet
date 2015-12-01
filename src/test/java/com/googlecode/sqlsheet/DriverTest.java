@@ -51,14 +51,14 @@ public class DriverTest {
     public void testXlsStreamSheetNameQuotes() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
         Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile() + "?readStreaming=true");
-        processBaseResultset(conn, "SELECT * FROM \"2009\"");
+        processBaseStreamingResultset(conn, "SELECT * FROM \"2009\"");
     }
 
     @Test
     public void testXlsStreamSheetNameNoQuotes() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
         Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile() + "?readStreaming=true");
-        processBaseResultset(conn, "SELECT * FROM SHEET1");
+        processBaseStreamingResultset(conn, "SELECT * FROM SHEET1");
     }
 
 
@@ -82,7 +82,7 @@ public class DriverTest {
     public void testXlsxStreamSheetNameQuotes() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
         Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=true");
-        processBaseResultset(conn, "SELECT * FROM \"2009\"");
+        processBaseStreamingResultset(conn, "SELECT * FROM \"2009\"");
     }
 
 
@@ -90,7 +90,7 @@ public class DriverTest {
     public void testXlsxStreamSheetNameNoQuotes() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
         Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=true");
-        processBaseResultset(conn, "SELECT * FROM SHEET1");
+        processBaseStreamingResultset(conn, "SELECT * FROM SHEET1");
     }
 
     @Test
@@ -126,15 +126,6 @@ public class DriverTest {
         Assert.assertEquals("java.lang.String", resultSetMetaData.getColumnTypeName(2));
         Assert.assertEquals("java.util.Date", resultSetMetaData.getColumnTypeName(3));
 
-        conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=no");
-        stmt = conn.createStatement();
-        results = stmt.executeQuery("SELECT * FROM SHEET1");
-        Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
-
-        resultSetMetaData = results.getMetaData();
-        Assert.assertEquals("java.lang.Double", resultSetMetaData.getColumnTypeName(1));
-        Assert.assertEquals("java.lang.String", resultSetMetaData.getColumnTypeName(2));
-        Assert.assertEquals("java.util.Date", resultSetMetaData.getColumnTypeName(3));
 
     }
 
@@ -147,7 +138,24 @@ public class DriverTest {
         while (results.next()) {
             Assert.assertEquals(Double.class, results.getObject(1).getClass());
             Assert.assertEquals(String.class, results.getObject(2).getClass());
-            Assert.assertEquals(Date.class, results.getObject(3).getClass());
+            Assert.assertEquals(java.sql.Date.class, results.getObject(3).getClass());
+            count++;
+        }
+        Assert.assertEquals(count.longValue(), 3L);
+        results.close();
+        stmt.close();
+        conn.close();
+    }
+
+    private void processBaseStreamingResultset(Connection conn, String sql) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet results = stmt.executeQuery(sql);
+        Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
+        Long count = 0L;
+        while (results.next()) {
+            Assert.assertEquals(Double.class, results.getObject(1).getClass());
+            Assert.assertEquals(String.class, results.getObject(2).getClass());
+            Assert.assertEquals(java.util.Date.class, results.getObject(3).getClass());
             count++;
         }
         Assert.assertEquals(count.longValue(), 3L);
