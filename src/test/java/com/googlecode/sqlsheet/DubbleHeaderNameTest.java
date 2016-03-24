@@ -34,7 +34,7 @@ public class DubbleHeaderNameTest {
   @Test
   public void testDuplicate() throws Exception {
     final Statement stmt = connection.createStatement();
-    final ResultSet results = stmt.executeQuery("SELECT * FROM duplicate");
+    final ResultSet results = stmt.executeQuery("SELECT * FROM \"duplicate\""); // Duplicate is a keyword
     Assert.assertEquals("The column name must A_1", "A_1", results.getMetaData().getColumnName(2));
     Assert.assertTrue("The column names must not be the same", !results.getMetaData().getColumnName(2).equals(results.getMetaData().getColumnName(1)));
 

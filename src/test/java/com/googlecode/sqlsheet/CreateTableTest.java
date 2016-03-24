@@ -35,6 +35,7 @@ public class CreateTableTest {
     final ResultSet trs = stmt.executeQuery("SELECT * FROM \"table\"");
     String columnName = trs.getMetaData().getColumnName(1);
     Assert.assertEquals("column", columnName);
+    stmt.execute("DROP TABLE \"table\"");
     stmt.close();
     trs.close();
     connection.close();
@@ -47,6 +48,7 @@ public class CreateTableTest {
     final ResultSet trs = stmt.executeQuery("SELECT * FROM \"table with very very very very long name\"");
     String columnName = trs.getMetaData().getColumnName(1);
     Assert.assertEquals("column", columnName);
+    stmt.execute("DROP TABLE \"table with very very very very long name\"");
     stmt.close();
     trs.close();
     connection.close();

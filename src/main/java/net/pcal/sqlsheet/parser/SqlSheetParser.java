@@ -198,7 +198,7 @@ public class SqlSheetParser {
                     };
                 } else if (statement instanceof Drop) {
 
-                    final String table = ((Drop) statement).getName();
+                    final String table = prepareTableIdentifier(((Drop) statement).getName().getName());
                     return new DropTableStatement() {
                         public String getTable() {
                             return table;
