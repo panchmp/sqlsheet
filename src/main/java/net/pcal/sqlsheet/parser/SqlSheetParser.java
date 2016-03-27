@@ -22,6 +22,7 @@ import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
+import net.sf.jsqlparser.statement.drop.Drop;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 
@@ -194,6 +195,16 @@ public class SqlSheetParser {
                             return values;
                         }
                     };
+                } else if (statement instanceof Drop) {
+
+                    final String table = ((Drop) statement).getName();
+                    return new DropTableStatement() {
+                        public String getTable() {
+                            return table;
+                        }
+
+                    };
+
                 }
                 //
                 // doh!

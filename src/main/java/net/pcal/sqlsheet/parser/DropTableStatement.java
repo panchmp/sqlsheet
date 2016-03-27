@@ -15,22 +15,16 @@
  */
 package net.pcal.sqlsheet.parser;
 
-import java.util.List;
-
 /**
  * Handle on a parsed SQL statement of the form
  *
- * CREATE TABLE xxx (xxx xxx, xxx xxx)
+ * DROP TABLE xxx.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
-public interface CreateTableStatement extends ParsedStatement {
+public interface DropTableStatement extends ParsedStatement {
 
     String getTable();
-
-    List<String> getColumns();
-
-    List<String> getTypes();
 
 }

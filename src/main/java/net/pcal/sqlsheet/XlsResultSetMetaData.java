@@ -15,15 +15,15 @@
  */
 package net.pcal.sqlsheet;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -34,11 +34,43 @@ import java.util.Date;
  */
 public class XlsResultSetMetaData implements ResultSetMetaData {
 
-    private String[] columnNames;
+    private List<String> columnNames;
     private final DataFormatter formatter;
     private XlsResultSet resultset;
 
+    /**
+     * A map to get consistently the same data type
+     */
+    Map<Integer, Integer> columnTypeMap = new HashMap<Integer, Integer>();
+
+    /**
+     * A map between the code ID and the type name
+     */
+    static Map<Integer, String> columnTypeNameMap = new HashMap<Integer, String>();
+
+    /**
+     * A map between the code ID and the type class
+     */
+    static Map<Integer, String> columnTypeClassMap = new HashMap<Integer, String>();
+
+    static {
+        columnTypeNameMap.put(Types.VARCHAR, "VARCHAR");
+        columnTypeNameMap.put(Types.DOUBLE, "DOUBLE");
+        columnTypeNameMap.put(Types.DATE, "DATE");
+
+        columnTypeClassMap.put(Types.VARCHAR, "java.lang.String.class");
+        columnTypeClassMap.put(Types.DOUBLE, "java.lang.Double.class");
+        columnTypeClassMap.put(Types.DATE, "java.sql.Date.class");
+
+    }
+
+
+    static {
+
+    }
+
     public XlsResultSetMetaData(Sheet sheet, XlsResultSet resultset, int firstSheetRowOffset) throws SQLException {
+
         if (sheet == null) throw new IllegalArgumentException();
         this.resultset = resultset;
         Row row = sheet.getRow(firstSheetRowOffset - 1);
@@ -46,23 +78,136 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
             throw new SQLException("No header row in sheet");
         }
         formatter = new DataFormatter();
-        columnNames = new String[row.getLastCellNum()];
-        for (short c = 0; c < columnNames.length; c++) {
+        columnNames = new ArrayList<String>();
+        for (short c = 0; c < row.getLastCellNum(); c++) {
             Cell cell = row.getCell(c);
-            columnNames[c] = formatter.formatCellValue(cell);
+            String columnName = formatter.formatCellValue(cell);
+
+            // Is it unique in the column name set
+            int suffix;
+            while (columnNames.contains(columnName)) {
+                suffix = 1;
+                columnName += "_" + suffix;
+            }
+
+            columnNames.add(columnName);
         }
+
+        // Data Type profiling on the whole excel file
+        int currentRowNumber = resultset.getRow();
+
+        // A double map to back the relation between the column Id and the count of type
+        Map<Integer, Map<Integer, Integer>> columnTypeScan = new HashMap<Integer, Map<Integer, Integer>>();
+        while (resultset.next()) {
+            int typeCode;
+            for (int columnId = 1; columnId <= getColumnCount(); columnId++) {
+
+                Cell cell = resultset.getCell(columnId);
+                if (cell != null) {
+
+                    int excelCellType = cell.getCellType();
+                    switch (excelCellType) {
+                        case Cell.CELL_TYPE_BOOLEAN:
+                            typeCode = Types.VARCHAR;
+                            break;
+                        case Cell.CELL_TYPE_STRING:
+                            typeCode = Types.VARCHAR;
+                            break;
+                        case Cell.CELL_TYPE_NUMERIC:
+                            if (DateUtil.isCellDateFormatted(cell)) {
+                                typeCode = Types.DATE;
+                            } else {
+                                typeCode = Types.DOUBLE;
+                            }
+                            break;
+                        case Cell.CELL_TYPE_BLANK:
+                            typeCode = Types.NULL;
+                            break;
+                        case Cell.CELL_TYPE_FORMULA:
+                            try {
+                                cell.getStringCellValue();
+                                typeCode = Types.VARCHAR;
+                            } catch (Exception e) {
+                                cell.getNumericCellValue();
+                                typeCode = Types.DOUBLE;
+                            }
+                            break;
+                        case Cell.CELL_TYPE_ERROR:
+                            throw new RuntimeException("The ExcelType ( ERROR ) is not supported - Cell (" + resultset.getRow() + "," + columnId + ")");
+
+                        default:
+                            throw new RuntimeException("The ExcelType (" + excelCellType + ") is not supported - Cell (" + resultset.getRow() + "," + columnId + ")");
+                    }
+                } else {
+                    typeCode = Types.NULL;
+                }
+                Map<Integer, Integer> columnIdTypeMap = columnTypeScan.get(columnId);
+                if (columnIdTypeMap == null) {
+                    columnIdTypeMap = new HashMap<Integer, Integer>();
+                    columnIdTypeMap.put(typeCode, 1);
+                    columnTypeScan.put(columnId, columnIdTypeMap);
+                } else {
+                    Integer columnIdType = columnIdTypeMap.get(typeCode);
+                    if (columnIdType == null) {
+                        columnIdTypeMap.put(typeCode, 1);
+                    } else {
+                        int count = columnIdTypeMap.get(typeCode) + 1;
+                        columnIdTypeMap.put(typeCode, count);
+                    }
+                }
+
+            }
+            // Retrieve only one type
+            for (Integer columnId : columnTypeScan.keySet()) {
+
+                Integer numberOfVarchar = 0;
+                Integer numberOfDouble = 0;
+                Integer numberOfDate = 0;
+
+                for (Map.Entry<Integer, Integer> columnIdTypeMap : columnTypeScan.get(columnId).entrySet()) {
+                    if (columnIdTypeMap.getKey() == Types.VARCHAR) {
+                        numberOfVarchar = columnIdTypeMap.getValue();
+                    } else if (columnIdTypeMap.getKey() == Types.DOUBLE) {
+                        numberOfDouble = columnIdTypeMap.getValue();
+                    } else if (columnIdTypeMap.getKey() == Types.DATE) {
+                        numberOfDate = columnIdTypeMap.getValue();
+                    }
+                }
+                Integer finalColumnType = null;
+                if (numberOfVarchar != 0) {
+                    finalColumnType = Types.VARCHAR;
+                } else {
+                    if (numberOfDouble != 0 && numberOfDate == 0) {
+                        finalColumnType = Types.DOUBLE;
+                    }
+                    if (numberOfDouble == 0 && numberOfDate != 0) {
+                        finalColumnType = Types.DATE;
+                    }
+                }
+                if (finalColumnType == null) {
+                    finalColumnType = Types.VARCHAR;
+                }
+                columnTypeMap.put(columnId, finalColumnType);
+            }
+
+        }
+
+        // Go back to the current row
+        resultset.absolute(currentRowNumber);
+
+
     }
 
     public int getColumnCount() {
-        return columnNames.length;
+        return columnNames.size();
     }
 
     public String getColumnLabel(int jdbcCol) {
-        return columnNames[jdbcCol - 1];
+        return columnNames.get(jdbcCol - 1);
     }
 
     public String getColumnName(int jdbcCol) {
-        return columnNames[jdbcCol - 1];
+        return columnNames.get(jdbcCol - 1);
     }
 
     public String getCatalogName(int arg0) throws SQLException {
@@ -70,7 +215,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     }
 
     public String getColumnClassName(int jdbcColumn) throws SQLException {
-        return resultset.getNextRowObject(jdbcColumn).getClass().getName();
+        return columnTypeClassMap.get(getColumnType(jdbcColumn));
     }
 
     public int getColumnDisplaySize(int arg0) {
@@ -78,18 +223,14 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     }
 
     public int getColumnType(int jdbcColumn) throws SQLException {
-        if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(String.class)) {
-            return Types.VARCHAR;
-        } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Double.class)) {
-            return Types.DOUBLE;
-        } else if (resultset.getNextRowObject(jdbcColumn).getClass().isAssignableFrom(Date.class)) {
-            return Types.DATE;
-        }
-        return Types.OTHER;
+
+        return columnTypeMap.get(jdbcColumn);
+
     }
 
     public String getColumnTypeName(int jdbcColumn) throws SQLException {
-        return resultset.getNextRowObject(jdbcColumn).getClass().getName();
+
+        return columnTypeNameMap.get(getColumnType(jdbcColumn));
     }
 
     public int getPrecision(int arg0) throws SQLException {

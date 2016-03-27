@@ -125,6 +125,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
     /**
      * Parses and shows the content of one sheet
      * using the specified styles and shared-strings tables.
+     * @throws XMLStreamException if any
      */
     public void processNextEvent() throws XMLStreamException {
         if (reader.hasNext()) {
