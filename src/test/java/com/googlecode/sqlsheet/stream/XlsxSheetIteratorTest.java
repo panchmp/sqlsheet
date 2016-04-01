@@ -1,11 +1,12 @@
 package com.googlecode.sqlsheet.stream;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
 
-
+@Ignore
 public class XlsxSheetIteratorTest {
 
     @Test
