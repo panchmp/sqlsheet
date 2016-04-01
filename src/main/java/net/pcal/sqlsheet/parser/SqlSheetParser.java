@@ -87,7 +87,8 @@ public class SqlSheetParser {
             }
             return new SelectStarStatement() {
                 public String getTable() {
-                    return (((Table) from).getName());
+                	String tableName = ((Table) from).getName();
+                    return prepareTableIdentifier(tableName);
                 }
             };
 
@@ -96,13 +97,13 @@ public class SqlSheetParser {
             // CREATE TABLE
             //
             if (statement instanceof CreateTable) {
-                final String table = ((CreateTable) statement).getTable().getName();
+                final String table = prepareTableIdentifier(((CreateTable) statement).getTable().getName());
                 List<ColumnDefinition> cols =
                         ((CreateTable) statement).getColumnDefinitions();
                 final List<String> names = new ArrayList<String>();
                 final List<String> types = new ArrayList<String>();
                 for (ColumnDefinition cd : cols) {
-                    names.add(stripUnderscores(cd.getColumnName()));
+                    names.add(prepareColumnIdentifier(stripUnderscores(cd.getColumnName())));
                     types.add(cd.getColDataType().getDataType());
                 }
                 return new CreateTableStatement() {
@@ -123,13 +124,13 @@ public class SqlSheetParser {
                 // INSERT INTO
                 //
                 if (statement instanceof Insert) {
-                    final String table = ((Insert) statement).getTable().getName();
+                    final String table = prepareTableIdentifier(((Insert) statement).getTable().getName());
                     List<net.sf.jsqlparser.schema.Column> cols =
                             ((Insert) statement).getColumns();
                     final List<String> names = new ArrayList<String>();
                     final List<Object> values = new ArrayList<Object>();
                     for (net.sf.jsqlparser.schema.Column cd : cols) {
-                        names.add(stripUnderscores(cd.getColumnName()));
+                        names.add(prepareColumnIdentifier(stripUnderscores(cd.getColumnName())));
                     }
                     ItemsList ilist = ((Insert) statement).getItemsList();
                     if (!(ilist instanceof ExpressionList)) {
@@ -197,7 +198,7 @@ public class SqlSheetParser {
                     };
                 } else if (statement instanceof Drop) {
 
-                    final String table = ((Drop) statement).getName();
+                    final String table = prepareTableIdentifier(((Drop) statement).getName().getName());
                     return new DropTableStatement() {
                         public String getTable() {
                             return table;
@@ -222,4 +223,23 @@ public class SqlSheetParser {
         return columnName.replace('_', ' ');
     }
 
+    /**
+     *  Excel silently truncates long sheet names to 31 chars.
+     *  We may truncate table names explicitly for every usage.
+     */
+    private static final int MAX_SENSITIVE_SHEET_NAME_LEN = 31;
+    
+	private String prepareTableIdentifier(String tableName) {
+		String newName = truncateQuotes(tableName);
+		return newName.substring(0, Math.min(MAX_SENSITIVE_SHEET_NAME_LEN, newName.length())).trim();
+	}
+
+	private String prepareColumnIdentifier(String columnName) {
+		return truncateQuotes(columnName);
+	}
+	
+	private String truncateQuotes(String name) {
+		return name.replaceAll("\"", "");
+	}
+	
 }
