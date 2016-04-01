@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-@Ignore
 public class XlsxSheetIteratorTest {
 
     @Test
