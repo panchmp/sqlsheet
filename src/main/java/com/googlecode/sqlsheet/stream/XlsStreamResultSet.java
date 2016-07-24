@@ -412,11 +412,13 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     public BigDecimal getBigDecimal(int jdbcColumn) throws SQLException {
-        throw nyi();
+        XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
+        return cell == null ? null : BigDecimal.valueOf(cell.doubleValue);
     }
 
     public BigDecimal getBigDecimal(String jdbcColumn) throws SQLException {
-        throw nyi();
+        XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
+        return cell == null ? null : BigDecimal.valueOf(cell.doubleValue);
     }
 
     public BigDecimal getBigDecimal(int jdbcColumn, int scale)
