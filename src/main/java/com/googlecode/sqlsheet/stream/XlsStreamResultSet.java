@@ -478,19 +478,43 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     public Date getDate(int jdbcColumn) throws SQLException {
-        throw nyi();
+        XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
+        return cell == null ? null : new Date(cell.dateValue.getTime());
     }
 
     public Date getDate(String jdbcColumn) throws SQLException {
-        throw nyi();
+        XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
+        return cell == null ? null : new Date(cell.dateValue.getTime());
     }
 
     public Date getDate(int jdbcColumn, Calendar cal) throws SQLException {
-        throw nyi();
+        XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
+        if (cell == null) {
+            return null;
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(cell.dateValue);
+            calendar.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY));
+            calendar.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
+            calendar.set(Calendar.SECOND, cal.get(Calendar.SECOND));
+            calendar.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
+            return new Date(calendar.getTime().getTime());
+        }
     }
 
     public Date getDate(String jdbcColumn, Calendar cal) throws SQLException {
-        throw nyi();
+        XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
+        if (cell == null) {
+            return null;
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(cell.dateValue);
+            calendar.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY));
+            calendar.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
+            calendar.set(Calendar.SECOND, cal.get(Calendar.SECOND));
+            calendar.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
+            return new Date(calendar.getTime().getTime());
+        }
     }
 
     public Object getObject(int i, Map<String, Class<?>> map)
