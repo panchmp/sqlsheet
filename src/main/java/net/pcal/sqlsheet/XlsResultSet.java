@@ -581,21 +581,33 @@ public class XlsResultSet implements ResultSet {
     }
 
     public BigDecimal getBigDecimal(int jdbcColumn) throws SQLException {
-        throw nyi();
+        Cell cell = getCell(jdbcColumn);
+        return cell == null ? null : BigDecimal.valueOf(cell.getNumericCellValue());
     }
 
     public BigDecimal getBigDecimal(String jdbcColumn) throws SQLException {
-        throw nyi();
+        Cell cell = getCell(jdbcColumn);
+        return cell == null ? null : BigDecimal.valueOf(cell.getNumericCellValue());
     }
 
-    public BigDecimal getBigDecimal(int jdbcColumn, int scale)
-            throws SQLException {
-        throw nyi();
+    public BigDecimal getBigDecimal(int jdbcColumn, int scale) throws SQLException {
+        Cell cell = getCell(jdbcColumn);
+        if (cell == null) {
+            return null;
+        } else {
+            BigDecimal bigDecimal = BigDecimal.valueOf(cell.getNumericCellValue());
+            return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
+        }
     }
 
-    public BigDecimal getBigDecimal(String jdbcColumn, int scale)
-            throws SQLException {
-        throw nyi();
+    public BigDecimal getBigDecimal(String jdbcColumn, int scale) throws SQLException {
+        Cell cell = getCell(jdbcColumn);
+        if (cell == null) {
+            return null;
+        } else {
+            BigDecimal bigDecimal = BigDecimal.valueOf(cell.getNumericCellValue());
+            return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
+        }
     }
 
     public InputStream getBinaryStream(int jdbcColumn) throws SQLException {
