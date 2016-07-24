@@ -422,11 +422,23 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     public BigDecimal getBigDecimal(int jdbcColumn, int scale) throws SQLException {
-        throw nyi();
+        XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
+        if (cell == null) {
+            return null;
+        } else {
+            BigDecimal bigDecimal = BigDecimal.valueOf(cell.doubleValue);
+            return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
+        }
     }
 
     public BigDecimal getBigDecimal(String jdbcColumn, int scale) throws SQLException {
-        throw nyi();
+        XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
+        if (cell == null) {
+            return null;
+        } else {
+            BigDecimal bigDecimal = BigDecimal.valueOf(cell.doubleValue);
+            return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
+        }
     }
 
     public InputStream getBinaryStream(int jdbcColumn) throws SQLException {
