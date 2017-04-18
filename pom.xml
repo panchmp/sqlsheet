@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.sqlsheet</groupId>
@@ -8,7 +8,7 @@
     <name>sqlsheet</name>
 
     <description>Jdbc API for xls/xlsx files using POI</description>
-    <url>http://code.google.com/p/sqlsheet/</url>
+    <url>https://github.com/panchmp/sqlsheet</url>
 
     <dependencies>
         <dependency>
@@ -67,7 +67,7 @@
     </properties>
 
     <prerequisites>
-        <maven>3.3.9</maven>
+        <maven>3.5</maven>
     </prerequisites>
 
     <build>
@@ -111,7 +111,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
+                <version>3.0.2</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -119,7 +119,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.0</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -129,7 +129,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.0.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -204,13 +204,12 @@
     </developers>
 
     <scm>
-        <connection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</connection>
-        <developerConnection>scm:svn:https://sqlsheet.googlecode.com/svn/trunk/</developerConnection>
-        <url>https://sqlsheet.googlecode.com/svn/trunk/</url>
+        <connection>scm:git:https://github.com/panchmp/sqlsheet</connection>
+        <developerConnection>scm:git:https://github.com/panchmp/sqlsheet</developerConnection>
+        <url>https://github.com/panchmp/sqlsheet</url>
     </scm>
     <issueManagement>
-        <system>Google Code Issue Tracking</system>
-        <url>https://code.google.com/p/sqlsheet/issues/list</url>
+        <url>https://github.com/panchmp/sqlsheet/issues</url>
     </issueManagement>
 
     <distributionManagement>
@@ -225,21 +224,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>sqlsheet.googlecode.com</id>
-            <name>sqlsheet.googlecode.com</name>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <url>http://sqlsheet.googlecode.com/svn/maven2/</url>
-        </repository>
-    </repositories>
 
     <profiles>
         <profile>
