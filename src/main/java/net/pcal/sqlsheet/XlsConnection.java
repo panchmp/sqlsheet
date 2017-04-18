@@ -17,10 +17,12 @@ package net.pcal.sqlsheet;
 
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.sql.*;
 import java.util.Map;
@@ -84,6 +86,19 @@ class XlsConnection implements Connection {
     }
 
     public void close() throws SQLException {
+        if (saveFile == null || !writeRequired) {
+            return;
+        }
+        try {
+            OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(saveFile));
+            workbook.write(outputStream);
+            outputStream.close();
+        } catch (IOException exception) {
+            throw new SQLException("Error while persisting changes.", exception);
+        }
+    }
+
+    public void _close() throws SQLException {
         if (saveFile != null && writeRequired) {
             FileOutputStream fileOut;
             try {
