@@ -519,7 +519,7 @@ public class XlsResultSet implements ResultSet {
 
     /**
      * Protected becasue used also in the resultset metadata to scan the column type
-     * @param jdbcColumn
+     * @param jdbcColumn - index of the column
      * @return the Cell
      */
     protected Cell getCell(int jdbcColumn) {
