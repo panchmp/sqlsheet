@@ -196,8 +196,8 @@
 
     <scm>
         <url>https://github.com/panchmp/sqlsheet</url>
-        <connection>scm:git:git://github.com/panchmp/sqlsheet.git</connection>
-        <developerConnection>scm:git:git://github.com/panchmp/sqlsheet.git</developerConnection>
+        <connection>scm:git:git://github.com:panchmp/sqlsheet.git</connection>
+        <developerConnection>scm:git:git://github.com:panchmp/sqlsheet.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
