@@ -3,6 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.sqlsheet</groupId>
     <artifactId>sqlsheet</artifactId>
+    <name>sqlsheet</name>
     <version>6.7-SNAPSHOT</version>
 
     <description>Jdbc API for xls/xlsx files using POI</description>
@@ -162,6 +163,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5.3</version>
+                <configuration>
+                    <releaseProfiles>release</releaseProfiles>
+                </configuration>
             </plugin>
         </plugins>
     </build>
