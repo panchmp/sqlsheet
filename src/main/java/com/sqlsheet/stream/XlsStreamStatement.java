@@ -15,20 +15,25 @@
  */
 package com.sqlsheet.stream;
 
-import net.pcal.sqlsheet.parser.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.Statement;
 
-import java.sql.*;
-
+import com.sqlsheet.parser.ParsedStatement;
+import com.sqlsheet.parser.SelectStarStatement;
+import com.sqlsheet.parser.SqlSheetParser;
 
 /**
  * SqlSheet implementation of java.sql.Statement which uses steaming over XLS
  *
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
-public class XlsStreamStatement implements Statement{
+public class XlsStreamStatement implements Statement {
 
     XlsStreamConnection connection;
-    SqlSheetParser parser;
+    SqlSheetParser      parser;
 
     public XlsStreamStatement(XlsStreamConnection c) {
         if (c == null)
@@ -77,34 +82,14 @@ public class XlsStreamStatement implements Statement{
     }
 
     private XlsStreamResultSet findOrCreateResultSetFor(String tableName) throws SQLException {
-        return new XlsStreamResultSet(tableName,connection);
-    }
-
-    public void setMaxFieldSize(int p0) throws SQLException {
-        nyi();
-    }
-
-    public void setMaxRows(int p0) throws SQLException {
-        nyi();
+        return new XlsStreamResultSet(tableName, connection);
     }
 
     public void setEscapeProcessing(boolean p0) throws SQLException {
         nyi();
     }
 
-    public void setQueryTimeout(int p0) throws SQLException {
-        nyi();
-    }
-
     public void setCursorName(String p0) throws SQLException {
-        nyi();
-    }
-
-    public void setFetchDirection(int p0) throws SQLException {
-        nyi();
-    }
-
-    public void setFetchSize(int p0) throws SQLException {
         nyi();
     }
 
@@ -113,14 +98,26 @@ public class XlsStreamStatement implements Statement{
         return -1;
     }
 
+    public void setMaxFieldSize(int p0) throws SQLException {
+        nyi();
+    }
+
     public int getMaxRows() throws SQLException {
         nyi();
         return -1;
     }
 
+    public void setMaxRows(int p0) throws SQLException {
+        nyi();
+    }
+
     public int getQueryTimeout() throws SQLException {
         nyi();
         return -1;
+    }
+
+    public void setQueryTimeout(int p0) throws SQLException {
+        nyi();
     }
 
     public SQLWarning getWarnings() throws SQLException {
@@ -153,9 +150,17 @@ public class XlsStreamStatement implements Statement{
         return -1;
     }
 
+    public void setFetchDirection(int p0) throws SQLException {
+        nyi();
+    }
+
     public int getFetchSize() throws SQLException {
         nyi();
         return -1;
+    }
+
+    public void setFetchSize(int p0) throws SQLException {
+        nyi();
     }
 
     public int getResultSetConcurrency() throws SQLException {
@@ -255,12 +260,12 @@ public class XlsStreamStatement implements Statement{
         return null;
     }
 
-	public void closeOnCompletion() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-}
+    public void closeOnCompletion() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public boolean isCloseOnCompletion() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public boolean isCloseOnCompletion() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }

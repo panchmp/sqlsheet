@@ -15,17 +15,31 @@
  */
 package com.sqlsheet.stream;
 
-import org.apache.poi.POIXMLDocument;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Date;
+import java.sql.NClob;
+import java.sql.Ref;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.RowId;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
+
+import org.apache.poi.POIXMLDocument;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
 /**
  * SqlSheet implementation of java.sql.ResultSet which uses steaming over XLS
@@ -34,7 +48,7 @@ import java.util.Map;
  */
 public class XlsStreamResultSet implements ResultSet {
 
-    AbstractXlsSheetIterator iterator;
+    AbstractXlsSheetIterator              iterator;
     private XlsStreamingResultSetMetaData metadata;
 
     public XlsStreamResultSet(String tableName, XlsStreamConnection connection) throws SQLException {
@@ -56,10 +70,14 @@ public class XlsStreamResultSet implements ResultSet {
     }
 
     private static Object getObject(XlsSheetIterator.CellValueHolder cell) throws SQLException {
-        if (cell == null) return null;
-        if (cell.dateValue != null) return cell.dateValue;
-        if (cell.doubleValue != null) return cell.doubleValue;
-        if (cell.stringValue != null) return cell.stringValue;
+        if (cell == null)
+            return null;
+        if (cell.dateValue != null)
+            return cell.dateValue;
+        if (cell.doubleValue != null)
+            return cell.doubleValue;
+        if (cell.stringValue != null)
+            return cell.stringValue;
         return null;
     }
 
@@ -529,13 +547,11 @@ public class XlsStreamResultSet implements ResultSet {
         }
     }
 
-    public Object getObject(int i, Map<String, Class<?>> map)
-            throws SQLException {
+    public Object getObject(int i, Map<String, Class<?>> map) throws SQLException {
         throw nyi();
     }
 
-    public Object getObject(String colName, Map<String, Class<?>> map)
-            throws SQLException {
+    public Object getObject(String colName, Map<String, Class<?>> map) throws SQLException {
         throw nyi();
     }
 
@@ -567,13 +583,11 @@ public class XlsStreamResultSet implements ResultSet {
         throw nyi();
     }
 
-    public Timestamp getTimestamp(int jdbcColumn, Calendar cal)
-            throws SQLException {
+    public Timestamp getTimestamp(int jdbcColumn, Calendar cal) throws SQLException {
         throw nyi();
     }
 
-    public Timestamp getTimestamp(String jdbcColumn, Calendar cal)
-            throws SQLException {
+    public Timestamp getTimestamp(String jdbcColumn, Calendar cal) throws SQLException {
         throw nyi();
     }
 
@@ -821,33 +835,27 @@ public class XlsStreamResultSet implements ResultSet {
         throw nyi();
     }
 
-    public void updateAsciiStream(int jdbcColumn, InputStream x, int length)
-            throws SQLException {
+    public void updateAsciiStream(int jdbcColumn, InputStream x, int length) throws SQLException {
         throw nyi();
     }
 
-    public void updateAsciiStream(String jdbcColumn, InputStream x, int length)
-            throws SQLException {
+    public void updateAsciiStream(String jdbcColumn, InputStream x, int length) throws SQLException {
         throw nyi();
     }
 
-    public void updateBigDecimal(int jdbcColumn, BigDecimal x)
-            throws SQLException {
+    public void updateBigDecimal(int jdbcColumn, BigDecimal x) throws SQLException {
         throw nyi();
     }
 
-    public void updateBigDecimal(String jdbcColumn, BigDecimal x)
-            throws SQLException {
+    public void updateBigDecimal(String jdbcColumn, BigDecimal x) throws SQLException {
         throw nyi();
     }
 
-    public void updateBinaryStream(int jdbcColumn, InputStream x, int length)
-            throws SQLException {
+    public void updateBinaryStream(int jdbcColumn, InputStream x, int length) throws SQLException {
         throw nyi();
     }
 
-    public void updateBinaryStream(String jdbcColumn, InputStream x, int length)
-            throws SQLException {
+    public void updateBinaryStream(String jdbcColumn, InputStream x, int length) throws SQLException {
         throw nyi();
     }
 
@@ -867,13 +875,11 @@ public class XlsStreamResultSet implements ResultSet {
         throw nyi();
     }
 
-    public void updateCharacterStream(int jdbcColumn, Reader x, int length)
-            throws SQLException {
+    public void updateCharacterStream(int jdbcColumn, Reader x, int length) throws SQLException {
         throw nyi();
     }
 
-    public void updateCharacterStream(String jdbcColumn, Reader reader,
-                                      int length) throws SQLException {
+    public void updateCharacterStream(String jdbcColumn, Reader reader, int length) throws SQLException {
         throw nyi();
     }
 
@@ -893,13 +899,11 @@ public class XlsStreamResultSet implements ResultSet {
         throw nyi();
     }
 
-    public void updateObject(int jdbcColumn, Object x, int scale)
-            throws SQLException {
+    public void updateObject(int jdbcColumn, Object x, int scale) throws SQLException {
         throw nyi();
     }
 
-    public void updateObject(String jdbcColumn, Object x, int scale)
-            throws SQLException {
+    public void updateObject(String jdbcColumn, Object x, int scale) throws SQLException {
         throw nyi();
     }
 
@@ -923,13 +927,11 @@ public class XlsStreamResultSet implements ResultSet {
         throw nyi();
     }
 
-    public void updateTimestamp(int jdbcColumn, Timestamp x)
-            throws SQLException {
+    public void updateTimestamp(int jdbcColumn, Timestamp x) throws SQLException {
         throw nyi();
     }
 
-    public void updateTimestamp(String jdbcColumn, Timestamp x)
-            throws SQLException {
+    public void updateTimestamp(String jdbcColumn, Timestamp x) throws SQLException {
         throw nyi();
     }
 
@@ -945,5 +947,7 @@ public class XlsStreamResultSet implements ResultSet {
         throw nyi();
     }
 
-    private static enum XlsType {XLS, XLSX}
+    private static enum XlsType {
+        XLS, XLSX
+    }
 }

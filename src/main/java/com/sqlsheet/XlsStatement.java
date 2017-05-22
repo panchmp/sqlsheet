@@ -15,17 +15,25 @@
  */
 package com.sqlsheet;
 
-import com.sqlsheet.XlsDriver;
-import net.pcal.sqlsheet.parser.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.sqlsheet.parser.CreateTableStatement;
+import com.sqlsheet.parser.DropTableStatement;
+import com.sqlsheet.parser.InsertIntoStatement;
+import com.sqlsheet.parser.ParsedStatement;
+import com.sqlsheet.parser.SelectStarStatement;
+import com.sqlsheet.parser.SqlSheetParser;
 
 /**
  * SqlSheet implementation of java.sql.Statement.
@@ -35,14 +43,42 @@ import java.util.Map;
  */
 public class XlsStatement implements Statement {
 
-    private XlsConnection connection;
+    private XlsConnection             connection;
     private Map<String, XlsResultSet> sheet2rs = new HashMap<String, XlsResultSet>();
-    private SqlSheetParser parser;
+    private SqlSheetParser            parser;
 
     public XlsStatement(XlsConnection c) {
         if (c == null)
             throw new IllegalArgumentException();
         this.connection = c;
+    }
+
+    private static Sheet getSheetNamed(Workbook wb, String name) throws SQLException {
+        if (name == null)
+            throw new IllegalArgumentException();
+        name = name.trim();
+        String allSheetNames = "";
+        int count = wb.getNumberOfSheets();
+        for (int i = 0; i < count; i++) {
+            String sheetName = wb.getSheetName(i);
+            allSheetNames += sheetName + ",";
+            if (sheetName == null)
+                continue;
+            if (sheetName.equalsIgnoreCase(name) || ("\"" + sheetName + "\"").equalsIgnoreCase(name)) {
+                return wb.getSheetAt(i);
+            }
+        }
+
+        String message = "No sheet named '" + name;
+        if (count == 0) {
+            message += " can be found. Are you sure of the Excel file path ?";
+        } else {
+            if (allSheetNames.length() > 2) {
+                allSheetNames = allSheetNames.substring(0, allSheetNames.length() - 1);
+            }
+            message += ". Only the following " + count + " sheets can be found (" + allSheetNames + ")";
+        }
+        throw new SQLException(message);
     }
 
     public Connection getConnection() throws SQLException {
@@ -140,59 +176,11 @@ public class XlsStatement implements Statement {
         return out;
     }
 
-    private static Sheet getSheetNamed(Workbook wb, String name) throws SQLException {
-        if (name == null)
-            throw new IllegalArgumentException();
-        name = name.trim();
-        String allSheetNames = "";
-        int count = wb.getNumberOfSheets();
-        for (int i = 0; i < count; i++) {
-            String sheetName = wb.getSheetName(i);
-            allSheetNames += sheetName + ",";
-            if (sheetName == null)
-                continue;
-            if (sheetName.equalsIgnoreCase(name) || ("\"" + sheetName + "\"").equalsIgnoreCase(name)) {
-                return wb.getSheetAt(i);
-            }
-        }
-
-        String message = "No sheet named '" + name;
-        if (count == 0) {
-            message += " can be found. Are you sure of the Excel file path ?";
-        } else {
-            if (allSheetNames.length() > 2) {
-                allSheetNames = allSheetNames.substring(0, allSheetNames.length() - 1);
-            }
-            message += ". Only the following " + count + " sheets can be found (" + allSheetNames + ")";
-        }
-        throw new SQLException(message);
-    }
-
-    public void setMaxFieldSize(int p0) throws SQLException {
-        nyi();
-    }
-
-    public void setMaxRows(int p0) throws SQLException {
-        nyi();
-    }
-
     public void setEscapeProcessing(boolean p0) throws SQLException {
         nyi();
     }
 
-    public void setQueryTimeout(int p0) throws SQLException {
-        nyi();
-    }
-
     public void setCursorName(String p0) throws SQLException {
-        nyi();
-    }
-
-    public void setFetchDirection(int p0) throws SQLException {
-        nyi();
-    }
-
-    public void setFetchSize(int p0) throws SQLException {
         nyi();
     }
 
@@ -201,14 +189,26 @@ public class XlsStatement implements Statement {
         return -1;
     }
 
+    public void setMaxFieldSize(int p0) throws SQLException {
+        nyi();
+    }
+
     public int getMaxRows() throws SQLException {
         nyi();
         return -1;
     }
 
+    public void setMaxRows(int p0) throws SQLException {
+        nyi();
+    }
+
     public int getQueryTimeout() throws SQLException {
         nyi();
         return -1;
+    }
+
+    public void setQueryTimeout(int p0) throws SQLException {
+        nyi();
     }
 
     public SQLWarning getWarnings() throws SQLException {
@@ -241,9 +241,17 @@ public class XlsStatement implements Statement {
         return -1;
     }
 
+    public void setFetchDirection(int p0) throws SQLException {
+        nyi();
+    }
+
     public int getFetchSize() throws SQLException {
         nyi();
         return -1;
+    }
+
+    public void setFetchSize(int p0) throws SQLException {
+        nyi();
     }
 
     public int getResultSetConcurrency() throws SQLException {

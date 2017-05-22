@@ -15,22 +15,27 @@
  */
 package com.sqlsheet.stream;
 
-import org.apache.poi.ss.usermodel.DateUtil;
-
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.poi.ss.usermodel.DateUtil;
 
 public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iterator<Object> {
 
-    private URL fileName;
-    private String sheetName;
-    private List<CellValueHolder> columns = new ArrayList<CellValueHolder>();
-    private Map<Long, List<CellValueHolder>> rowValues = new HashMap<Long, List<CellValueHolder>>();
+    private URL                              fileName;
+    private String                           sheetName;
+    private List<CellValueHolder>            columns                 = new ArrayList<CellValueHolder>();
+    private Map<Long, List<CellValueHolder>> rowValues               = new HashMap<Long, List<CellValueHolder>>();
 
-    //Counter includes columns row
-    private Long currentSheetRowIndex = 0L;
-    private Long currentIteratorRowIndex = 0L;
+    // Counter includes columns row
+    private Long                             currentSheetRowIndex    = 0L;
+    private Long                             currentIteratorRowIndex = 0L;
 
     /**
      * @param filename The file to postConstruct
@@ -57,17 +62,17 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
         return getRowValues().get(getCurrentIteratorRowIndex() + 1) != null;
     }
 
-    public Object next(){
+    public Object next() {
         try {
             getRowValues().remove(getCurrentIteratorRowIndex());
             setCurrentIteratorRowIndex(getCurrentIteratorRowIndex() + 1);
-            //Fill current row
+            // Fill current row
             processNextRecords();
             if (getRowValues().get(getCurrentIteratorRowIndex() + 1L) == null) {
                 processNextRecords();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage(),e);
+            throw new RuntimeException(e.getMessage(), e);
         }
         return getRowValues().get(getCurrentIteratorRowIndex());
     }
@@ -79,21 +84,20 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
         getRowValues().get(getCurrentSheetRowIndex()).add(cellValue);
     }
 
-    CellValueHolder getCurrentRowValue(int column){
-         CellValueHolder result = new CellValueHolder();
-        if(getRowValues().get(getCurrentIteratorRowIndex())!=null){
-            if(column < getRowValues().get(getCurrentIteratorRowIndex()).size()){
+    CellValueHolder getCurrentRowValue(int column) {
+        CellValueHolder result = new CellValueHolder();
+        if (getRowValues().get(getCurrentIteratorRowIndex()) != null) {
+            if (column < getRowValues().get(getCurrentIteratorRowIndex()).size()) {
                 result = getRowValues().get(getCurrentIteratorRowIndex()).get(column);
             }
         }
         return result;
     }
 
-
-    CellValueHolder getNextRowValue(int column){
+    CellValueHolder getNextRowValue(int column) {
         CellValueHolder result = new CellValueHolder();
-        if(getRowValues().get(getCurrentIteratorRowIndex() + 1)!=null){
-            if(column < getRowValues().get(getCurrentIteratorRowIndex() + 1).size()){
+        if (getRowValues().get(getCurrentIteratorRowIndex() + 1) != null) {
+            if (column < getRowValues().get(getCurrentIteratorRowIndex() + 1).size()) {
                 result = getRowValues().get(getCurrentIteratorRowIndex() + 1).get(column);
             }
         }
@@ -103,7 +107,7 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
     public void remove() {
     }
 
-    Date convertDateValue(double value,int formatIndex,String formatString) {
+    Date convertDateValue(double value, int formatIndex, String formatString) {
         // Get the built in format, if there is one
         if (DateUtil.isADateFormat(formatIndex, formatString)) {
             if (DateUtil.isValidExcelDate(value)) {
@@ -164,21 +168,21 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
     class CellValueHolder {
         String stringValue;
         Double doubleValue;
-        Date dateValue;
+        Date   dateValue;
 
         @Override
         public String toString() {
-            return "CellValueHolder{" +
-                    "stringValue='" + stringValue + '\'' +
-                    ", doubleValue=" + doubleValue +
-                    ", dateValue=" + dateValue +
-                    '}';
+            return "CellValueHolder{" + "stringValue='" + stringValue + '\'' + ", doubleValue=" + doubleValue + ", dateValue="
+                    + dateValue + '}';
         }
 
-        public Class getType(){
-            if (this.dateValue != null) return dateValue.getClass();
-            if (this.doubleValue != null) return doubleValue.getClass();
-            if (this.stringValue != null) return stringValue.getClass();
+        public Class getType() {
+            if (this.dateValue != null)
+                return dateValue.getClass();
+            if (this.doubleValue != null)
+                return doubleValue.getClass();
+            if (this.stringValue != null)
+                return stringValue.getClass();
             return Object.class;
         }
 

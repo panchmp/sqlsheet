@@ -43,43 +43,99 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * A rudimentary XLSX -> CSV processor modeled on the
- * POI sample program XLS2CSVmra by Nick Burch from the
- * package org.apache.poi.hssf.eventusermodel.examples.
- * Unlike the HSSF version, this one completely ignores
- * missing rows.
+ * A rudimentary XLSX -> CSV processor modeled on the POI sample program XLS2CSVmra by Nick Burch from the package
+ * org.apache.poi.hssf.eventusermodel.examples. Unlike the HSSF version, this one completely ignores missing rows.
  * <p/>
- * Data sheets are read using a SAX parser to keep the
- * memory footprint relatively small, so this should be
- * able to read enormous workbooks.  The styles table and
- * the shared-string table must be kept in memory.  The
- * standard POI styles table class is used, but a custom
- * (read-only) class is used for the shared string table
- * because the standard POI SharedStringsTable grows very
+ * Data sheets are read using a SAX parser to keep the memory footprint relatively small, so this should be able to read enormous
+ * workbooks. The styles table and the shared-string table must be kept in memory. The standard POI styles table class is used,
+ * but a custom (read-only) class is used for the shared string table because the standard POI SharedStringsTable grows very
  * quickly with the number of unique strings.
  * <p/>
- * Thanks to Eric Smith for a patch that fixes a problem
- * triggered by cells with multiple "t" elements, which is
- * how Excel represents different formats (e.g., one word
- * plain and one word bold).
+ * Thanks to Eric Smith for a patch that fixes a problem triggered by cells with multiple "t" elements, which is how Excel
+ * represents different formats (e.g., one word plain and one word bold).
  * 
  * @author Chris Lott
  */
 public class XLSX2CSV {
 
+    private OPCPackage  xlsxPackage;
+    private int         minColumns;
+
+    ///////////////////////////////////////
+    private PrintStream output;
     /**
-     * The type of the data value is indicated by an attribute on the cell.
-     * The value is usually in a "v" element within the cell.
+     * Creates a new XLSX -> CSV converter
+     *
+     * @param pkg The XLSX package to process
+     * @param output The PrintStream to output the CSV to
+     * @param minColumns The minimum number of columns to output, or -1 for no minimum
      */
-    enum xssfDataType {
-        BOOL,
-        ERROR,
-        FORMULA,
-        INLINESTR,
-        SSTINDEX,
-        NUMBER,
+    public XLSX2CSV(OPCPackage pkg, PrintStream output, int minColumns) {
+        this.xlsxPackage = pkg;
+        this.output = output;
+        this.minColumns = minColumns;
     }
 
+    public static void main(String[] args) throws Exception {
+        int minColumns = -1;
+        // The package open is instantaneous, as it should be.
+        OPCPackage p = OPCPackage.open(ClassLoader.getSystemResource("fail.xlsx").getFile(), PackageAccess.READ);
+        // OPCPackage p = OPCPackage.open("d:/temp/sxssf.xlsx", PackageAccess.READ);
+        XLSX2CSV xlsx2csv = new XLSX2CSV(p, System.out, minColumns);
+        xlsx2csv.process();
+    }
+
+    /**
+     * Parses and shows the content of one sheet using the specified styles and shared-strings tables.
+     *
+     * @param styles
+     * @param strings
+     * @param sheetInputStream
+     */
+    public void processSheet(StylesTable styles, ReadOnlySharedStringsTable strings, InputStream sheetInputStream)
+            throws IOException, ParserConfigurationException, SAXException {
+
+        InputSource sheetSource = new InputSource(sheetInputStream);
+        SAXParserFactory saxFactory = SAXParserFactory.newInstance();
+        SAXParser saxParser = saxFactory.newSAXParser();
+        XMLReader sheetParser = saxParser.getXMLReader();
+        ContentHandler handler = new MyXSSFSheetHandler(styles, strings, this.minColumns, this.output);
+        sheetParser.setContentHandler(handler);
+        sheetParser.parse(sheetSource);
+    }
+
+    /**
+     * Initiates the processing of the XLS workbook file to CSV.
+     *
+     * @throws IOException
+     * @throws OpenXML4JException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
+    public void process() throws IOException, OpenXML4JException, ParserConfigurationException, SAXException {
+
+        ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(this.xlsxPackage);
+        XSSFReader xssfReader = new XSSFReader(this.xlsxPackage);
+        StylesTable styles = xssfReader.getStylesTable();
+        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
+        int index = 0;
+        while (iter.hasNext()) {
+            InputStream stream = iter.next();
+            String sheetName = iter.getSheetName();
+            this.output.println();
+            this.output.println(sheetName + " [index=" + index + "]:");
+            processSheet(styles, strings, stream);
+            stream.close();
+            ++index;
+        }
+    }
+
+    /**
+     * The type of the data value is indicated by an attribute on the cell. The value is usually in a "v" element within the cell.
+     */
+    enum xssfDataType {
+        BOOL, ERROR, FORMULA, INLINESTR, SSTINDEX, NUMBER,
+    }
 
     /**
      * Derived from http://poi.apache.org/spreadsheet/how-to.html#xssf_sax_api
@@ -92,57 +148,46 @@ public class XLSX2CSV {
     class MyXSSFSheetHandler extends DefaultHandler {
 
         /**
+         * Destination for data
+         */
+        private final PrintStream          output;
+        /**
+         * Number of columns to read starting with leftmost
+         */
+        private final int                  minColumnCount;
+        private final DataFormatter        formatter;
+        /**
          * Table with styles
          */
-        private StylesTable stylesTable;
-
+        private StylesTable                stylesTable;
         /**
          * Table with unique strings
          */
         private ReadOnlySharedStringsTable sharedStringsTable;
-
-        /**
-         * Destination for data
-         */
-        private final PrintStream output;
-
-        /**
-         * Number of columns to read starting with leftmost
-         */
-        private final int minColumnCount;
-
         // Set when V start element is seen
-        private boolean vIsOpen;
-
+        private boolean                    vIsOpen;
         // Set when cell start element is seen;
         // used when cell close element is seen.
-        private xssfDataType nextDataType;
-
+        private xssfDataType               nextDataType;
         // Used to format numeric cell values.
-        private short formatIndex;
-        private String formatString;
-        private final DataFormatter formatter;
-
-        private int thisColumn = -1;
+        private short                      formatIndex;
+        private String                     formatString;
+        private int                        thisColumn       = -1;
         // The last column printed to the output stream
-        private int lastColumnNumber = -1;
+        private int                        lastColumnNumber = -1;
 
         // Gathers characters as they are seen.
-        private StringBuffer value;
+        private StringBuffer               value;
 
         /**
          * Accepts objects needed while parsing.
          *
-         * @param styles  Table of styles
+         * @param styles Table of styles
          * @param strings Table of shared strings
-         * @param cols    Minimum number of columns to show
-         * @param target  Sink for output
+         * @param cols Minimum number of columns to show
+         * @param target Sink for output
          */
-        public MyXSSFSheetHandler(
-                StylesTable styles,
-                ReadOnlySharedStringsTable strings,
-                int cols,
-                PrintStream target) {
+        public MyXSSFSheetHandler(StylesTable styles, ReadOnlySharedStringsTable strings, int cols, PrintStream target) {
             this.stylesTable = styles;
             this.sharedStringsTable = strings;
             this.minColumnCount = cols;
@@ -156,10 +201,9 @@ public class XLSX2CSV {
            * (non-Javadoc)
            * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
            */
-        public void startElement(String uri, String localName, String name,
-                                 Attributes attributes) throws SAXException {
+        public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException {
 
-            if ("inlineStr".equals(name) || "v".equals(name)|| "is".equals(name)) {
+            if ("inlineStr".equals(name) || "v".equals(name) || "is".equals(name)) {
                 vIsOpen = true;
                 // Clear contents cache
                 value.setLength(0);
@@ -195,7 +239,7 @@ public class XLSX2CSV {
                     nextDataType = xssfDataType.FORMULA;
                 else if (cellStyleStr != null) {
                     // It's a number, but almost certainly one
-                    //  with a special style or format 
+                    // with a special style or format
                     int styleIndex = Integer.parseInt(cellStyleStr);
                     XSSFCellStyle style = stylesTable.getStyleAt(styleIndex);
                     this.formatIndex = style.getDataFormat();
@@ -211,8 +255,7 @@ public class XLSX2CSV {
            * (non-Javadoc)
            * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
            */
-        public void endElement(String uri, String localName, String name)
-                throws SAXException {
+        public void endElement(String uri, String localName, String name) throws SAXException {
             String thisStr = null;
 
             // v => contents of a cell
@@ -248,8 +291,7 @@ public class XLSX2CSV {
                             int idx = Integer.parseInt(sstIndex);
                             XSSFRichTextString rtss = new XSSFRichTextString(sharedStringsTable.getEntryAt(idx));
                             thisStr = '"' + rtss.toString() + '"';
-                        }
-                        catch (NumberFormatException ex) {
+                        } catch (NumberFormatException ex) {
                             output.println("Failed to parse SST index '" + sstIndex + "': " + ex.toString());
                         }
                         break;
@@ -303,11 +345,9 @@ public class XLSX2CSV {
         }
 
         /**
-         * Captures characters only if a suitable element is open.
-         * Originally was just "v"; extended for inlineStr also.
+         * Captures characters only if a suitable element is open. Originally was just "v"; extended for inlineStr also.
          */
-        public void characters(char[] ch, int start, int length)
-                throws SAXException {
+        public void characters(char[] ch, int start, int length) throws SAXException {
             if (vIsOpen)
                 value.append(ch, start, length);
         }
@@ -328,83 +368,5 @@ public class XLSX2CSV {
         }
 
     }
-
-    ///////////////////////////////////////
-
-    private OPCPackage xlsxPackage;
-    private int minColumns;
-    private PrintStream output;
-
-    /**
-     * Creates a new XLSX -> CSV converter
-     *
-     * @param pkg        The XLSX package to process
-     * @param output     The PrintStream to output the CSV to
-     * @param minColumns The minimum number of columns to output, or -1 for no minimum
-     */
-    public XLSX2CSV(OPCPackage pkg, PrintStream output, int minColumns) {
-        this.xlsxPackage = pkg;
-        this.output = output;
-        this.minColumns = minColumns;
-    }
-
-    /**
-     * Parses and shows the content of one sheet
-     * using the specified styles and shared-strings tables.
-     *
-     * @param styles
-     * @param strings
-     * @param sheetInputStream
-     */
-    public void processSheet(
-            StylesTable styles,
-            ReadOnlySharedStringsTable strings,
-            InputStream sheetInputStream)
-            throws IOException, ParserConfigurationException, SAXException {
-
-        InputSource sheetSource = new InputSource(sheetInputStream);
-        SAXParserFactory saxFactory = SAXParserFactory.newInstance();
-        SAXParser saxParser = saxFactory.newSAXParser();
-        XMLReader sheetParser = saxParser.getXMLReader();
-        ContentHandler handler = new MyXSSFSheetHandler(styles, strings, this.minColumns, this.output);
-        sheetParser.setContentHandler(handler);
-        sheetParser.parse(sheetSource);
-    }
-
-    /**
-     * Initiates the processing of the XLS workbook file to CSV.
-     *
-     * @throws IOException
-     * @throws OpenXML4JException
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     */
-    public void process()
-            throws IOException, OpenXML4JException, ParserConfigurationException, SAXException {
-
-        ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(this.xlsxPackage);
-        XSSFReader xssfReader = new XSSFReader(this.xlsxPackage);
-        StylesTable styles = xssfReader.getStylesTable();
-        XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
-        int index = 0;
-        while (iter.hasNext()) {
-            InputStream stream = iter.next();
-            String sheetName = iter.getSheetName();
-            this.output.println();
-            this.output.println(sheetName + " [index=" + index + "]:");
-            processSheet(styles, strings, stream);
-            stream.close();
-            ++index;
-        }
-    }
-
-    public static void main(String[] args) throws Exception {
-        int minColumns = -1;
-        // The package open is instantaneous, as it should be.
-        OPCPackage p = OPCPackage.open(ClassLoader.getSystemResource("fail.xlsx").getFile(), PackageAccess.READ);
-        //OPCPackage p = OPCPackage.open("d:/temp/sxssf.xlsx", PackageAccess.READ);
-		XLSX2CSV xlsx2csv = new XLSX2CSV(p, System.out, minColumns);
-		xlsx2csv.process();
-	}
 
 }

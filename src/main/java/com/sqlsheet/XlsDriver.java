@@ -30,13 +30,14 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sqlsheet.stream.XlsStreamConnection;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.sqlsheet.stream.XlsStreamConnection;
 
 /**
  * SqlSheet implementation of java.sql.Driver.
@@ -46,10 +47,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class XlsDriver implements java.sql.Driver {
 
-    private static final String URL_SCHEME      = "jdbc:xls:";
     static final String         READ_STREAMING  = "readStreaming";
     static final String         WRITE_STREAMING = "writeStreaming";
     static final String         HEADLINE        = "headLine";
+    private static final String URL_SCHEME      = "jdbc:xls:";
     private static final Logger logger          = Logger.getLogger(XlsDriver.class.getName());
 
     static {

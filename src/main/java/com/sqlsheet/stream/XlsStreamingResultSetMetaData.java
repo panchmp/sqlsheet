@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Date;
 
-
 /**
  * SqlSheet implementation of java.sql.ResultSetMetaData.
  *
@@ -71,9 +70,9 @@ public class XlsStreamingResultSetMetaData implements ResultSetMetaData {
     }
 
     public String getColumnTypeName(int jdbcCol) throws SQLException {
-        if(iterator.getCurrentIteratorRowIndex() ==0) {
+        if (iterator.getCurrentIteratorRowIndex() == 0) {
             return iterator.getNextRowValue(jdbcCol - 1).getType().getName();
-        } else{
+        } else {
             return iterator.getCurrentRowValue(jdbcCol - 1).getType().getName();
         }
     }

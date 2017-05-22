@@ -1,28 +1,33 @@
 package com.sqlsheet;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import scriptella.configuration.ConfigurationFactory;
 import scriptella.execution.EtlExecutor;
 import scriptella.execution.EtlExecutorException;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-
 public class XlsDriverIntegrationTest {
 
     private static final String extractXlsScriptFile = "xlsextract.xml";
-    private static final String loadXlsScriptFile = "xlsload.xml";
-    private static final String testExtractXlsFile = "extracttest.xls";
-    private static final String testExtractXlsxFile = "extracttest.xlsx";
+    private static final String loadXlsScriptFile    = "xlsload.xml";
+    private static final String testExtractXlsFile   = "extracttest.xls";
+    private static final String testExtractXlsxFile  = "extracttest.xlsx";
 
     @Before
     public void setUp() throws Exception {
@@ -42,7 +47,6 @@ public class XlsDriverIntegrationTest {
     @Before
     public void init() throws Exception {
     }
-
 
     @Test
     public void testExctractFromXls() throws Exception {
@@ -125,7 +129,7 @@ public class XlsDriverIntegrationTest {
         params.put("filePath", xls.toURL().toString());
         params.put("params", params);
         // script must fill results parameter
-        Map<String, Object> results1 = executeEtlScriptWithResult(ClassLoader.getSystemResource(extractXlsScriptFile),params);
+        Map<String, Object> results1 = executeEtlScriptWithResult(ClassLoader.getSystemResource(extractXlsScriptFile), params);
         assertNotNull(results1.get("results"));
         List<ResultMock> results2 = (List<ResultMock>) results1.get("results");
         assertNotNull(results2);
@@ -145,7 +149,8 @@ public class XlsDriverIntegrationTest {
         return url;
     }
 
-    private Map<String, Object> executeEtlScriptWithResult(URL scriptFile, Map<String, Object> parameters) throws EtlExecutorException {
+    private Map<String, Object> executeEtlScriptWithResult(URL scriptFile, Map<String, Object> parameters)
+            throws EtlExecutorException {
         EtlExecutor etlExecutor = new EtlExecutor();
         ConfigurationFactory cf = new ConfigurationFactory();
         cf.setResourceURL(scriptFile);

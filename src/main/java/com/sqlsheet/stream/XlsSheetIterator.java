@@ -15,66 +15,80 @@
  */
 package com.sqlsheet.stream;
 
-import org.apache.poi.hssf.eventusermodel.*;
-import org.apache.poi.hssf.eventusermodel.EventWorkbookBuilder.SheetRecordCollectingListener;
-import org.apache.poi.hssf.eventusermodel.dummyrecord.LastCellOfRowDummyRecord;
-import org.apache.poi.hssf.eventusermodel.dummyrecord.MissingCellDummyRecord;
-import org.apache.poi.hssf.model.HSSFFormulaParser;
-import org.apache.poi.hssf.record.*;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.apache.poi.hssf.eventusermodel.EventWorkbookBuilder;
+import org.apache.poi.hssf.eventusermodel.EventWorkbookBuilder.SheetRecordCollectingListener;
+import org.apache.poi.hssf.eventusermodel.FormatTrackingHSSFListener;
+import org.apache.poi.hssf.eventusermodel.HSSFListener;
+import org.apache.poi.hssf.eventusermodel.HSSFRequest;
+import org.apache.poi.hssf.eventusermodel.HSSFUserException;
+import org.apache.poi.hssf.eventusermodel.MissingRecordAwareHSSFListener;
+import org.apache.poi.hssf.eventusermodel.dummyrecord.LastCellOfRowDummyRecord;
+import org.apache.poi.hssf.eventusermodel.dummyrecord.MissingCellDummyRecord;
+import org.apache.poi.hssf.model.HSSFFormulaParser;
+import org.apache.poi.hssf.record.BOFRecord;
+import org.apache.poi.hssf.record.BlankRecord;
+import org.apache.poi.hssf.record.BoolErrRecord;
+import org.apache.poi.hssf.record.BoundSheetRecord;
+import org.apache.poi.hssf.record.FormulaRecord;
+import org.apache.poi.hssf.record.LabelRecord;
+import org.apache.poi.hssf.record.LabelSSTRecord;
+import org.apache.poi.hssf.record.NoteRecord;
+import org.apache.poi.hssf.record.NumberRecord;
+import org.apache.poi.hssf.record.RKRecord;
+import org.apache.poi.hssf.record.Record;
+import org.apache.poi.hssf.record.RecordFactoryInputStream;
+import org.apache.poi.hssf.record.SSTRecord;
+import org.apache.poi.hssf.record.StringRecord;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
+
 /**
- * Streaming iterator over XLS files
- * Derived from:
+ * Streaming iterator over XLS files Derived from:
  * http://svn.apache.org/repos/asf/poi/trunk/src/examples/src/org/apache/poi/hssf/eventusermodel/examples/XLS2CSVmra.java
  */
 public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFListener {
 
-    NPOIFSFileSystem fileSystem;
-    boolean inRequiredSheet;
+    NPOIFSFileSystem              fileSystem;
+    boolean                       inRequiredSheet;
     // Create a new RecordStream and use that
-    RecordFactoryInputStream recordStream;
-    PublicMorozoffHSSFRequest requestPublic;
-    int lastRowNumber;
-    int lastColumnNumber;
+    RecordFactoryInputStream      recordStream;
+    PublicMorozoffHSSFRequest     requestPublic;
+    int                           lastRowNumber;
+    int                           lastColumnNumber;
     /**
      * Should we output the formula, or the value it has?
      */
-    boolean outputFormulaValues;
+    boolean                       outputFormulaValues;
     /**
      * For parsing Formulas
      */
     SheetRecordCollectingListener workbookBuildingListener;
-    HSSFWorkbook stubWorkbook;
+    HSSFWorkbook                  stubWorkbook;
     // Records we pick up as we postConstruct
-    SSTRecord sstRecord;
-    FormatTrackingHSSFListener formatListener;
+    SSTRecord                     sstRecord;
+    FormatTrackingHSSFListener    formatListener;
     /**
      * So we known which sheet we're on
      */
-    int sheetIndex;
-    BoundSheetRecord[] orderedBSRs;
-    ArrayList boundSheetRecords;
+    int                           sheetIndex;
+    BoundSheetRecord[]            orderedBSRs;
+    ArrayList                     boundSheetRecords;
     // For handling formulas with string results
-    int nextRow;
-    int nextColumn;
-    boolean outputNextStringRecord;
+    int                           nextRow;
+    int                           nextColumn;
+    boolean                       outputNextStringRecord;
 
     public XlsSheetIterator(URL filename, String sheetName) throws SQLException {
         super(filename, sheetName);
     }
 
     /**
-     * Initiates the processing
-     * - position stream to the right sheet
-     * - extracts columns
-     * - extracts first row
+     * Initiates the processing - position stream to the right sheet - extracts columns - extracts first row
      */
     public void postConstruct() throws SQLException {
         try {
@@ -111,9 +125,9 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
                     throw new RuntimeException(e.getMessage(), e);
                 }
             }
-            //Flush rows counter
+            // Flush rows counter
             setCurrentSheetRowIndex(0L);
-            //Fill current row
+            // Fill current row
             processNextRecords();
         } catch (IOException e) {
             throw new SQLException(e.getMessage(), e);
@@ -122,8 +136,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
     }
 
     /**
-     * Process few records to get current and maybe few next rows loaded
-     * into memory
+     * Process few records to get current and maybe few next rows loaded into memory
      */
     protected void processNextRecords() throws SQLException {
         Long nextRowIndex = getCurrentSheetRowIndex() + 2L;
@@ -164,8 +177,8 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
                     }
                     // Output the worksheet name
                     // Works by ordering the BSRs by the location of
-                    //  their BOFRecords, and then knowing that we
-                    //  postConstruct BOFRecords in byte offset order
+                    // their BOFRecords, and then knowing that we
+                    // postConstruct BOFRecords in byte offset order
                     sheetIndex++;
                     if (orderedBSRs == null) {
                         orderedBSRs = BoundSheetRecord.orderByBofPosition(boundSheetRecords);
@@ -206,12 +219,14 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
                     } else {
                         thisCellValue.stringValue = formatListener.formatNumberDateCell(frec);
                         thisCellValue.doubleValue = frec.getValue();
-                        thisCellValue.dateValue = convertDateValue(frec.getValue(), formatListener.getFormatIndex(frec), formatListener.getFormatString(frec));
+                        thisCellValue.dateValue = convertDateValue(frec.getValue(), formatListener.getFormatIndex(frec),
+                                formatListener.getFormatString(frec));
                     }
                 } else {
                     thisCellValue.stringValue = HSSFFormulaParser.toFormulaString(stubWorkbook, frec.getParsedExpression());
                     thisCellValue.doubleValue = frec.getValue();
-                    thisCellValue.dateValue = convertDateValue(frec.getValue(), formatListener.getFormatIndex(frec), formatListener.getFormatString(frec));
+                    thisCellValue.dateValue = convertDateValue(frec.getValue(), formatListener.getFormatIndex(frec),
+                            formatListener.getFormatString(frec));
                 }
                 break;
             case StringRecord.sid:
@@ -255,7 +270,8 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
                 // Format
                 thisCellValue.stringValue = formatListener.formatNumberDateCell(numrec);
                 thisCellValue.doubleValue = numrec.getValue();
-                thisCellValue.dateValue = convertDateValue(numrec.getValue(), formatListener.getFormatIndex(numrec), formatListener.getFormatString(numrec));
+                thisCellValue.dateValue = convertDateValue(numrec.getValue(), formatListener.getFormatIndex(numrec),
+                        formatListener.getFormatString(numrec));
                 break;
             case RKRecord.sid:
                 RKRecord rkrec = (RKRecord) record;
@@ -279,7 +295,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
         }
         // If we got something to print out, do so
         if (thisCellValue.stringValue != null) {
-            //If we are on the first row - fill column names
+            // If we are on the first row - fill column names
             if (getCurrentSheetRowIndex().equals(0L) && inRequiredSheet) {
                 getColumns().add(thisCellValue);
             } else if (inRequiredSheet) {

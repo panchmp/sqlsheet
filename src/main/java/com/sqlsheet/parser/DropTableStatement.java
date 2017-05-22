@@ -16,9 +16,7 @@
 package com.sqlsheet.parser;
 
 /**
- * Handle on a parsed SQL statement of the form
- *
- * DROP TABLE xxx.
+ * Handle on a parsed SQL statement of the form DROP TABLE xxx.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>

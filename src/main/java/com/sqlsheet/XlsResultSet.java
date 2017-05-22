@@ -15,15 +15,36 @@
  */
 package com.sqlsheet;
 
-import org.apache.poi.ss.usermodel.*;
-
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Date;
-import java.util.*;
+import java.sql.NClob;
+import java.sql.Ref;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.RowId;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.sql.Types;
+import java.util.Calendar;
+import java.util.Map;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * SqlSheet implementation of java.sql.ResultSet.
@@ -33,21 +54,21 @@ import java.util.*;
  */
 public class XlsResultSet implements ResultSet {
 
-    private static final double BAD_DOUBLE = 0;
-    protected Statement statement;
-    private Workbook workbook;
-    private Sheet sheet;
+    private static final double  BAD_DOUBLE          = 0;
+    protected Statement          statement;
+    private Workbook             workbook;
+    private Sheet                sheet;
     private XlsResultSetMetaData metadata;
-    private int firstSheetRowOffset = 0;
-    private int cursorSheetRow;
-    private CellStyle dateStyle = null;
-    private DataFormatter formatter;
+    private int                  firstSheetRowOffset = 0;
+    private int                  cursorSheetRow;
+    private CellStyle            dateStyle           = null;
+    private DataFormatter        formatter;
 
     public XlsResultSet(Workbook wb, Sheet s, int firstSheetRowOffset) throws SQLException {
-        if (s == null){
+        if (s == null) {
             throw new IllegalArgumentException("null sheet");
         }
-        if (wb == null){
+        if (wb == null) {
             throw new IllegalArgumentException("null workbook");
         }
         formatter = new DataFormatter();
@@ -61,14 +82,11 @@ public class XlsResultSet implements ResultSet {
         dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
     }
 
-
-
     private static SQLException wrapped(Throwable t) {
         SQLException out = new SQLException(t.getMessage());
         out.initCause(t);
         return out;
     }
-
 
     public ResultSetMetaData getMetaData() throws SQLException {
         return metadata;
@@ -142,7 +160,7 @@ public class XlsResultSet implements ResultSet {
         Cell cell = getCell(jdbcColumn);
         int columnType = metadata.getColumnType(jdbcColumn);
         try {
-            if (cell == null){
+            if (cell == null) {
                 return null;
             }
             switch (cell.getCellType()) {
@@ -151,13 +169,17 @@ public class XlsResultSet implements ResultSet {
                     if (columnType == Types.VARCHAR) {
                         return cell.getBooleanCellValue();
                     } else {
-                        throw new RuntimeException("The cell ("+getCurrentRow()+","+jdbcColumn+") is a boolean and cannot be cast to ("+XlsResultSetMetaData.columnTypeNameMap.get(columnType)+".");
+                        throw new RuntimeException(
+                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a boolean and cannot be cast to ("
+                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
                     }
                 case Cell.CELL_TYPE_STRING:
                     if (columnType == Types.VARCHAR) {
                         return cell.getStringCellValue();
                     } else {
-                        throw new RuntimeException("The cell ("+getCurrentRow()+","+jdbcColumn+") is a string cell and cannot be cast to ("+XlsResultSetMetaData.columnTypeNameMap.get(columnType)+".");
+                        throw new RuntimeException(
+                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a string cell and cannot be cast to ("
+                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
                     }
                 case Cell.CELL_TYPE_NUMERIC:
                     if (columnType == Types.VARCHAR) {
@@ -170,9 +192,10 @@ public class XlsResultSet implements ResultSet {
                             return new java.sql.Date(value.getTime());
                         }
                     } else {
-                        throw new RuntimeException("The cell ("+getCurrentRow()+","+jdbcColumn+") is a numeric cell and cannot be cast to ("+XlsResultSetMetaData.columnTypeNameMap.get(columnType)+".");
+                        throw new RuntimeException(
+                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a numeric cell and cannot be cast to ("
+                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
                     }
-
 
                 default:
                     return null;
@@ -190,13 +213,13 @@ public class XlsResultSet implements ResultSet {
         return (T) getObject(columnName);
     }
 
-//    Object getNextRowObject(int jdbcColumn) throws SQLException {
-//        if (sheet.getRow(cursorSheetRow + 1) != null) {
-//            Cell cell = sheet.getRow(cursorSheetRow + 1).getCell((short) (jdbcColumn - 1));
-//            return getObject(cell);
-//        }
-//        return getObject(jdbcColumn);
-//    }
+    // Object getNextRowObject(int jdbcColumn) throws SQLException {
+    // if (sheet.getRow(cursorSheetRow + 1) != null) {
+    // Cell cell = sheet.getRow(cursorSheetRow + 1).getCell((short) (jdbcColumn - 1));
+    // return getObject(cell);
+    // }
+    // return getObject(jdbcColumn);
+    // }
 
     public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
         return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
@@ -206,13 +229,11 @@ public class XlsResultSet implements ResultSet {
         return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
     }
 
-    public Timestamp getTimestamp(int jdbcColumn, Calendar cal)
-            throws SQLException {
+    public Timestamp getTimestamp(int jdbcColumn, Calendar cal) throws SQLException {
         throw nyi();
     }
 
-    public Timestamp getTimestamp(String jdbcColumn, Calendar cal)
-            throws SQLException {
+    public Timestamp getTimestamp(String jdbcColumn, Calendar cal) throws SQLException {
         throw nyi();
     }
 
@@ -404,7 +425,7 @@ public class XlsResultSet implements ResultSet {
 
     public void setFetchSize(int rows) throws SQLException {
         // better just ignore it if configuration is not supported
-        //throw nyi();
+        // throw nyi();
     }
 
     public int getRow() throws SQLException {
@@ -472,8 +493,7 @@ public class XlsResultSet implements ResultSet {
         } else if (x instanceof char[]) {
             cell.setCellValue(new String((char[]) x));
         } else if (x instanceof Double) {
-            if (x.equals(Double.NEGATIVE_INFINITY)
-                    || x.equals(Double.POSITIVE_INFINITY) || x.equals(Double.NaN)) {
+            if (x.equals(Double.NEGATIVE_INFINITY) || x.equals(Double.POSITIVE_INFINITY) || x.equals(Double.NaN)) {
                 cell.setCellValue(BAD_DOUBLE);
             } else {
                 cell.setCellValue((Double) x);
@@ -485,15 +505,15 @@ public class XlsResultSet implements ResultSet {
             // if (dateStyle != null) cell.setCellStyle(dateStyle);
         } else if (x instanceof java.util.Date) {
             cell.setCellValue(DateUtil.getExcelDate((java.util.Date) x));
-            if (dateStyle != null) cell.setCellStyle(dateStyle);
+            if (dateStyle != null)
+                cell.setCellStyle(dateStyle);
         } else if (x instanceof Boolean) {
             cell.setCellValue((Boolean) x);
         } else if (x == null) {
             cell.setCellValue((String) null);
         } else {
             throw new SQLException(
-                    "Unknown value type for ExcelResultSet.updateObject: " + x + " ("
-                            + x.getClass().getName() + ")");
+                    "Unknown value type for ExcelResultSet.updateObject: " + x + " (" + x.getClass().getName() + ")");
         }
     }
 
@@ -519,7 +539,8 @@ public class XlsResultSet implements ResultSet {
 
     /**
      * Protected becasue used also in the resultset metadata to scan the column type
-     * @param jdbcColumn - index of the column
+     * 
+     * @param jdbcColumn
      * @return the Cell
      */
     protected Cell getCell(int jdbcColumn) {
@@ -534,7 +555,7 @@ public class XlsResultSet implements ResultSet {
         int count = metadata.getColumnCount();
         for (short i = 0; i < count; i++) {
             String col = metadata.getColumnName(i + 1);
-            if (col.equalsIgnoreCase(name)){
+            if (col.equalsIgnoreCase(name)) {
                 return i;
             }
         }
@@ -698,13 +719,11 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public Object getObject(int i, Map<String, Class<?>> map)
-            throws SQLException {
+    public Object getObject(int i, Map<String, Class<?>> map) throws SQLException {
         throw nyi();
     }
 
-    public Object getObject(String colName, Map<String, Class<?>> map)
-            throws SQLException {
+    public Object getObject(String colName, Map<String, Class<?>> map) throws SQLException {
         throw nyi();
     }
 
@@ -980,33 +999,27 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public void updateAsciiStream(int jdbcColumn, InputStream x, int length)
-            throws SQLException {
+    public void updateAsciiStream(int jdbcColumn, InputStream x, int length) throws SQLException {
         throw nyi();
     }
 
-    public void updateAsciiStream(String jdbcColumn, InputStream x, int length)
-            throws SQLException {
+    public void updateAsciiStream(String jdbcColumn, InputStream x, int length) throws SQLException {
         throw nyi();
     }
 
-    public void updateBigDecimal(int jdbcColumn, BigDecimal x)
-            throws SQLException {
+    public void updateBigDecimal(int jdbcColumn, BigDecimal x) throws SQLException {
         throw nyi();
     }
 
-    public void updateBigDecimal(String jdbcColumn, BigDecimal x)
-            throws SQLException {
+    public void updateBigDecimal(String jdbcColumn, BigDecimal x) throws SQLException {
         throw nyi();
     }
 
-    public void updateBinaryStream(int jdbcColumn, InputStream x, int length)
-            throws SQLException {
+    public void updateBinaryStream(int jdbcColumn, InputStream x, int length) throws SQLException {
         throw nyi();
     }
 
-    public void updateBinaryStream(String jdbcColumn, InputStream x, int length)
-            throws SQLException {
+    public void updateBinaryStream(String jdbcColumn, InputStream x, int length) throws SQLException {
         throw nyi();
     }
 
@@ -1026,13 +1039,11 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public void updateCharacterStream(int jdbcColumn, Reader x, int length)
-            throws SQLException {
+    public void updateCharacterStream(int jdbcColumn, Reader x, int length) throws SQLException {
         throw nyi();
     }
 
-    public void updateCharacterStream(String jdbcColumn, Reader reader,
-                                      int length) throws SQLException {
+    public void updateCharacterStream(String jdbcColumn, Reader reader, int length) throws SQLException {
         throw nyi();
     }
 
@@ -1052,13 +1063,11 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public void updateObject(int jdbcColumn, Object x, int scale)
-            throws SQLException {
+    public void updateObject(int jdbcColumn, Object x, int scale) throws SQLException {
         throw nyi();
     }
 
-    public void updateObject(String jdbcColumn, Object x, int scale)
-            throws SQLException {
+    public void updateObject(String jdbcColumn, Object x, int scale) throws SQLException {
         throw nyi();
     }
 
@@ -1082,13 +1091,11 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public void updateTimestamp(int jdbcColumn, Timestamp x)
-            throws SQLException {
+    public void updateTimestamp(int jdbcColumn, Timestamp x) throws SQLException {
         throw nyi();
     }
 
-    public void updateTimestamp(String jdbcColumn, Timestamp x)
-            throws SQLException {
+    public void updateTimestamp(String jdbcColumn, Timestamp x) throws SQLException {
         throw nyi();
     }
 

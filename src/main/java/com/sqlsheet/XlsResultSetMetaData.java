@@ -15,8 +15,6 @@
  */
 package com.sqlsheet;
 
-import org.apache.poi.ss.usermodel.*;
-
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -25,6 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 
 /**
  * SqlSheet implementation of java.sql.ResultSetMetaData.
@@ -34,20 +37,10 @@ import java.util.Map;
  */
 public class XlsResultSetMetaData implements ResultSetMetaData {
 
-    private List<String> columnNames;
-    private final DataFormatter formatter;
-    private XlsResultSet resultset;
-
-    /**
-     * A map to get consistently the same data type
-     */
-    Map<Integer, Integer> columnTypeMap = new HashMap<Integer, Integer>();
-
     /**
      * A map between the code ID and the type name
      */
-    static Map<Integer, String> columnTypeNameMap = new HashMap<Integer, String>();
-
+    static Map<Integer, String> columnTypeNameMap  = new HashMap<Integer, String>();
     /**
      * A map between the code ID and the type class
      */
@@ -64,14 +57,22 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
 
     }
 
-
     static {
 
     }
 
+    private final DataFormatter formatter;
+    /**
+     * A map to get consistently the same data type
+     */
+    Map<Integer, Integer>       columnTypeMap      = new HashMap<Integer, Integer>();
+    private List<String>        columnNames;
+    private XlsResultSet        resultset;
+
     public XlsResultSetMetaData(Sheet sheet, XlsResultSet resultset, int firstSheetRowOffset) throws SQLException {
 
-        if (sheet == null) throw new IllegalArgumentException();
+        if (sheet == null)
+            throw new IllegalArgumentException();
         this.resultset = resultset;
         Row row = sheet.getRow(firstSheetRowOffset - 1);
         if (row == null) {
@@ -133,10 +134,12 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
                             }
                             break;
                         case Cell.CELL_TYPE_ERROR:
-                            throw new RuntimeException("The ExcelType ( ERROR ) is not supported - Cell (" + resultset.getRow() + "," + columnId + ")");
+                            throw new RuntimeException("The ExcelType ( ERROR ) is not supported - Cell (" + resultset.getRow()
+                                    + "," + columnId + ")");
 
                         default:
-                            throw new RuntimeException("The ExcelType (" + excelCellType + ") is not supported - Cell (" + resultset.getRow() + "," + columnId + ")");
+                            throw new RuntimeException("The ExcelType (" + excelCellType + ") is not supported - Cell ("
+                                    + resultset.getRow() + "," + columnId + ")");
                     }
                 } else {
                     typeCode = Types.NULL;
@@ -194,7 +197,6 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
 
         // Go back to the current row
         resultset.absolute(currentRowNumber);
-
 
     }
 

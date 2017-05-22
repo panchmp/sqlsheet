@@ -22,12 +22,12 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
+import org.apache.poi.hssf.eventusermodel.EventWorkbookBuilder.SheetRecordCollectingListener;
 import org.apache.poi.hssf.eventusermodel.FormatTrackingHSSFListener;
 import org.apache.poi.hssf.eventusermodel.HSSFEventFactory;
 import org.apache.poi.hssf.eventusermodel.HSSFListener;
 import org.apache.poi.hssf.eventusermodel.HSSFRequest;
 import org.apache.poi.hssf.eventusermodel.MissingRecordAwareHSSFListener;
-import org.apache.poi.hssf.eventusermodel.EventWorkbookBuilder.SheetRecordCollectingListener;
 import org.apache.poi.hssf.eventusermodel.dummyrecord.LastCellOfRowDummyRecord;
 import org.apache.poi.hssf.eventusermodel.dummyrecord.MissingCellDummyRecord;
 import org.apache.poi.hssf.model.HSSFFormulaParser;
@@ -48,271 +48,265 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
 /**
- * A XLS -> CSV processor, that uses the MissingRecordAware
- *  EventModel code to ensure it outputs all columns and rows.
+ * A XLS -> CSV processor, that uses the MissingRecordAware EventModel code to ensure it outputs all columns and rows.
+ * 
  * @author Nick Burch
  */
 public class XLS2CSVmra implements HSSFListener {
-	private int minColumns;
-	private POIFSFileSystem fs;
-	private PrintStream output;
-    String currentSheetName;
+    String                                currentSheetName;
+    private int                           minColumns;
+    private POIFSFileSystem               fs;
+    private PrintStream                   output;
+    private int                           lastRowNumber;
+    private int                           lastColumnNumber;
 
-	private int lastRowNumber;
-	private int lastColumnNumber;
+    /** Should we output the formula, or the value it has? */
+    private boolean                       outputFormulaValues = true;
 
-	/** Should we output the formula, or the value it has? */
-	private boolean outputFormulaValues = true;
+    /** For parsing Formulas */
+    private SheetRecordCollectingListener workbookBuildingListener;
+    private HSSFWorkbook                  stubWorkbook;
 
-	/** For parsing Formulas */
-	private SheetRecordCollectingListener workbookBuildingListener;
-	private HSSFWorkbook stubWorkbook;
+    // Records we pick up as we process
+    private SSTRecord                     sstRecord;
+    private FormatTrackingHSSFListener    formatListener;
 
-	// Records we pick up as we process
-	private SSTRecord sstRecord;
-	private FormatTrackingHSSFListener formatListener;
-	
-	/** So we known which sheet we're on */
-	private int sheetIndex = -1;
-	private BoundSheetRecord[] orderedBSRs;
-	private ArrayList boundSheetRecords = new ArrayList();
+    /** So we known which sheet we're on */
+    private int                           sheetIndex          = -1;
+    private BoundSheetRecord[]            orderedBSRs;
+    private ArrayList                     boundSheetRecords   = new ArrayList();
 
-	// For handling formulas with string results
-	private int nextRow;
-	private int nextColumn;
-	private boolean outputNextStringRecord;
+    // For handling formulas with string results
+    private int                           nextRow;
+    private int                           nextColumn;
+    private boolean                       outputNextStringRecord;
 
-	/**
-	 * Creates a new XLS -> CSV converter
-	 * @param fs The POIFSFileSystem to process
-	 * @param output The PrintStream to output the CSV to
-	 * @param minColumns The minimum number of columns to output, or -1 for no minimum
-	 */
-	public XLS2CSVmra(POIFSFileSystem fs, PrintStream output, int minColumns) {
-		this.fs = fs;
-		this.output = output;
-		this.minColumns = minColumns;
-	}
+    /**
+     * Creates a new XLS -> CSV converter
+     * 
+     * @param fs The POIFSFileSystem to process
+     * @param output The PrintStream to output the CSV to
+     * @param minColumns The minimum number of columns to output, or -1 for no minimum
+     */
+    public XLS2CSVmra(POIFSFileSystem fs, PrintStream output, int minColumns) {
+        this.fs = fs;
+        this.output = output;
+        this.minColumns = minColumns;
+    }
 
-	/**
-	 * Creates a new XLS -> CSV converter
-	 * @param filename The file to process
-	 * @param minColumns The minimum number of columns to output, or -1 for no minimum
-	 * @throws IOException
-	 * @throws FileNotFoundException
-	 */
-	public XLS2CSVmra(String filename, int minColumns) throws IOException, FileNotFoundException {
-		this(
-				new POIFSFileSystem(new FileInputStream(filename)),
-				System.out, minColumns
-		);
-	}
+    /**
+     * Creates a new XLS -> CSV converter
+     * 
+     * @param filename The file to process
+     * @param minColumns The minimum number of columns to output, or -1 for no minimum
+     * @throws IOException
+     * @throws FileNotFoundException
+     */
+    public XLS2CSVmra(String filename, int minColumns) throws IOException, FileNotFoundException {
+        this(new POIFSFileSystem(new FileInputStream(filename)), System.out, minColumns);
+    }
 
-	/**
-	 * Initiates the processing of the XLS file to CSV
-	 */
-	public void process() throws IOException {
-		MissingRecordAwareHSSFListener listener = new MissingRecordAwareHSSFListener(this);
-		formatListener = new FormatTrackingHSSFListener(listener);
+    public static void main(String[] args) throws Exception {
+        int minColumns = -1;
+        XLS2CSVmra xls2csv = new XLS2CSVmra(ClassLoader.getSystemResource("test.xls").getFile(), minColumns);
+        xls2csv.process();
+    }
 
-		HSSFEventFactory factory = new HSSFEventFactory();
-		HSSFRequest request = new HSSFRequest();
+    /**
+     * Initiates the processing of the XLS file to CSV
+     */
+    public void process() throws IOException {
+        MissingRecordAwareHSSFListener listener = new MissingRecordAwareHSSFListener(this);
+        formatListener = new FormatTrackingHSSFListener(listener);
 
-		if(outputFormulaValues) {
-			request.addListenerForAllRecords(formatListener);
-		} else {
-			workbookBuildingListener = new SheetRecordCollectingListener(formatListener);
-			request.addListenerForAllRecords(workbookBuildingListener);
-		}
+        HSSFEventFactory factory = new HSSFEventFactory();
+        HSSFRequest request = new HSSFRequest();
 
-		factory.processWorkbookEvents(request, fs);
-	}
+        if (outputFormulaValues) {
+            request.addListenerForAllRecords(formatListener);
+        } else {
+            workbookBuildingListener = new SheetRecordCollectingListener(formatListener);
+            request.addListenerForAllRecords(workbookBuildingListener);
+        }
 
-	/**
-	 * Main HSSFListener method, processes events, and outputs the
-	 *  CSV as the file is processed.
-	 */
-	public void processRecord(Record record) {
-		int thisRow = -1;
-		int thisColumn = -1;
-		String thisStr = null;
+        factory.processWorkbookEvents(request, fs);
+    }
 
-		switch (record.getSid())
-		{
-		case BoundSheetRecord.sid:
-			boundSheetRecords.add(record);
-			break;
-		case BOFRecord.sid:
-			BOFRecord br = (BOFRecord)record;
-			if(br.getType() == BOFRecord.TYPE_WORKSHEET) {
-				// Create sub workbook if required
-				if(workbookBuildingListener != null && stubWorkbook == null) {
-					stubWorkbook = workbookBuildingListener.getStubHSSFWorkbook();
-				}
-				
-				// Output the worksheet name
-				// Works by ordering the BSRs by the location of
-				//  their BOFRecords, and then knowing that we
-				//  process BOFRecords in byte offset order
-				sheetIndex++;
-				if(orderedBSRs == null) {
-					orderedBSRs = BoundSheetRecord.orderByBofPosition(boundSheetRecords);
-				}
-                currentSheetName = orderedBSRs[sheetIndex].getSheetname();
-				output.println();
-				output.println( 
-						orderedBSRs[sheetIndex].getSheetname() +
-						" [" + (sheetIndex+1) + "]:"
-				);
-			}
-			break;
+    /**
+     * Main HSSFListener method, processes events, and outputs the CSV as the file is processed.
+     */
+    public void processRecord(Record record) {
+        int thisRow = -1;
+        int thisColumn = -1;
+        String thisStr = null;
 
-		case SSTRecord.sid:
-			sstRecord = (SSTRecord) record;
-			break;
+        switch (record.getSid()) {
+            case BoundSheetRecord.sid:
+                boundSheetRecords.add(record);
+                break;
+            case BOFRecord.sid:
+                BOFRecord br = (BOFRecord) record;
+                if (br.getType() == BOFRecord.TYPE_WORKSHEET) {
+                    // Create sub workbook if required
+                    if (workbookBuildingListener != null && stubWorkbook == null) {
+                        stubWorkbook = workbookBuildingListener.getStubHSSFWorkbook();
+                    }
 
-		case BlankRecord.sid:
-			BlankRecord brec = (BlankRecord) record;
+                    // Output the worksheet name
+                    // Works by ordering the BSRs by the location of
+                    // their BOFRecords, and then knowing that we
+                    // process BOFRecords in byte offset order
+                    sheetIndex++;
+                    if (orderedBSRs == null) {
+                        orderedBSRs = BoundSheetRecord.orderByBofPosition(boundSheetRecords);
+                    }
+                    currentSheetName = orderedBSRs[sheetIndex].getSheetname();
+                    output.println();
+                    output.println(orderedBSRs[sheetIndex].getSheetname() + " [" + (sheetIndex + 1) + "]:");
+                }
+                break;
 
-			thisRow = brec.getRow();
-			thisColumn = brec.getColumn();
-			thisStr = "";
-			break;
-		case BoolErrRecord.sid:
-			BoolErrRecord berec = (BoolErrRecord) record;
+            case SSTRecord.sid:
+                sstRecord = (SSTRecord) record;
+                break;
 
-			thisRow = berec.getRow();
-			thisColumn = berec.getColumn();
-			thisStr = "";
-			break;
+            case BlankRecord.sid:
+                BlankRecord brec = (BlankRecord) record;
 
-		case FormulaRecord.sid:
-			FormulaRecord frec = (FormulaRecord) record;
+                thisRow = brec.getRow();
+                thisColumn = brec.getColumn();
+                thisStr = "";
+                break;
+            case BoolErrRecord.sid:
+                BoolErrRecord berec = (BoolErrRecord) record;
 
-			thisRow = frec.getRow();
-			thisColumn = frec.getColumn();
+                thisRow = berec.getRow();
+                thisColumn = berec.getColumn();
+                thisStr = "";
+                break;
 
-			if(outputFormulaValues) {
-				if(Double.isNaN( frec.getValue() )) {
-					// Formula result is a string
-					// This is stored in the next record
-					outputNextStringRecord = true;
-					nextRow = frec.getRow();
-					nextColumn = frec.getColumn();
-				} else {
-					thisStr = formatListener.formatNumberDateCell(frec);
-				}
-			} else {
-				thisStr = '"' +
-					HSSFFormulaParser.toFormulaString(stubWorkbook, frec.getParsedExpression()) + '"';
-			}
-			break;
-		case StringRecord.sid:
-			if(outputNextStringRecord) {
-				// String for formula
-				StringRecord srec = (StringRecord)record;
-				thisStr = srec.getString();
-				thisRow = nextRow;
-				thisColumn = nextColumn;
-				outputNextStringRecord = false;
-			}
-			break;
+            case FormulaRecord.sid:
+                FormulaRecord frec = (FormulaRecord) record;
 
-		case LabelRecord.sid:
-			LabelRecord lrec = (LabelRecord) record;
+                thisRow = frec.getRow();
+                thisColumn = frec.getColumn();
 
-			thisRow = lrec.getRow();
-			thisColumn = lrec.getColumn();
-			thisStr = '"' + lrec.getValue() + '"';
-			break;
-		case LabelSSTRecord.sid:
-			LabelSSTRecord lsrec = (LabelSSTRecord) record;
+                if (outputFormulaValues) {
+                    if (Double.isNaN(frec.getValue())) {
+                        // Formula result is a string
+                        // This is stored in the next record
+                        outputNextStringRecord = true;
+                        nextRow = frec.getRow();
+                        nextColumn = frec.getColumn();
+                    } else {
+                        thisStr = formatListener.formatNumberDateCell(frec);
+                    }
+                } else {
+                    thisStr = '"' + HSSFFormulaParser.toFormulaString(stubWorkbook, frec.getParsedExpression()) + '"';
+                }
+                break;
+            case StringRecord.sid:
+                if (outputNextStringRecord) {
+                    // String for formula
+                    StringRecord srec = (StringRecord) record;
+                    thisStr = srec.getString();
+                    thisRow = nextRow;
+                    thisColumn = nextColumn;
+                    outputNextStringRecord = false;
+                }
+                break;
 
-			thisRow = lsrec.getRow();
-			thisColumn = lsrec.getColumn();
-			if(sstRecord == null) {
-				thisStr = '"' + "(No SST Record, can't identify string)" + '"';
-			} else {
-				thisStr = '"' + sstRecord.getString(lsrec.getSSTIndex()).toString() + '"';
-			}
-			break;
-		case NoteRecord.sid:
-			NoteRecord nrec = (NoteRecord) record;
+            case LabelRecord.sid:
+                LabelRecord lrec = (LabelRecord) record;
 
-			thisRow = nrec.getRow();
-			thisColumn = nrec.getColumn();
-			// TODO: Find object to match nrec.getShapeId()
-			thisStr = '"' + "(TODO)" + '"';
-			break;
-		case NumberRecord.sid:
-			NumberRecord numrec = (NumberRecord) record;
+                thisRow = lrec.getRow();
+                thisColumn = lrec.getColumn();
+                thisStr = '"' + lrec.getValue() + '"';
+                break;
+            case LabelSSTRecord.sid:
+                LabelSSTRecord lsrec = (LabelSSTRecord) record;
 
-			thisRow = numrec.getRow();
-			thisColumn = numrec.getColumn();
+                thisRow = lsrec.getRow();
+                thisColumn = lsrec.getColumn();
+                if (sstRecord == null) {
+                    thisStr = '"' + "(No SST Record, can't identify string)" + '"';
+                } else {
+                    thisStr = '"' + sstRecord.getString(lsrec.getSSTIndex()).toString() + '"';
+                }
+                break;
+            case NoteRecord.sid:
+                NoteRecord nrec = (NoteRecord) record;
 
-			// Format
-			thisStr = formatListener.formatNumberDateCell(numrec);
-			break;
-		case RKRecord.sid:
-			RKRecord rkrec = (RKRecord) record;
+                thisRow = nrec.getRow();
+                thisColumn = nrec.getColumn();
+                // TODO: Find object to match nrec.getShapeId()
+                thisStr = '"' + "(TODO)" + '"';
+                break;
+            case NumberRecord.sid:
+                NumberRecord numrec = (NumberRecord) record;
 
-			thisRow = rkrec.getRow();
-			thisColumn = rkrec.getColumn();
-			thisStr = '"' + "(TODO)" + '"';
-			break;
-		default:
-			break;
-		}
+                thisRow = numrec.getRow();
+                thisColumn = numrec.getColumn();
 
-		// Handle new row
-		if(thisRow != -1 && thisRow != lastRowNumber) {
-			lastColumnNumber = -1;
-		}
+                // Format
+                thisStr = formatListener.formatNumberDateCell(numrec);
+                break;
+            case RKRecord.sid:
+                RKRecord rkrec = (RKRecord) record;
 
-		// Handle missing column
-		if(record instanceof MissingCellDummyRecord) {
-			MissingCellDummyRecord mc = (MissingCellDummyRecord)record;
-			thisRow = mc.getRow();
-			thisColumn = mc.getColumn();
-			thisStr = "";
-		}
+                thisRow = rkrec.getRow();
+                thisColumn = rkrec.getColumn();
+                thisStr = '"' + "(TODO)" + '"';
+                break;
+            default:
+                break;
+        }
 
-		// If we got something to print out, do so
-		if(thisStr != null) {
-			if(thisColumn > 0) {
-				output.print(',');
-			}
-			output.print(thisStr);
-		}
+        // Handle new row
+        if (thisRow != -1 && thisRow != lastRowNumber) {
+            lastColumnNumber = -1;
+        }
 
-		// Update column and row count
-		if(thisRow > -1)
-			lastRowNumber = thisRow;
-		if(thisColumn > -1)
-			lastColumnNumber = thisColumn;
+        // Handle missing column
+        if (record instanceof MissingCellDummyRecord) {
+            MissingCellDummyRecord mc = (MissingCellDummyRecord) record;
+            thisRow = mc.getRow();
+            thisColumn = mc.getColumn();
+            thisStr = "";
+        }
 
-		// Handle end of row
-		if(record instanceof LastCellOfRowDummyRecord) {
-			// Print out any missing commas if needed
-			if(minColumns > 0) {
-				// Columns are 0 based
-				if(lastColumnNumber == -1) { lastColumnNumber = 0; }
-				for(int i=lastColumnNumber; i<(minColumns); i++) {
-					output.print(',');
-				}
-			}
+        // If we got something to print out, do so
+        if (thisStr != null) {
+            if (thisColumn > 0) {
+                output.print(',');
+            }
+            output.print(thisStr);
+        }
 
-			// We're onto a new row
-			lastColumnNumber = -1;
+        // Update column and row count
+        if (thisRow > -1)
+            lastRowNumber = thisRow;
+        if (thisColumn > -1)
+            lastColumnNumber = thisColumn;
 
-			// End the row
-			output.println("--> " + currentSheetName);
-		}
-	}
+        // Handle end of row
+        if (record instanceof LastCellOfRowDummyRecord) {
+            // Print out any missing commas if needed
+            if (minColumns > 0) {
+                // Columns are 0 based
+                if (lastColumnNumber == -1) {
+                    lastColumnNumber = 0;
+                }
+                for (int i = lastColumnNumber; i < (minColumns); i++) {
+                    output.print(',');
+                }
+            }
 
-	public static void main(String[] args) throws Exception {
-		int minColumns = -1;
-		XLS2CSVmra xls2csv = new XLS2CSVmra(ClassLoader.getSystemResource("test.xls").getFile(), minColumns);
-		xls2csv.process();
-	}
+            // We're onto a new row
+            lastColumnNumber = -1;
+
+            // End the row
+            output.println("--> " + currentSheetName);
+        }
+    }
 }

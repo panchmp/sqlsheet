@@ -16,13 +16,27 @@
 package com.sqlsheet.stream;
 
 import java.net.URL;
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.CallableStatement;
+import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Savepoint;
+import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.logging.Logger;
-import net.pcal.sqlsheet.XlsDatabaseMetaData;
 
+import com.sqlsheet.XlsDatabaseMetaData;
 
 /**
  * SqlSheet implementation of java.sql.Connection which uses steaming over XLS
@@ -33,7 +47,7 @@ public class XlsStreamConnection implements Connection {
 
     private static final Logger logger = Logger.getLogger(XlsStreamConnection.class.getName());
 
-    URL xlsFile;
+    URL                         xlsFile;
 
     public XlsStreamConnection(URL xlsFile) throws SQLException {
         this.xlsFile = xlsFile;
@@ -47,8 +61,7 @@ public class XlsStreamConnection implements Connection {
         return new XlsStreamPreparedStatement(this, sql);
     }
 
-    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
-            throws SQLException {
+    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
         return prepareStatement(sql);
     }
 
@@ -59,6 +72,10 @@ public class XlsStreamConnection implements Connection {
         return false;
     }
 
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+        nyi();
+    }
+
     public boolean isClosed() {
         return false;
     }
@@ -67,12 +84,24 @@ public class XlsStreamConnection implements Connection {
         return true;
     }
 
+    public void setReadOnly(boolean readOnly) throws SQLException {
+        nyi();
+    }
+
     public String getCatalog() {
         return null;
     }
 
+    public void setCatalog(String catalog) throws SQLException {
+        nyi();
+    }
+
     public int getTransactionIsolation() {
         return Connection.TRANSACTION_NONE;
+    }
+
+    public void setTransactionIsolation(int level) throws SQLException {
+        nyi();
     }
 
     public SQLWarning getWarnings() {
@@ -82,6 +111,10 @@ public class XlsStreamConnection implements Connection {
     @SuppressWarnings("unchecked")
     public Map getTypeMap() throws SQLException {
         return null;
+    }
+
+    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
+        nyi();
     }
 
     public void commit() throws SQLException {
@@ -95,22 +128,6 @@ public class XlsStreamConnection implements Connection {
 
     public DatabaseMetaData getMetaData() throws SQLException {
         return new XlsDatabaseMetaData();
-    }
-
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
-        nyi();
-    }
-
-    public void setReadOnly(boolean readOnly) throws SQLException {
-        nyi();
-    }
-
-    public void setCatalog(String catalog) throws SQLException {
-        nyi();
-    }
-
-    public void setTransactionIsolation(int level) throws SQLException {
-        nyi();
     }
 
     public CallableStatement prepareCall(String sql) throws SQLException {
@@ -136,6 +153,10 @@ public class XlsStreamConnection implements Connection {
     public int getHoldability() throws SQLException {
         nyi();
         return -1;
+    }
+
+    public void setHoldability(int param) throws SQLException {
+        nyi();
     }
 
     public CallableStatement prepareCall(String str, int param, int param2, int param3) throws SQLException {
@@ -186,9 +207,6 @@ public class XlsStreamConnection implements Connection {
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
     }
 
-    public void setClientInfo(Properties properties) throws SQLClientInfoException {
-    }
-
     public String getClientInfo(String name) throws SQLException {
         nyi();
         return null;
@@ -197,6 +215,9 @@ public class XlsStreamConnection implements Connection {
     public Properties getClientInfo() throws SQLException {
         nyi();
         return null;
+    }
+
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
     }
 
     public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
@@ -223,10 +244,6 @@ public class XlsStreamConnection implements Connection {
         nyi();
     }
 
-    public void setHoldability(int param) throws SQLException {
-        nyi();
-    }
-
     public Savepoint setSavepoint() throws SQLException {
         nyi();
         return null;
@@ -239,18 +256,13 @@ public class XlsStreamConnection implements Connection {
 
     }
 
-    public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)
-            throws SQLException {
+    public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
         nyi();
         return null;
     }
 
     private void nyi() throws SQLException {
         throw new SQLException("NYI");
-    }
-
-    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-        nyi();
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
@@ -263,24 +275,24 @@ public class XlsStreamConnection implements Connection {
         return false;
     }
 
-	public void setSchema(String string) throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-}
+    public String getSchema() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public String getSchema() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public void setSchema(String string) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public void abort(Executor exctr) throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public void abort(Executor exctr) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public int getNetworkTimeout() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public int getNetworkTimeout() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }

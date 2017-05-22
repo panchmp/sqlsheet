@@ -1,12 +1,16 @@
 package com.sqlsheet;
 
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Date;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.File;
-import java.sql.*;
-import java.util.Date;
 
 public class XlsDriverStreamingTest {
 
@@ -33,7 +37,8 @@ public class XlsDriverStreamingTest {
     @Test
     public void testXlsConnectReadStream() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile() + "?readStreaming=true");
+        Connection conn = DriverManager
+                .getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile() + "?readStreaming=true");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM \"2009\"");
         Assert.assertEquals(3L, results.getMetaData().getColumnCount());
@@ -53,7 +58,8 @@ public class XlsDriverStreamingTest {
     @Test
     public void testXlsxConnectReadStream() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=true");
+        Connection conn = DriverManager
+                .getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=true");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM \"2009\"");
         Assert.assertEquals(3L, results.getMetaData().getColumnCount());
@@ -73,7 +79,8 @@ public class XlsDriverStreamingTest {
     @Test
     public void testXlsConnectReadStreamBigTable() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("big-grid.xls").getFile() + "?readStreaming=true");
+        Connection conn = DriverManager.getConnection(
+                "jdbc:xls:file:" + ClassLoader.getSystemResource("big-grid.xls").getFile() + "?readStreaming=true");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM \"Big Grid\"");
         Assert.assertEquals(20L, results.getMetaData().getColumnCount());
@@ -95,7 +102,8 @@ public class XlsDriverStreamingTest {
     @Test
     public void testXlsxConnectReadStreamBigTable() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("big-grid.xlsx").getFile() + "?readStreaming=true");
+        Connection conn = DriverManager.getConnection(
+                "jdbc:xls:file:" + ClassLoader.getSystemResource("big-grid.xlsx").getFile() + "?readStreaming=true");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM \"Big Grid\"");
         Assert.assertEquals(20L, results.getMetaData().getColumnCount());
@@ -117,16 +125,17 @@ public class XlsDriverStreamingTest {
     @Test
     public void testXlsConnectWriteStream() throws Exception {
         Class.forName("com.googlecode.sqlsheet.Driver");
-        File test = File.createTempFile("testXlsConnectWriteStream",".xlsx");
-        FileUtils.copyFile(new File(ClassLoader.getSystemResource("test.xlsx").getFile()),test);
+        File test = File.createTempFile("testXlsConnectWriteStream", ".xlsx");
+        FileUtils.copyFile(new File(ClassLoader.getSystemResource("test.xlsx").getFile()), test);
 
         Connection writeConnection = DriverManager.getConnection("jdbc:xls:file:" + test.getPath() + "?writeStreaming=true");
         Statement writeStatement = writeConnection.createStatement();
         writeStatement.executeUpdate("CREATE TABLE TEST_INSERT(COL1 INT, COL2 VARCHAR(255), COL3 DATE)");
         writeStatement.close();
 
-        PreparedStatement writeStatement2 = writeConnection.prepareStatement("INSERT INTO TEST_INSERT(COL1, COL2, COL3) VALUES(?,?,?)");
-        for(int i = 0; i<3;i++){
+        PreparedStatement writeStatement2 = writeConnection
+                .prepareStatement("INSERT INTO TEST_INSERT(COL1, COL2, COL3) VALUES(?,?,?)");
+        for (int i = 0; i < 3; i++) {
             writeStatement2.setDouble(1, i);
             writeStatement2.setString(2, "Row" + i);
             writeStatement2.setDate(3, new java.sql.Date(new Date().getTime()));
@@ -167,6 +176,5 @@ public class XlsDriverStreamingTest {
         readStatementstmt2.close();
         readConnection2.close();
     }
-
 
 }

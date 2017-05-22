@@ -18,9 +18,7 @@ package com.sqlsheet.parser;
 import java.util.List;
 
 /**
- * Handle on a parsed SQL statement of the form
- *
- * INSERT INTO xxx (xxx) VALUE (xxx).
+ * Handle on a parsed SQL statement of the form INSERT INTO xxx (xxx) VALUE (xxx).
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>

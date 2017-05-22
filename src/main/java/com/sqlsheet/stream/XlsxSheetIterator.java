@@ -15,6 +15,22 @@
  */
 package com.sqlsheet.stream;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
@@ -25,43 +41,17 @@ import org.apache.poi.xssf.model.StylesTable;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.*;
-import java.io.InputStream;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 /**
- * Streaming iterator over XLSX files
- * Derived from:
+ * Streaming iterator over XLSX files Derived from:
  * http://svn.apache.org/repos/asf/poi/trunk/src/examples/src/org/apache/poi/xssf/eventusermodel/XLSX2CSV.java
  */
 public class XlsxSheetIterator extends AbstractXlsSheetIterator {
 
-    /**
-     * The type of the data value is indicated by an attribute on the cell.
-     * The value is usually in a "v" element within the cell.
-     */
-    enum xssfDataType {
-        BOOL,
-        ERROR,
-        FORMULA,
-        INLINESTR,
-        SSTINDEX,
-        NUMBER,
-    }
-
-    OPCPackage xlsxPackage;
-    XMLEventReader reader;
-    StylesTable styles;
+    OPCPackage                 xlsxPackage;
+    XMLEventReader             reader;
+    StylesTable                styles;
     ReadOnlySharedStringsTable strings;
-    XSSFSheetEventHandler handler;
-
+    XSSFSheetEventHandler      handler;
     public XlsxSheetIterator(URL filename, String sheetName) throws SQLException {
         super(filename, sheetName);
     }
@@ -69,22 +59,22 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
     @Override
     protected void postConstruct() throws SQLException {
         try {
-            //Open and pre process XLSX file
+            // Open and pre process XLSX file
             xlsxPackage = OPCPackage.open(getFileName().getPath(), PackageAccess.READ);
             strings = new ReadOnlySharedStringsTable(this.xlsxPackage);
             XSSFReader xssfReader = new XSSFReader(this.xlsxPackage);
             styles = xssfReader.getStylesTable();
-            //Find appropriate sheet
+            // Find appropriate sheet
             XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
             while (iter.hasNext()) {
                 InputStream stream = iter.next();
                 String currentSheetName = iter.getSheetName();
-                if (currentSheetName.equalsIgnoreCase(getSheetName()) ||
-                        ("\"" + currentSheetName + "\"").equalsIgnoreCase(getSheetName())) {
+                if (currentSheetName.equalsIgnoreCase(getSheetName())
+                        || ("\"" + currentSheetName + "\"").equalsIgnoreCase(getSheetName())) {
                     handler = new XSSFSheetEventHandler(styles, strings);
                     XMLInputFactory factory = XMLInputFactory.newInstance();
                     reader = factory.createXMLEventReader(stream);
-                    //Start sheet processing
+                    // Start sheet processing
                     while (reader.hasNext() && getCurrentSheetRowIndex() == 0) {
                         processNextEvent();
                     }
@@ -123,8 +113,8 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
     }
 
     /**
-     * Parses and shows the content of one sheet
-     * using the specified styles and shared-strings tables.
+     * Parses and shows the content of one sheet using the specified styles and shared-strings tables.
+     *
      * @throws XMLStreamException if any
      */
     public void processNextEvent() throws XMLStreamException {
@@ -148,6 +138,13 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
     }
 
     /**
+     * The type of the data value is indicated by an attribute on the cell. The value is usually in a "v" element within the cell.
+     */
+    enum xssfDataType {
+        BOOL, ERROR, FORMULA, INLINESTR, SSTINDEX, NUMBER,
+    }
+
+    /**
      * Derived from http://poi.apache.org/spreadsheet/how-to.html#xssf_sax_api
      * <p/>
      * Also see Standard ECMA-376, 1st edition, part 4, pages 1928ff, at
@@ -156,43 +153,37 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
      */
     class XSSFSheetEventHandler {
 
+        private final DataFormatter            formatter;
         /**
          * Table with styles
          */
-        private StylesTable stylesTable;
-
+        private StylesTable                    stylesTable;
         /**
          * Table with unique strings
          */
-        private ReadOnlySharedStringsTable sharedStringsTable;
-
+        private ReadOnlySharedStringsTable     sharedStringsTable;
         // Set when V start element is seen
-        private boolean vIsOpen;
-
+        private boolean                        vIsOpen;
         // Set when cell start element is seen;
         // used when cell close element is seen.
         private XlsxSheetIterator.xssfDataType nextDataType;
-
         // Used to format numeric cell values.
-        private short formatIndex;
-        private String formatString;
-        private final DataFormatter formatter;
-
-        private int thisColumn;
+        private short                          formatIndex;
+        private String                         formatString;
+        private int                            thisColumn;
         // The last column printed to the output stream
-        private int lastColumnNumber;
+        private int                            lastColumnNumber;
 
         // Gathers characters as they are seen.
-        private StringBuffer value;
+        private StringBuffer                   value;
 
         /**
          * Accepts objects needed while parsing.
          *
-         * @param styles  Table of styles
+         * @param styles Table of styles
          * @param strings Table of shared strings
          */
-        public XSSFSheetEventHandler(StylesTable styles,
-                                     ReadOnlySharedStringsTable strings) {
+        public XSSFSheetEventHandler(StylesTable styles, ReadOnlySharedStringsTable strings) {
             thisColumn = -1;
             lastColumnNumber = -1;
             this.stylesTable = styles;
@@ -210,8 +201,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                 attributes.put(attr.getName().getLocalPart(), attr.getValue());
             }
 
-            if ("inlineStr".equals(startElement.getName().getLocalPart())
-                    || "v".equals(startElement.getName().getLocalPart())
+            if ("inlineStr".equals(startElement.getName().getLocalPart()) || "v".equals(startElement.getName().getLocalPart())
                     || "is".equals(startElement.getName().getLocalPart())) {
                 vIsOpen = true;
                 // Clear contents cache
@@ -248,7 +238,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                     nextDataType = XlsxSheetIterator.xssfDataType.FORMULA;
                 else if (cellStyleStr != null) {
                     // It's a number, but almost certainly one
-                    //  with a special style or format
+                    // with a special style or format
                     int styleIndex = Integer.parseInt(cellStyleStr);
                     XSSFCellStyle style = stylesTable.getStyleAt(styleIndex);
                     this.formatIndex = style.getDataFormat();
@@ -262,7 +252,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
 
         public void endElement(EndElement endElement) {
             CellValueHolder thisCellValue = new CellValueHolder();
-            //String thisStr = null;
+            // String thisStr = null;
             // v => contents of a cell
             if ("v".equals(endElement.getName().getLocalPart())
                     || ("c".equals(endElement.getName().getLocalPart()) && xssfDataType.INLINESTR.equals(nextDataType))) {
@@ -299,12 +289,14 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                     case NUMBER:
                         String n = value.toString();
                         if (this.formatString != null) {
-                            thisCellValue.stringValue = formatter.formatRawCellContents(Double.parseDouble(n), this.formatIndex, this.formatString);
+                            thisCellValue.stringValue = formatter.formatRawCellContents(Double.parseDouble(n), this.formatIndex,
+                                    this.formatString);
                         } else {
                             thisCellValue.stringValue = n;
                         }
                         thisCellValue.doubleValue = Double.parseDouble(n);
-                        thisCellValue.dateValue = convertDateValue(thisCellValue.doubleValue, this.formatIndex, this.formatString);
+                        thisCellValue.dateValue = convertDateValue(thisCellValue.doubleValue, this.formatIndex,
+                                this.formatString);
                         break;
                     default:
                         thisCellValue.stringValue = "(TODO: Unexpected type: " + nextDataType + ")";
@@ -312,9 +304,9 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                 }
                 // Output after we've seen the string contents
                 // Emit commas for any fields that were missing on this row
-                //Fill empty columns if required
+                // Fill empty columns if required
                 for (int i = lastColumnNumber + 1; i < thisColumn; ++i) {
-                    //  output.print(',');
+                    // output.print(',');
                     if (getCurrentSheetRowIndex() == 0) {
                         getColumns().add(new CellValueHolder());
                     } else {
@@ -345,8 +337,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
         }
 
         /**
-         * Captures characters only if a suitable element is open.
-         * Originally was just "v"; extended for inlineStr also.
+         * Captures characters only if a suitable element is open. Originally was just "v"; extended for inlineStr also.
          */
         public void characters(char[] ch) {
             if (vIsOpen)
@@ -356,7 +347,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
         /**
          * Converts an Excel column name like "C" to a zero-based index.
          *
-         * @param name  column name
+         * @param name column name
          * @return Index corresponding to the specified name
          */
         private int nameToColumn(String name) {

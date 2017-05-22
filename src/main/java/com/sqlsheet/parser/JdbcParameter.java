@@ -16,13 +16,11 @@
 package com.sqlsheet.parser;
 
 /**
- * Used to represent a jdbc parameter ('?') in a query for a PreparedSatement.
- * A singleton with no fields and no methods. Possibly dumbest class in the
- * world.
+ * Used to represent a jdbc parameter ('?') in a query for a PreparedSatement. A singleton with no fields and no methods. Possibly
+ * dumbest class in the world.
  *
  * @author <a href='http://www.pcal.net'>pcal</a>
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
- *
  */
 public class JdbcParameter {
 

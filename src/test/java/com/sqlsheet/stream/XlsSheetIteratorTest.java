@@ -1,9 +1,9 @@
 package com.sqlsheet.stream;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.List;
 
 public class XlsSheetIteratorTest {
 
@@ -13,16 +13,16 @@ public class XlsSheetIteratorTest {
         Assert.assertEquals(3, xlsSheet.getColumns().size());
         long counter = 0L;
         for (Object o : xlsSheet) {
-            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>)o;
+            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>) o;
             Assert.assertEquals(3, rowValues.size());
-            for(XlsSheetIterator.CellValueHolder value : rowValues){
+            for (XlsSheetIterator.CellValueHolder value : rowValues) {
                 Assert.assertNotNull(value.stringValue);
             }
             Assert.assertNotNull(rowValues.get(0).doubleValue);
             Assert.assertNotNull(rowValues.get(2).dateValue);
             counter++;
         }
-        Assert.assertEquals(3L,counter);
+        Assert.assertEquals(3L, counter);
 
     }
 
@@ -32,9 +32,9 @@ public class XlsSheetIteratorTest {
         Assert.assertEquals(3, xlsSheet.getColumns().size());
         long counter = 0L;
         for (Object o : xlsSheet) {
-            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>)o;
+            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>) o;
             Assert.assertEquals(3, rowValues.size());
-            for(XlsSheetIterator.CellValueHolder value : rowValues){
+            for (XlsSheetIterator.CellValueHolder value : rowValues) {
                 Assert.assertNotNull(value.stringValue);
             }
             Assert.assertNotNull(rowValues.get(0).doubleValue);
@@ -42,7 +42,7 @@ public class XlsSheetIteratorTest {
 
             counter++;
         }
-        Assert.assertEquals(3L,counter);
+        Assert.assertEquals(3L, counter);
 
     }
 
@@ -52,9 +52,9 @@ public class XlsSheetIteratorTest {
         Assert.assertEquals(20, xlsSheet.getColumns().size());
         long counter = 0L;
         for (Object o : xlsSheet) {
-            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>)o;
+            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>) o;
             Assert.assertEquals(20, rowValues.size());
-            for(XlsSheetIterator.CellValueHolder value : rowValues){
+            for (XlsSheetIterator.CellValueHolder value : rowValues) {
                 Assert.assertNotNull(value.stringValue);
             }
             Assert.assertNotNull(rowValues.get(1).doubleValue);
@@ -63,7 +63,7 @@ public class XlsSheetIteratorTest {
             Assert.assertNotNull(rowValues.get(4).dateValue);
             counter++;
         }
-        Assert.assertEquals(65535L,counter);
+        Assert.assertEquals(65535L, counter);
     }
 
 }

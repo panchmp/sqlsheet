@@ -15,18 +15,33 @@
  */
 package com.sqlsheet.stream;
 
-import net.pcal.sqlsheet.parser.*;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Date;
+import java.sql.NClob;
+import java.sql.ParameterMetaData;
+import java.sql.PreparedStatement;
+import java.sql.Ref;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.RowId;
+import java.sql.SQLException;
+import java.sql.SQLXML;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
+
+import com.sqlsheet.parser.ParsedStatement;
+import com.sqlsheet.parser.SelectStarStatement;
 
 /**
  * SqlSheet implementation of java.sql.PreparedStatement which uses steaming over XLS
@@ -35,9 +50,9 @@ import java.util.logging.Logger;
  */
 public class XlsStreamPreparedStatement extends XlsStreamStatement implements PreparedStatement {
 
-    private static final Logger logger = Logger.getLogger(XlsStreamPreparedStatement.class.getName());
-    private ParsedStatement statement;
-    private List<Object> parameters = new ArrayList<Object>();
+    private static final Logger logger     = Logger.getLogger(XlsStreamPreparedStatement.class.getName());
+    private ParsedStatement     statement;
+    private List<Object>        parameters = new ArrayList<Object>();
 
     public XlsStreamPreparedStatement(XlsStreamConnection conn, String sql) throws SQLException {
         super(conn);
@@ -153,7 +168,6 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
         setParameter(arg0, arg1);
     }
 
-
     public void setTimestamp(int arg0, Timestamp arg1, Calendar arg2) throws SQLException {
         nyi();
     }
@@ -191,43 +205,43 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
     }
 
     public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setBinaryStream(int parameterIndex, InputStream x, long length) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setBinaryStream(int parameterIndex, InputStream x) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setClob(int parameterIndex, Reader reader) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setNClob(int parameterIndex, Reader reader) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setRef(int arg0, Ref arg1) throws SQLException {
@@ -245,35 +259,35 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
     }
 
     public void setRowId(int parameterIndex, RowId x) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setNString(int parameterIndex, String value) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setNClob(int parameterIndex, NClob value) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setClob(int parameterIndex, Reader reader, long length) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
-      nyi();
+        nyi();
     }
 
     public void setBinaryStream(int arg0, InputStream arg1, int arg2) throws SQLException {
@@ -292,11 +306,11 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
         nyi();
     }
 
-	public void closeOnCompletion() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-}
+    public void closeOnCompletion() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	public boolean isCloseOnCompletion() throws SQLException {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    public boolean isCloseOnCompletion() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
