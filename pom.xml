@@ -204,9 +204,10 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/panchmp/sqlsheet</connection>
-        <developerConnection>scm:git:https://github.com/panchmp/sqlsheet</developerConnection>
         <url>https://github.com/panchmp/sqlsheet</url>
+        <connection>scm:git:git://github.com:panchmp/sqlsheet.git</connection>
+        <developerConnection>scm:git:git://github.com:panchmp/sqlsheet.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <url>https://github.com/panchmp/sqlsheet/issues</url>
