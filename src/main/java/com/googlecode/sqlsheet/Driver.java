@@ -15,7 +15,7 @@
  */
 package com.googlecode.sqlsheet;
 
-import net.pcal.sqlsheet.XlsDriver;
+import com.sqlsheet.XlsDriver;
 
 /**
  * sqlsheet implementation of java.sql.Driver.

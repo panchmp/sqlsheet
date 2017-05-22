@@ -12,7 +12,7 @@
     </script>
 
 	<query connection-id="java">
-        import com.googlecode.sqlsheet.ResultMock;
+        import com.sqlsheet.ResultMock;
         import java.util.*;
 		
 		List list = (List) get("POJO");
