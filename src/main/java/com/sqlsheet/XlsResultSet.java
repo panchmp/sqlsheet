@@ -204,7 +204,16 @@ public class XlsResultSet implements ResultSet {
 						+ XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
 			}
 		case Cell.CELL_TYPE_FORMULA:
-			return getCellValue(cell.getCachedFormulaResultType(), columnType, cell, jdbcColumn);
+			try {
+				return getCellValue(cell.getCachedFormulaResultType(), columnType, cell, jdbcColumn);
+			} catch (RuntimeException e) {
+				int formulaCellType = workbook.getCreationHelper().createFormulaEvaluator().evaluateFormulaCell(cell);
+				try {
+					return getCellValue(formulaCellType, columnType, cell, jdbcColumn);
+				} catch (Exception e2) {
+					throw e;
+				}
+			}
 		default:
 			return null;
 		}
