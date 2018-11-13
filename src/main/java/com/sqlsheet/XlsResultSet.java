@@ -163,47 +163,52 @@ public class XlsResultSet implements ResultSet {
             if (cell == null) {
                 return null;
             }
-            switch (cell.getCellType()) {
-
-                case Cell.CELL_TYPE_BOOLEAN:
-                    if (columnType == Types.VARCHAR) {
-                        return cell.getBooleanCellValue();
-                    } else {
-                        throw new RuntimeException(
-                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a boolean and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
-                    }
-                case Cell.CELL_TYPE_STRING:
-                    if (columnType == Types.VARCHAR) {
-                        return cell.getStringCellValue();
-                    } else {
-                        throw new RuntimeException(
-                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a string cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
-                    }
-                case Cell.CELL_TYPE_NUMERIC:
-                    if (columnType == Types.VARCHAR) {
-                        return String.valueOf(cell.getNumericCellValue());
-                    } else if (columnType == Types.DOUBLE) {
-                        return cell.getNumericCellValue();
-                    } else if (columnType == Types.DATE) {
-                        if (DateUtil.isCellDateFormatted(cell)) {
-                            java.util.Date value = cell.getDateCellValue();
-                            return new java.sql.Date(value.getTime());
-                        }
-                    } else {
-                        throw new RuntimeException(
-                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a numeric cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
-                    }
-
-                default:
-                    return null;
-            }
+            return getCellValue(cell.getCellType(), columnType, cell, jdbcColumn);
         } catch (Exception e) {
             throw wrapped(e);
         }
     }
+
+	private Object getCellValue(int cellType, int columnType, Cell cell, int jdbcColumn) {
+
+		switch (cellType) {
+		case Cell.CELL_TYPE_BOOLEAN:
+			if (columnType == Types.VARCHAR) {
+				return cell.getBooleanCellValue();
+			} else {
+				throw new RuntimeException(
+						"The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a boolean and cannot be cast to ("
+								+ XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
+			}
+		case Cell.CELL_TYPE_STRING:
+			if (columnType == Types.VARCHAR) {
+				return cell.getStringCellValue();
+			} else {
+				throw new RuntimeException(
+						"The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a string cell and cannot be cast to ("
+								+ XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
+			}
+		case Cell.CELL_TYPE_NUMERIC:
+			if (columnType == Types.VARCHAR) {
+				return String.valueOf(cell.getNumericCellValue());
+			} else if (columnType == Types.DOUBLE) {
+				return cell.getNumericCellValue();
+			} else if (columnType == Types.DATE) {
+				if (DateUtil.isCellDateFormatted(cell)) {
+					java.util.Date value = cell.getDateCellValue();
+					return new java.sql.Date(value.getTime());
+				}
+			} else {
+				throw new RuntimeException("The cell (" + getCurrentRow() + "," + jdbcColumn
+						+ ") is a numeric cell and cannot be cast to ("
+						+ XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
+			}
+		case Cell.CELL_TYPE_FORMULA:
+			return getCellValue(cell.getCachedFormulaResultType(), columnType, cell, jdbcColumn);
+		default:
+			return null;
+		}
+	}
 
     public <T> T getObject(int jdbcColumn, Class<T> type) throws SQLException {
         return (T) getObject(jdbcColumn);
