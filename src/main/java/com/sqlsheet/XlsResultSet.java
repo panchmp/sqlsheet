@@ -151,9 +151,12 @@ public class XlsResultSet implements ResultSet {
         Cell cell = getCell(jdbcColumn);
         return (long) (cell == null ? 0 : cell.getNumericCellValue());
     }
+    
+    
 
     public Object getObject(String jdbcColumn) throws SQLException {
-        return getObject(jdbcColumn);
+        Cell cell = getCell(jdbcColumn);
+        return cell!=null ? getObject(cell.getColumnIndex()) : null;
     }
 
     public Object getObject(int jdbcColumn) throws SQLException {
@@ -165,7 +168,7 @@ public class XlsResultSet implements ResultSet {
             }
             switch (cell.getCellType()) {
 
-                case Cell.CELL_TYPE_BOOLEAN:
+                case BOOLEAN:
                     if (columnType == Types.VARCHAR) {
                         return cell.getBooleanCellValue();
                     } else {
@@ -173,7 +176,7 @@ public class XlsResultSet implements ResultSet {
                                 "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a boolean and cannot be cast to ("
                                         + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
                     }
-                case Cell.CELL_TYPE_STRING:
+                case STRING:
                     if (columnType == Types.VARCHAR) {
                         return cell.getStringCellValue();
                     } else {
@@ -181,22 +184,23 @@ public class XlsResultSet implements ResultSet {
                                 "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a string cell and cannot be cast to ("
                                         + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
                     }
-                case Cell.CELL_TYPE_NUMERIC:
-                    if (columnType == Types.VARCHAR) {
-                        return String.valueOf(cell.getNumericCellValue());
-                    } else if (columnType == Types.DOUBLE) {
-                        return cell.getNumericCellValue();
-                    } else if (columnType == Types.DATE) {
-                        if (DateUtil.isCellDateFormatted(cell)) {
-                            java.util.Date value = cell.getDateCellValue();
-                            return new java.sql.Date(value.getTime());
-                        }
-                    } else {
-                        throw new RuntimeException(
-                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a numeric cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
-                    }
-
+                case NUMERIC:
+                  switch (columnType) {
+                    case Types.VARCHAR:
+                      return String.valueOf(cell.getNumericCellValue());
+                    case Types.DOUBLE:
+                      return cell.getNumericCellValue();
+                    case Types.DATE:
+                      if (DateUtil.isCellDateFormatted(cell)) {
+                        java.util.Date value = cell.getDateCellValue();
+                        return new java.sql.Date(value.getTime());
+                      }
+                      break;
+                    default:
+                      throw new RuntimeException(
+                              "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a numeric cell and cannot be cast to ("
+                                    + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
+                  }
                 default:
                     return null;
             }
