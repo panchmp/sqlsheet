@@ -23,11 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 
 /**
  * SqlSheet implementation of java.sql.ResultSetMetaData.
@@ -69,7 +65,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     private List<String>        columnNames;
     private XlsResultSet        resultset;
 
-    public XlsResultSetMetaData(Sheet sheet, XlsResultSet resultset, int firstSheetRowOffset) throws SQLException {
+    public XlsResultSetMetaData(Sheet sheet, XlsResultSet resultset, int firstSheetRowOffset, int firstSheetColOffset) throws SQLException {
 
         if (sheet == null)
             throw new IllegalArgumentException();
@@ -80,7 +76,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
         }
         formatter = new DataFormatter();
         columnNames = new ArrayList<String>();
-        for (short c = 0; c < row.getLastCellNum(); c++) {
+        for (short c = (short) firstSheetColOffset; c < row.getLastCellNum(); c++) {
             Cell cell = row.getCell(c);
             String columnName = formatter.formatCellValue(cell);
 
@@ -106,25 +102,25 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
                 Cell cell = resultset.getCell(columnId);
                 if (cell != null) {
 
-                    int excelCellType = cell.getCellType();
+                    CellType excelCellType = cell.getCellType();
                     switch (excelCellType) {
-                        case Cell.CELL_TYPE_BOOLEAN:
+                        case BOOLEAN:
                             typeCode = Types.VARCHAR;
                             break;
-                        case Cell.CELL_TYPE_STRING:
+                        case STRING:
                             typeCode = Types.VARCHAR;
                             break;
-                        case Cell.CELL_TYPE_NUMERIC:
+                        case NUMERIC:
                             if (DateUtil.isCellDateFormatted(cell)) {
                                 typeCode = Types.DATE;
                             } else {
                                 typeCode = Types.DOUBLE;
                             }
                             break;
-                        case Cell.CELL_TYPE_BLANK:
+                        case BLANK:
                             typeCode = Types.NULL;
                             break;
-                        case Cell.CELL_TYPE_FORMULA:
+                        case FORMULA:
                             try {
                                 cell.getStringCellValue();
                                 typeCode = Types.VARCHAR;
@@ -133,7 +129,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
                                 typeCode = Types.DOUBLE;
                             }
                             break;
-                        case Cell.CELL_TYPE_ERROR:
+                        case ERROR:
                             throw new RuntimeException("The ExcelType ( ERROR ) is not supported - Cell (" + resultset.getRow()
                                     + "," + columnId + ")");
 
