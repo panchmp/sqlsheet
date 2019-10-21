@@ -97,7 +97,7 @@ public class SqlSheetParser {
             if (((PlainSelect) body).getHaving() != null) {
                 throw new SQLException("HAVING not supported on Excel sheets.");
             }
-            if (((PlainSelect) body).getGroupByColumnReferences() != null) {
+            if (((PlainSelect) body).getGroupBy() != null) {
                 throw new SQLException("GROUP BY not supported on Excel sheets.");
             }
             List<SelectItem> selectItems = ((PlainSelect) body).getSelectItems();
