@@ -60,11 +60,12 @@ public class XlsResultSet implements ResultSet {
     private Sheet                sheet;
     private XlsResultSetMetaData metadata;
     private int                  firstSheetRowOffset = 0;
+    private int                  firstSheetColOffset = 0;
     private int                  cursorSheetRow;
     private CellStyle            dateStyle           = null;
     private DataFormatter        formatter;
 
-    public XlsResultSet(Workbook wb, Sheet s, int firstSheetRowOffset) throws SQLException {
+    public XlsResultSet(Workbook wb, Sheet s, int firstSheetRowOffset, int firstSheetColOffset) throws SQLException {
         if (s == null) {
             throw new IllegalArgumentException("null sheet");
         }
@@ -75,8 +76,10 @@ public class XlsResultSet implements ResultSet {
         workbook = wb;
         sheet = s;
         this.firstSheetRowOffset = firstSheetRowOffset;
+        this.firstSheetColOffset = firstSheetColOffset;
+        
         cursorSheetRow = this.firstSheetRowOffset - 1;
-        metadata = new XlsResultSetMetaData(s, this, firstSheetRowOffset);
+        metadata = new XlsResultSetMetaData(s, this, firstSheetRowOffset, firstSheetColOffset);
         // set the default date cell format
         dateStyle = workbook.createCellStyle();
         dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
@@ -542,17 +545,17 @@ public class XlsResultSet implements ResultSet {
     }
 
     /**
-     * Protected becasue used also in the resultset metadata to scan the column type
+     * Protected because used also in the resultset metadata to scan the column type
      * 
      * @param jdbcColumn
      * @return the Cell
      */
     protected Cell getCell(int jdbcColumn) {
-        return sheet.getRow(cursorSheetRow).getCell((short) (jdbcColumn - 1));
+        return sheet.getRow(cursorSheetRow).getCell((short) (jdbcColumn + firstSheetColOffset - 1));
     }
 
     private Cell getCell(String named) {
-        return sheet.getRow(cursorSheetRow).getCell(getSheetColumnNamed(named));
+        return sheet.getRow(cursorSheetRow).getCell(getSheetColumnNamed(named) + firstSheetColOffset);
     }
 
     private short getSheetColumnNamed(String name) {
