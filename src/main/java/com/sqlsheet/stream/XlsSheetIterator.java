@@ -45,7 +45,7 @@ import org.apache.poi.hssf.record.RecordFactoryInputStream;
 import org.apache.poi.hssf.record.SSTRecord;
 import org.apache.poi.hssf.record.StringRecord;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
 /**
  * Streaming iterator over XLS files Derived from:
@@ -53,7 +53,7 @@ import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
  */
 public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFListener {
 
-    NPOIFSFileSystem              fileSystem;
+    POIFSFileSystem              fileSystem;
     boolean                       inRequiredSheet;
     // Create a new RecordStream and use that
     RecordFactoryInputStream      recordStream;
@@ -97,7 +97,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
             inRequiredSheet = false;
             outputFormulaValues = true;
 
-            fileSystem = new NPOIFSFileSystem(getFileName().openStream());
+            fileSystem = new POIFSFileSystem(getFileName().openStream());
             recordStream = new RecordFactoryInputStream(fileSystem.getRoot().createDocumentInputStream("Workbook"), false);
             MissingRecordAwareHSSFListener listener = new MissingRecordAwareHSSFListener(this);
             formatListener = new FormatTrackingHSSFListener(listener);
