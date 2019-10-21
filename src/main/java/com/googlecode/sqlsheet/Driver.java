@@ -21,6 +21,7 @@ import com.sqlsheet.XlsDriver;
  * sqlsheet implementation of java.sql.Driver.
  *
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
+ * @deprecated 
  */
 public class Driver extends XlsDriver {
 }

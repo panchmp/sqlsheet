@@ -16,6 +16,9 @@
 package com.sqlsheet.stream;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -46,6 +49,7 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
  * http://svn.apache.org/repos/asf/poi/trunk/src/examples/src/org/apache/poi/xssf/eventusermodel/XLSX2CSV.java
  */
 public class XlsxSheetIterator extends AbstractXlsSheetIterator {
+    private static final MathContext CTX_NN_15_EVEN = new MathContext(15, RoundingMode.HALF_EVEN);
 
     OPCPackage                 xlsxPackage;
     XMLEventReader             reader;
@@ -288,13 +292,15 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
                         break;
                     case NUMBER:
                         String n = value.toString();
+                        final BigDecimal rawBigDecimal = new BigDecimal(n, CTX_NN_15_EVEN);
+                        thisCellValue.doubleValue = rawBigDecimal.doubleValue();
+                        
                         if (this.formatString != null) {
-                            thisCellValue.stringValue = formatter.formatRawCellContents(Double.parseDouble(n), this.formatIndex,
+                            thisCellValue.stringValue = formatter.formatRawCellContents(thisCellValue.doubleValue, this.formatIndex,
                                     this.formatString);
                         } else {
                             thisCellValue.stringValue = n;
                         }
-                        thisCellValue.doubleValue = Double.parseDouble(n);
                         thisCellValue.dateValue = convertDateValue(thisCellValue.doubleValue, this.formatIndex,
                                 this.formatString);
                         break;

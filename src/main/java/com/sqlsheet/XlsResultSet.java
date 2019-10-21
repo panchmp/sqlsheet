@@ -18,6 +18,8 @@ package com.sqlsheet;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
@@ -53,6 +55,7 @@ import org.apache.poi.ss.usermodel.Workbook;
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsResultSet implements ResultSet {
+    private static final MathContext CTX_NN_15_EVEN = new MathContext(15, RoundingMode.HALF_EVEN);
 
     private static final double  BAD_DOUBLE          = 0;
     protected Statement          statement;
@@ -60,11 +63,12 @@ public class XlsResultSet implements ResultSet {
     private Sheet                sheet;
     private XlsResultSetMetaData metadata;
     private int                  firstSheetRowOffset = 0;
+    private int                  firstSheetColOffset = 0;
     private int                  cursorSheetRow;
     private CellStyle            dateStyle           = null;
     private DataFormatter        formatter;
 
-    public XlsResultSet(Workbook wb, Sheet s, int firstSheetRowOffset) throws SQLException {
+    public XlsResultSet(Workbook wb, Sheet s, int firstSheetRowOffset, int firstSheetColOffset) throws SQLException {
         if (s == null) {
             throw new IllegalArgumentException("null sheet");
         }
@@ -75,8 +79,10 @@ public class XlsResultSet implements ResultSet {
         workbook = wb;
         sheet = s;
         this.firstSheetRowOffset = firstSheetRowOffset;
+        this.firstSheetColOffset = firstSheetColOffset;
+        
         cursorSheetRow = this.firstSheetRowOffset - 1;
-        metadata = new XlsResultSetMetaData(s, this, firstSheetRowOffset);
+        metadata = new XlsResultSetMetaData(s, this, firstSheetRowOffset, firstSheetColOffset);
         // set the default date cell format
         dateStyle = workbook.createCellStyle();
         dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
@@ -151,9 +157,12 @@ public class XlsResultSet implements ResultSet {
         Cell cell = getCell(jdbcColumn);
         return (long) (cell == null ? 0 : cell.getNumericCellValue());
     }
+    
+    
 
     public Object getObject(String jdbcColumn) throws SQLException {
-        return getObject(jdbcColumn);
+        Cell cell = getCell(jdbcColumn);
+        return cell!=null ? getObject(cell.getColumnIndex()) : null;
     }
 
     public Object getObject(int jdbcColumn) throws SQLException {
@@ -165,7 +174,7 @@ public class XlsResultSet implements ResultSet {
             }
             switch (cell.getCellType()) {
 
-                case Cell.CELL_TYPE_BOOLEAN:
+                case BOOLEAN:
                     if (columnType == Types.VARCHAR) {
                         return cell.getBooleanCellValue();
                     } else {
@@ -173,7 +182,7 @@ public class XlsResultSet implements ResultSet {
                                 "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a boolean and cannot be cast to ("
                                         + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
                     }
-                case Cell.CELL_TYPE_STRING:
+                case STRING:
                     if (columnType == Types.VARCHAR) {
                         return cell.getStringCellValue();
                     } else {
@@ -181,22 +190,13 @@ public class XlsResultSet implements ResultSet {
                                 "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a string cell and cannot be cast to ("
                                         + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
                     }
-                case Cell.CELL_TYPE_NUMERIC:
-                    if (columnType == Types.VARCHAR) {
-                        return String.valueOf(cell.getNumericCellValue());
-                    } else if (columnType == Types.DOUBLE) {
-                        return cell.getNumericCellValue();
-                    } else if (columnType == Types.DATE) {
-                        if (DateUtil.isCellDateFormatted(cell)) {
-                            java.util.Date value = cell.getDateCellValue();
-                            return new java.sql.Date(value.getTime());
-                        }
-                    } else {
-                        throw new RuntimeException(
-                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a numeric cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
-                    }
-
+                case NUMERIC:
+                  if (DateUtil.isCellDateFormatted(cell)) {
+                    java.util.Date value = cell.getDateCellValue();
+                    return new java.sql.Date(value.getTime());
+                  } else {
+                    return new BigDecimal(cell.getNumericCellValue(), CTX_NN_15_EVEN).doubleValue();
+                  }
                 default:
                     return null;
             }
@@ -538,17 +538,17 @@ public class XlsResultSet implements ResultSet {
     }
 
     /**
-     * Protected becasue used also in the resultset metadata to scan the column type
+     * Protected because used also in the resultset metadata to scan the column type
      * 
      * @param jdbcColumn
      * @return the Cell
      */
     protected Cell getCell(int jdbcColumn) {
-        return sheet.getRow(cursorSheetRow).getCell((short) (jdbcColumn - 1));
+        return sheet.getRow(cursorSheetRow).getCell((short) (jdbcColumn + firstSheetColOffset - 1));
     }
 
     private Cell getCell(String named) {
-        return sheet.getRow(cursorSheetRow).getCell(getSheetColumnNamed(named));
+        return sheet.getRow(cursorSheetRow).getCell(getSheetColumnNamed(named) + firstSheetColOffset);
     }
 
     private short getSheetColumnNamed(String name) {

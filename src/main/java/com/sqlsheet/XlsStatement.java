@@ -42,6 +42,8 @@ import com.sqlsheet.parser.SqlSheetParser;
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsStatement implements Statement {
+    public static final int DEFAULT_HEADLINE = 1;
+    public static final int DEFAULT_FIRST_COL = 0;
 
     private XlsConnection             connection;
     private Map<String, XlsResultSet> sheet2rs = new HashMap<String, XlsResultSet>();
@@ -169,12 +171,16 @@ public class XlsStatement implements Statement {
         XlsResultSet out = sheet2rs.get(tableName);
         if (out == null) {
             Sheet sheet = getSheetNamed(connection.getWorkBook(), tableName);
-            out = new XlsResultSet(connection.getWorkBook(), sheet, connection.getInt(XlsDriver.HEADLINE, 1));
+            out = new XlsResultSet(connection.getWorkBook(), sheet
+                    , connection.getInt(XlsDriver.HEADLINE, DEFAULT_HEADLINE)
+                    , connection.getInt(XlsDriver.FIRST_COL, DEFAULT_FIRST_COL)
+            );
             out.statement = this;
             sheet2rs.put(tableName, out);
         }
         return out;
     }
+  
 
     public void setEscapeProcessing(boolean p0) throws SQLException {
         nyi();

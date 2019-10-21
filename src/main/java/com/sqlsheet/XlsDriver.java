@@ -50,6 +50,7 @@ public class XlsDriver implements java.sql.Driver {
     static final String         READ_STREAMING  = "readStreaming";
     static final String         WRITE_STREAMING = "writeStreaming";
     static final String         HEADLINE        = "headLine";
+    static final String         FIRST_COL       = "firstColumn";
     private static final String URL_SCHEME      = "jdbc:xls:";
     private static final Logger logger          = Logger.getLogger(XlsDriver.class.getName());
 

@@ -37,9 +37,11 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
-import org.apache.poi.POIXMLDocument;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * SqlSheet implementation of java.sql.ResultSet which uses steaming over XLS
@@ -84,12 +86,12 @@ public class XlsStreamResultSet implements ResultSet {
     XlsType getXlsType(URL inputXls) throws IOException {
         InputStream input = inputXls.openStream();
         try {
-            if (POIFSFileSystem.hasPOIFSHeader(inputXls.openStream())) {
-                return XlsType.XLS;
-            }
-            if (POIXMLDocument.hasOOXMLHeader(input)) {
-                return XlsType.XLSX;
-            }
+          Workbook wb = WorkbookFactory.create(input);
+          if (wb instanceof HSSFWorkbook) {
+              return XlsType.XLS;
+          } else if (wb instanceof XSSFWorkbook) {
+              return XlsType.XLSX;
+          }
         } finally {
             if (input != null) {
                 input.close();
