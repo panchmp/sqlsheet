@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.sqlsheet</groupId>
     <artifactId>sqlsheet</artifactId>
-    <version>7.1</version>
+    <version>7.2-SNAPSHOT</version>
     <name>sqlsheet</name>
 
     <description>Jdbc API for xls/xlsx files using POI</description>
@@ -211,7 +211,7 @@
         <url>https://github.com/panchmp/sqlsheet</url>
         <connection>scm:git:git://github.com/panchmp/sqlsheet.git</connection>
         <developerConnection>scm:git:git@github.com:panchmp/sqlsheet.git</developerConnection>
-        <tag>sqlsheet-7.1</tag>
+        <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <url>https://github.com/panchmp/sqlsheet/issues</url>
