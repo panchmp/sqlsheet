@@ -1,3 +1,6 @@
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/panchmp)
+
+
 Simple, POI based JDBC driver for XLS/XLSX files. Currently supports basic SELECT ( 'select `*`' only, w/o where clause), CREATE,  INSERT operations. The driver is pure Java - no native Windows components are required. From version 6.1 streaming implemented to process large files.
 
 Fork of http://www.pcal.net/downloads/sqlsheet/
@@ -107,3 +110,5 @@ writeConnection.close();
   
 </etl>
 ```
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/panchmp)
+
