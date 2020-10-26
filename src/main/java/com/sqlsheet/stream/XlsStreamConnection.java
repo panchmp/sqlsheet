@@ -127,7 +127,7 @@ public class XlsStreamConnection implements Connection {
     }
 
     public DatabaseMetaData getMetaData() throws SQLException {
-        return new XlsDatabaseMetaData();
+        return new XlsStreamDatabaseMetaData(xlsFile);
     }
 
     public CallableStatement prepareCall(String sql) throws SQLException {
