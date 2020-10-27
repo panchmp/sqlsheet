@@ -40,13 +40,7 @@ import java.sql.Types;
 import java.util.Calendar;
 import java.util.Map;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 
 /**
  * SqlSheet implementation of java.sql.ResultSet.
@@ -67,6 +61,8 @@ public class XlsResultSet implements ResultSet {
     private int                  cursorSheetRow;
     private CellStyle            dateStyle           = null;
     private DataFormatter        formatter;
+    private boolean              isClosed;
+    private boolean              wasNull;
 
     public XlsResultSet(Workbook wb, Sheet s, int firstSheetRowOffset, int firstSheetColOffset) throws SQLException {
         if (s == null) {
@@ -94,80 +90,117 @@ public class XlsResultSet implements ResultSet {
         return out;
     }
 
+    @Override
     public ResultSetMetaData getMetaData() throws SQLException {
         return metadata;
     }
 
-    public boolean getBoolean(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return cell != null && cell.getBooleanCellValue();
+    @Override
+    public boolean getBoolean(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return false;
+        } else {
+          return cell.getBooleanCellValue();
+        } 
     }
 
-    public boolean getBoolean(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return cell != null && cell.getBooleanCellValue();
+    @Override
+    public boolean getBoolean(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getBoolean(columnIndex);
     }
 
-    public double getDouble(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return cell == null ? 0 : cell.getNumericCellValue();
+    @Override
+    public double getDouble(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return 0d;
+        } else {
+          return cell.getNumericCellValue();
+        }
     }
 
-    public double getDouble(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return cell == null ? 0 : cell.getNumericCellValue();
+    @Override
+    public double getDouble(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getDouble(columnIndex);
     }
 
-    public byte getByte(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (byte) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public byte getByte(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return (byte) 0;
+        } else {
+          return Double.valueOf(cell.getNumericCellValue()).byteValue();
+        }
     }
 
-    public byte getByte(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (byte) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public byte getByte(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getByte(columnIndex);
     }
 
-    public float getFloat(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (float) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public float getFloat(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return 0f;
+        } else {
+          return Double.valueOf(cell.getNumericCellValue()).floatValue();
+        }
     }
 
-    public float getFloat(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (float) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public float getFloat(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getFloat(columnIndex);
     }
 
-    public int getInt(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (int) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public int getInt(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return 0;
+        } else {
+          return Double.valueOf(cell.getNumericCellValue()).intValue();
+        }
     }
 
-    public int getInt(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (int) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public int getInt(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getInt(columnIndex);
     }
 
-    public long getLong(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (long) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public long getLong(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return 0;
+        } else {
+          return Double.valueOf(cell.getNumericCellValue()).longValue();
+        }
     }
 
-    public long getLong(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (long) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public long getLong(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getLong(columnIndex);
     }
     
-    
-
-    public Object getObject(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return cell!=null ? getObject(cell.getColumnIndex()) : null;
-    }
-
-    public Object getObject(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        int columnType = metadata.getColumnType(jdbcColumn);
+    @Override
+    public Object getObject(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
+        int columnType = metadata.getColumnType(columnIndex);
         try {
             if (cell == null) {
                 return null;
@@ -179,7 +212,7 @@ public class XlsResultSet implements ResultSet {
                         return cell.getBooleanCellValue();
                     } else {
                         throw new RuntimeException(
-                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a boolean and cannot be cast to ("
+                                "The cell (" + getCurrentRow() + "," + columnIndex + ") is a boolean and cannot be cast to ("
                                         + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
                     }
                 case STRING:
@@ -187,7 +220,7 @@ public class XlsResultSet implements ResultSet {
                         return cell.getStringCellValue();
                     } else {
                         throw new RuntimeException(
-                                "The cell (" + getCurrentRow() + "," + jdbcColumn + ") is a string cell and cannot be cast to ("
+                                "The cell (" + getCurrentRow() + "," + columnIndex + ") is a string cell and cannot be cast to ("
                                         + XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
                     }
                 case NUMERIC:
@@ -204,13 +237,21 @@ public class XlsResultSet implements ResultSet {
             throw wrapped(e);
         }
     }
-
-    public <T> T getObject(int jdbcColumn, Class<T> type) throws SQLException {
-        return (T) getObject(jdbcColumn);
+    
+    @Override
+    public Object getObject(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getObject(columnIndex);
     }
 
-    public <T> T getObject(String columnName, Class<T> type) throws SQLException {
-        return (T) getObject(columnName);
+    @Override
+    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+        return (T) getObject(columnIndex);
+    }
+
+    @Override
+    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
+        return (T) getObject(columnLabel);
     }
 
     // Object getNextRowObject(int jdbcColumn) throws SQLException {
@@ -221,44 +262,62 @@ public class XlsResultSet implements ResultSet {
     // return getObject(jdbcColumn);
     // }
 
-    public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
-        return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
+    @Override
+    public Timestamp getTimestamp(int columnIndex) throws SQLException {
+        return new Timestamp(((java.util.Date) getObject(columnIndex)).getTime());
     }
 
-    public Timestamp getTimestamp(String jdbcColumn) throws SQLException {
-        return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
+    @Override
+    public Timestamp getTimestamp(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getTimestamp(columnIndex);
     }
 
-    public Timestamp getTimestamp(int jdbcColumn, Calendar cal) throws SQLException {
+    @Override
+    public Timestamp getTimestamp(int columnIndex, Calendar cal) throws SQLException {
         throw nyi();
     }
 
+    @Override
     public Timestamp getTimestamp(String jdbcColumn, Calendar cal) throws SQLException {
         throw nyi();
     }
 
-    public short getShort(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (short) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public short getShort(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return 0;
+        } else {
+          return Double.valueOf(cell.getNumericCellValue()).shortValue();
+        }
     }
 
-    public short getShort(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return (short) (cell == null ? 0 : cell.getNumericCellValue());
+    @Override
+    public short getShort(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getShort(columnIndex);
     }
 
-    public String getString(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return cell == null ? null : formatter.formatCellValue(cell);
+    @Override
+    public String getString(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return null;
+        } else {
+          return cell.getStringCellValue();
+        }
     }
 
-    public String getString(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return cell == null ? null : formatter.formatCellValue(cell);
+    public String getString(String columnLabel) throws SQLException {
+         int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getString(columnIndex);
     }
 
-    public void updateBoolean(int jdbcColumn, boolean x) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    public void updateBoolean(int columnIndex, boolean x) throws SQLException {
+        Cell cell = getCell(columnIndex);
         if (cell != null) {
             cell.setCellValue(x);
         }
@@ -271,8 +330,8 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public void updateByte(int jdbcColumn, byte x) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    public void updateByte(int columnIndex, byte x) throws SQLException {
+        Cell cell = getCell(columnIndex);
         if (cell != null) {
             cell.setCellValue(x);
         }
@@ -285,8 +344,8 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public void updateDouble(int jdbcColumn, double x) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    public void updateDouble(int columnIndex, double x) throws SQLException {
+        Cell cell = getCell(columnIndex);
         if (cell != null) {
             cell.setCellValue(x);
         }
@@ -299,8 +358,8 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public void updateFloat(int jdbcColumn, float x) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    public void updateFloat(int columnIndex, float x) throws SQLException {
+        Cell cell = getCell(columnIndex);
         if (cell != null) {
             cell.setCellValue(x);
         }
@@ -313,8 +372,8 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public void updateInt(int jdbcColumn, int x) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    public void updateInt(int columnIndex, int x) throws SQLException {
+        Cell cell = getCell(columnIndex);
         if (cell != null) {
             cell.setCellValue(x);
         }
@@ -327,8 +386,8 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public void updateLong(int jdbcColumn, long x) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    public void updateLong(int columnIndex, long x) throws SQLException {
+        Cell cell = getCell(columnIndex);
         if (cell != null) {
             cell.setCellValue(x);
         }
@@ -341,8 +400,8 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public void updateNull(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    public void updateNull(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
         if (cell != null) {
             cell.setCellValue((String) null); // REVIEW
         }
@@ -355,16 +414,16 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public void updateObject(int jdbcColumn, Object x) throws SQLException {
-        updateObject(findOrCreateCell(jdbcColumn), x);
+    public void updateObject(int columnIndex, Object x) throws SQLException {
+        updateObject(findOrCreateCell(columnIndex), x);
     }
 
     public void updateObject(String jdbcColumn, Object x) throws SQLException {
         updateObject(findOrCreateCell(jdbcColumn), x);
     }
 
-    public void updateShort(int jdbcColumn, short x) throws SQLException {
-        Cell cell = findOrCreateCell(jdbcColumn);
+    public void updateShort(int columnIndex, short x) throws SQLException {
+        Cell cell = findOrCreateCell(columnIndex);
         if (cell != null) {
             cell.setCellValue(x);
         }
@@ -377,8 +436,8 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public void updateString(int jdbcColumn, String x) throws SQLException {
-        Cell cell = findOrCreateCell(jdbcColumn);
+    public void updateString(int columnIndex, String x) throws SQLException {
+        Cell cell = findOrCreateCell(columnIndex);
         if (cell != null) {
             cell.setCellValue(x);
         }
@@ -540,15 +599,24 @@ public class XlsResultSet implements ResultSet {
     /**
      * Protected because used also in the resultset metadata to scan the column type
      * 
+   * @param columnIndex
      * @param jdbcColumn
      * @return the Cell
      */
-    protected Cell getCell(int jdbcColumn) {
-        return sheet.getRow(cursorSheetRow).getCell((short) (jdbcColumn + firstSheetColOffset - 1));
+    protected Cell getCell(int columnIndex) {
+      Row row=sheet.getRow(cursorSheetRow);
+      
+        return row!=null 
+                ? row.getCell((short) (columnIndex + firstSheetColOffset - 1))
+                : null;
     }
 
-    private Cell getCell(String named) {
-        return sheet.getRow(cursorSheetRow).getCell(getSheetColumnNamed(named) + firstSheetColOffset);
+    private Cell getCell(String columnLabel) {
+      Row row=sheet.getRow(cursorSheetRow);
+      
+        return row!=null 
+                ? row.getCell(getSheetColumnNamed(columnLabel) + firstSheetColOffset)
+                : null;
     }
 
     private short getSheetColumnNamed(String name) {
@@ -574,15 +642,30 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
+    @Override
     public void close() throws SQLException {
+      isClosed=true;
+      
+      //help the GC by nulling all objects
+      workbook=null;
+      sheet=null;
+      metadata=null;
+      dateStyle           = null;
+      formatter = null;
+      
+      if (statement!=null & !statement.isClosed() && statement.isCloseOnCompletion())
+        statement.close();
+      
+      statement=null;
     }
 
     public void deleteRow() throws SQLException {
         throw nyi();
     }
 
-    public int findColumn(String jdbcColumn) throws SQLException {
-        throw nyi();
+    @Override
+    public int findColumn(String columnLabel) throws SQLException {
+        return getSheetColumnNamed(columnLabel);
     }
 
     public Array getArray(int i) throws SQLException {
@@ -593,7 +676,8 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public InputStream getAsciiStream(int jdbcColumn) throws SQLException {
+    @Override
+    public InputStream getAsciiStream(int columnIndex) throws SQLException {
         throw nyi();
     }
 
@@ -601,18 +685,21 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public BigDecimal getBigDecimal(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    @Override
+    public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
         return cell == null ? null : BigDecimal.valueOf(cell.getNumericCellValue());
     }
 
+    @Override
     public BigDecimal getBigDecimal(String jdbcColumn) throws SQLException {
         Cell cell = getCell(jdbcColumn);
         return cell == null ? null : BigDecimal.valueOf(cell.getNumericCellValue());
     }
 
-    public BigDecimal getBigDecimal(int jdbcColumn, int scale) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    @Override
+    public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
+        Cell cell = getCell(columnIndex);
         if (cell == null) {
             return null;
         } else {
@@ -631,7 +718,8 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public InputStream getBinaryStream(int jdbcColumn) throws SQLException {
+    @Override
+    public InputStream getBinaryStream(int columnIndex) throws SQLException {
         throw nyi();
     }
 
@@ -639,7 +727,7 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public Blob getBlob(int i) throws SQLException {
+    public Blob getBlob(int columnIndex) throws SQLException {
         throw nyi();
     }
 
@@ -647,7 +735,8 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public byte[] getBytes(int jdbcColumn) throws SQLException {
+    @Override
+    public byte[] getBytes(int columnIndex) throws SQLException {
         throw nyi();
     }
 
@@ -655,7 +744,8 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public Reader getCharacterStream(int jdbcColumn) throws SQLException {
+    @Override
+    public Reader getCharacterStream(int columnIndex) throws SQLException {
         throw nyi();
     }
 
@@ -679,8 +769,9 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public Date getDate(int jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    @Override
+    public Date getDate(int columnIndex) throws SQLException {
+        Cell cell = getCell(columnIndex);
         return cell == null ? null : new Date(cell.getDateCellValue().getTime());
     }
 
@@ -689,8 +780,9 @@ public class XlsResultSet implements ResultSet {
         return cell == null ? null : new Date(cell.getDateCellValue().getTime());
     }
 
-    public Date getDate(int jdbcColumn, Calendar cal) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
+    @Override
+    public Date getDate(int columnIndex, Calendar cal) throws SQLException {
+        Cell cell = getCell(columnIndex);
         if (cell == null) {
             return null;
         } else {
@@ -719,7 +811,8 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public Object getObject(int i, Map<String, Class<?>> map) throws SQLException {
+    @Override
+    public Object getObject(int columnIndex, Map<String, Class<?>> map) throws SQLException {
         throw nyi();
     }
 
@@ -727,7 +820,7 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public Ref getRef(int i) throws SQLException {
+    public Ref getRef(int columnIndex) throws SQLException {
         throw nyi();
     }
 
@@ -739,7 +832,7 @@ public class XlsResultSet implements ResultSet {
         return statement;
     }
 
-    public Time getTime(int jdbcColumn) throws SQLException {
+    public Time getTime(int columnIndex) throws SQLException {
         throw nyi();
     }
 
@@ -747,7 +840,7 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public Time getTime(int jdbcColumn, Calendar cal) throws SQLException {
+    public Time getTime(int columnIndex, Calendar cal) throws SQLException {
         throw nyi();
     }
 
@@ -755,7 +848,7 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public URL getURL(int jdbcColumn) throws SQLException {
+    public URL getURL(int columnIndex) throws SQLException {
         throw nyi();
     }
 
@@ -763,7 +856,7 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public InputStream getUnicodeStream(int jdbcColumn) throws SQLException {
+    public InputStream getUnicodeStream(int columnIndex) throws SQLException {
         throw nyi();
     }
 
@@ -799,7 +892,7 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
-    public void updateArray(int jdbcColumn, Array x) throws SQLException {
+    public void updateArray(int columnIndex, Array x) throws SQLException {
         throw nyi();
     }
 
@@ -827,8 +920,9 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
+    @Override
     public boolean isClosed() throws SQLException {
-        throw nyi();
+        return isClosed;
     }
 
     public void updateNString(int columnIndex, String nString) throws SQLException {
@@ -1099,8 +1193,9 @@ public class XlsResultSet implements ResultSet {
         throw nyi();
     }
 
+    @Override
     public boolean wasNull() throws SQLException {
-        throw nyi();
+        return wasNull;
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
