@@ -688,34 +688,34 @@ public class XlsResultSet implements ResultSet {
     @Override
     public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
-        return cell == null ? null : BigDecimal.valueOf(cell.getNumericCellValue());
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return null;
+        } else {
+          return BigDecimal.valueOf(cell.getNumericCellValue());
+        }
     }
 
     @Override
-    public BigDecimal getBigDecimal(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return cell == null ? null : BigDecimal.valueOf(cell.getNumericCellValue());
+    public BigDecimal getBigDecimal(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getBigDecimal(columnIndex);
     }
 
     @Override
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
-        Cell cell = getCell(columnIndex);
-        if (cell == null) {
-            return null;
-        } else {
-            BigDecimal bigDecimal = BigDecimal.valueOf(cell.getNumericCellValue());
-            return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
-        }
+        BigDecimal d = getBigDecimal(columnIndex);
+        return d!=null
+                ? d.setScale(scale)
+                : null;
     }
 
-    public BigDecimal getBigDecimal(String jdbcColumn, int scale) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        if (cell == null) {
-            return null;
-        } else {
-            BigDecimal bigDecimal = BigDecimal.valueOf(cell.getNumericCellValue());
-            return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
-        }
+    @Override
+    public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
+        BigDecimal d = getBigDecimal(columnLabel);
+        return d!=null
+                ? d.setScale(scale)
+                : null;
     }
 
     @Override
@@ -772,22 +772,27 @@ public class XlsResultSet implements ResultSet {
     @Override
     public Date getDate(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
-        return cell == null ? null : new Date(cell.getDateCellValue().getTime());
+        if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+          wasNull=true;
+          return null;
+        } else {
+          return new Date(cell.getDateCellValue().getTime());
+        }
     }
 
-    public Date getDate(String jdbcColumn) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        return cell == null ? null : new Date(cell.getDateCellValue().getTime());
+    public Date getDate(String columnLabel) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getDate(columnIndex);
     }
 
     @Override
     public Date getDate(int columnIndex, Calendar cal) throws SQLException {
-        Cell cell = getCell(columnIndex);
-        if (cell == null) {
+      Date date = getDate(columnIndex);
+        if (date == null) {
             return null;
         } else {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(cell.getDateCellValue());
+            calendar.setTime(date);
             calendar.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY));
             calendar.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
             calendar.set(Calendar.SECOND, cal.get(Calendar.SECOND));
@@ -796,19 +801,9 @@ public class XlsResultSet implements ResultSet {
         }
     }
 
-    public Date getDate(String jdbcColumn, Calendar cal) throws SQLException {
-        Cell cell = getCell(jdbcColumn);
-        if (cell == null) {
-            return null;
-        } else {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(cell.getDateCellValue());
-            calendar.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY));
-            calendar.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
-            calendar.set(Calendar.SECOND, cal.get(Calendar.SECOND));
-            calendar.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
-            return new Date(calendar.getTime().getTime());
-        }
+    public Date getDate(String columnLabel, Calendar cal) throws SQLException {
+        int columnIndex = getSheetColumnNamed(columnLabel) + firstSheetColOffset;
+        return getDate(columnIndex, cal);
     }
 
     @Override
