@@ -34,6 +34,7 @@ import com.sqlsheet.parser.InsertIntoStatement;
 import com.sqlsheet.parser.ParsedStatement;
 import com.sqlsheet.parser.SelectStarStatement;
 import com.sqlsheet.parser.SqlSheetParser;
+import java.sql.*;
 
 /**
  * SqlSheet implementation of java.sql.Statement.
@@ -242,22 +243,24 @@ public class XlsStatement implements Statement {
         return false;
     }
 
+    @Override
     public int getFetchDirection() throws SQLException {
-        nyi();
-        return -1;
+        throw new SQLFeatureNotSupportedException("Fetch Size is not supported.");
     }
 
+    @Override
     public void setFetchDirection(int p0) throws SQLException {
-        nyi();
+        throw new SQLFeatureNotSupportedException("Fetch Size is not supported.");
     }
 
+    @Override
     public int getFetchSize() throws SQLException {
-        nyi();
-        return -1;
+        throw new SQLFeatureNotSupportedException("Fetch Size is not supported.");
     }
 
+    @Override
     public void setFetchSize(int p0) throws SQLException {
-        nyi();
+        throw new SQLFeatureNotSupportedException("Fetch Size is not supported.");
     }
 
     public int getResultSetConcurrency() throws SQLException {

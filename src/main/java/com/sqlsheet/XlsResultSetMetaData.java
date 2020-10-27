@@ -105,7 +105,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
                     CellType excelCellType = cell.getCellType();
                     switch (excelCellType) {
                         case BOOLEAN:
-                            typeCode = Types.VARCHAR;
+                            typeCode = Types.BOOLEAN;
                             break;
                         case STRING:
                             typeCode = Types.VARCHAR;
