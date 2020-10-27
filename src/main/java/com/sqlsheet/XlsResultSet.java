@@ -623,8 +623,7 @@ public class XlsResultSet implements ResultSet {
   /**
    * Protected because used also in the resultset metadata to scan the column type
    *
-   * @param columnIndex
-   * @param jdbcColumn
+   * @param columnIndex The index of the column, starting at 1.
    * @return the Cell
    */
   protected Cell getCell(int columnIndex) {
