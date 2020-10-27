@@ -103,6 +103,69 @@ public class Issue13_NPEOnEmptyCells {
     "jdbc:xls:" + file.toURI().toASCIIString() + "?headLine=" + DEFAULT_HEADLINE + "&firstColumn=" + DEFAULT_FIRST_COL);
     metaData = conn.getMetaData();
   }
+  
+  @Test
+  public void testColumnLabel() throws SQLException, IOException, ClassNotFoundException {
+    Statement st = null;
+    ResultSet rs = null;
+    try {
+      st = conn.createStatement();
+      st.closeOnCompletion();
+
+      rs = st.executeQuery("SELECT * from TestSheet1");
+      int r = 0;
+      while (rs.next()) {
+        ArrayList<Object> values=new ArrayList<>();
+         
+        for (int c = 0; c < 4; c++) {
+          String columnLabel=columnNames[c] + (c + 1);
+          
+          Object valueByColumnIndex = null;
+          Object valueByColumnLabel = null;
+          if (columnNames[c].equals("String")) {
+            valueByColumnIndex = rs.getString(c + 1);
+            valueByColumnLabel = rs.getString(columnLabel);
+            
+          } else if (columnNames[c].equals("Date")){
+            valueByColumnIndex = rs.getDate(c + 1);
+            valueByColumnLabel = rs.getDate(columnLabel);
+            
+          } else if (columnNames[c].equals("Boolean")){
+            valueByColumnIndex = rs.getBoolean(c + 1);
+            valueByColumnLabel = rs.getBoolean(columnLabel);
+            
+          } else if (columnNames[c].equals("Double")){
+            valueByColumnIndex = rs.getDouble(c + 1);
+            valueByColumnLabel = rs.getDouble(columnLabel);
+            
+          } else {
+            valueByColumnIndex = rs.getObject(c + 1);
+            valueByColumnLabel = rs.getObject(columnLabel);
+          }
+          
+          if (!rs.wasNull())
+            Assert.assertEquals("Column " + (c+1) + " "  + columnNames[c+1] + " fails.", valueByColumnIndex, valueByColumnLabel);
+          
+        }
+        r++;
+      }
+    } finally {
+      try {
+        if (rs != null && !rs.isClosed())
+          rs.close();
+      } catch (Exception ex) {
+        // fail silently
+      }
+
+      try {
+        if (st != null && !st.isClosed())
+          st.close();
+      } catch (Exception ex) {
+        // fail silently
+      }
+      
+    }
+  }
 
   @BeforeClass
   public static void loadDriverClass() throws ClassNotFoundException {

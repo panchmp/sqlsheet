@@ -62,7 +62,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
      * A map to get consistently the same data type
      */
     Map<Integer, Integer>       columnTypeMap      = new HashMap<Integer, Integer>();
-    private List<String>        columnNames;
+    protected List<String>        columnNames;
     private XlsResultSet        resultset;
 
     public XlsResultSetMetaData(Sheet sheet, XlsResultSet resultset, int firstSheetRowOffset, int firstSheetColOffset) throws SQLException {
