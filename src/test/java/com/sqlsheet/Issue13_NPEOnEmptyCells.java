@@ -15,11 +15,15 @@
  */
 package com.sqlsheet;
 
+import de.vandermeer.asciitable.AT_Context;
+import de.vandermeer.asciitable.AsciiTable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.DateFormatConverter;
@@ -39,9 +43,12 @@ public class Issue13_NPEOnEmptyCells {
 
   private final String[] columnNames = {"String", "Date", "Boolean", "Double", "String", "Date", "Boolean", "Double"};
   private final Object[][] cellValues = {
-    {"Row1", new java.util.Date(), Boolean.TRUE, 1, "Test", new java.util.Date(), Boolean.FALSE, Math.PI},
-    {"Row2", new java.util.Date(), Boolean.FALSE, 2, "Test", new java.util.Date(), Boolean.TRUE, 2 * Math.PI},
-    {"Row3", new java.util.Date(), Boolean.TRUE, 3, "Test", new java.util.Date(), Boolean.FALSE, 3 * Math.PI}
+    {"Row1", new java.util.Date(), Boolean.TRUE, 1d, "Test", new java.util.Date(), Boolean.FALSE, Math.PI},
+    {"Row2", new java.util.Date(), Boolean.FALSE, 2d, "Test", new java.util.Date(), Boolean.TRUE, 2 * Math.PI},
+    {"Row3", new java.util.Date(), Boolean.TRUE, 3d, "Test", new java.util.Date(), Boolean.FALSE, 3 * Math.PI},
+    {"Row4", new java.util.Date(), Boolean.TRUE, 1d, "Test", new java.util.Date(), Boolean.FALSE, Math.PI},
+    {"Row5", new java.util.Date(), Boolean.FALSE, 2d, "Test", new java.util.Date(), Boolean.TRUE, 2 * Math.PI},
+    {"Row6", new java.util.Date(), Boolean.TRUE, 3d, "Test", new java.util.Date(), Boolean.FALSE, 3 * Math.PI}
   };
 
   public Issue13_NPEOnEmptyCells() throws SQLException, IOException, ClassNotFoundException {
@@ -67,12 +74,12 @@ public class Issue13_NPEOnEmptyCells {
       row = sheet.createRow(r);
 
       // fill only even rows with cells
-      if (r % 2 == 0)
+      if (r % 4 == 0)
         for (int c = DEFAULT_FIRST_COL; c < columnNames.length + DEFAULT_FIRST_COL; c++) {
           Cell cell = row.createCell(c);
 
           Object value = cellValues[r - DEFAULT_HEADLINE][c - DEFAULT_FIRST_COL];
-          if (value instanceof java.util.Date) {
+          if (r % 2 == 0) if (value instanceof java.util.Date) {
             cell.setCellValue((java.util.Date) value);
             cell.setCellStyle(dateCellStyle);
           } else if (value instanceof Boolean)
@@ -106,15 +113,23 @@ public class Issue13_NPEOnEmptyCells {
   public void getData() throws SQLException {
     Statement st = null;
     ResultSet rs = null;
+    
+    AT_Context ctx = new AT_Context();
+    ctx.setWidth(120);
+
+    AsciiTable at = new AsciiTable(ctx);
+    at.addRule();
+    at.addRow(Arrays.asList(columnNames));
 
     try {
       st = conn.createStatement();
-
       st.closeOnCompletion();
 
       rs = st.executeQuery("SELECT * from TestSheet1");
       int r = 0;
       while (rs.next()) {
+        ArrayList<Object> values=new ArrayList<>();
+         
         for (int c = 0; c < columnNames.length; c++) {
           Object value = 0;
           if (columnNames[c].equals("String"))
@@ -125,12 +140,21 @@ public class Issue13_NPEOnEmptyCells {
             value = rs.getBoolean(c + 1);
           else if (columnNames[c].equals("Double"))
             value = rs.getDouble(c + 1);
+          else
+            value = rs.getObject(c+1);
+          
+          values.add(rs.wasNull() ? "" : value);
 
           if (r % 2 == 0)
             Assert.assertTrue("Column " + columnNames[c] + " in row " + r + " should be NULL.", rs.wasNull());
         }
+        at.addRule();
+        at.addRow(values);
         r++;
       }
+      at.addRule();
+      System.out.println(at.render());
+      
     } finally {
       try {
         if (rs != null && !rs.isClosed())
@@ -145,6 +169,7 @@ public class Issue13_NPEOnEmptyCells {
       } catch (Exception ex) {
         // fail silently
       }
+      
     }
   }
 }
