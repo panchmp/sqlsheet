@@ -102,6 +102,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return false;
         } else {
+          wasNull=false;
           return cell.getBooleanCellValue();
         } 
     }
@@ -119,6 +120,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return 0d;
         } else {
+          wasNull=false;
           return cell.getNumericCellValue();
         }
     }
@@ -136,6 +138,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return (byte) 0;
         } else {
+          wasNull=false;
           return Double.valueOf(cell.getNumericCellValue()).byteValue();
         }
     }
@@ -153,6 +156,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return 0f;
         } else {
+          wasNull=false;
           return Double.valueOf(cell.getNumericCellValue()).floatValue();
         }
     }
@@ -170,6 +174,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return 0;
         } else {
+          wasNull=false;
           return Double.valueOf(cell.getNumericCellValue()).intValue();
         }
     }
@@ -187,6 +192,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return 0;
         } else {
+          wasNull=false;
           return Double.valueOf(cell.getNumericCellValue()).longValue();
         }
     }
@@ -203,12 +209,14 @@ public class XlsResultSet implements ResultSet {
         int columnType = metadata.getColumnType(columnIndex);
         try {
             if (cell == null) {
+                wasNull=true;
                 return null;
             }
             switch (cell.getCellType()) {
 
                 case BOOLEAN:
                     if (columnType == Types.VARCHAR) {
+                        wasNull=false;
                         return cell.getBooleanCellValue();
                     } else {
                         throw new RuntimeException(
@@ -217,6 +225,7 @@ public class XlsResultSet implements ResultSet {
                     }
                 case STRING:
                     if (columnType == Types.VARCHAR) {
+                        wasNull=false;
                         return cell.getStringCellValue();
                     } else {
                         throw new RuntimeException(
@@ -226,11 +235,14 @@ public class XlsResultSet implements ResultSet {
                 case NUMERIC:
                   if (DateUtil.isCellDateFormatted(cell)) {
                     java.util.Date value = cell.getDateCellValue();
+                    wasNull=false;
                     return new java.sql.Date(value.getTime());
                   } else {
+                    wasNull=false;
                     return new BigDecimal(cell.getNumericCellValue(), CTX_NN_15_EVEN).doubleValue();
                   }
                 default:
+                    wasNull=true;
                     return null;
             }
         } catch (Exception e) {
@@ -264,7 +276,14 @@ public class XlsResultSet implements ResultSet {
 
     @Override
     public Timestamp getTimestamp(int columnIndex) throws SQLException {
-        return new Timestamp(((java.util.Date) getObject(columnIndex)).getTime());
+      java.util.Date date = (java.util.Date) getObject(columnIndex);
+      if (date==null) {
+        wasNull=true;
+        return null;
+      } else {
+        wasNull=true;
+        return new Timestamp(date.getTime());
+      }
     }
 
     @Override
@@ -290,6 +309,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return 0;
         } else {
+          wasNull=false;
           return Double.valueOf(cell.getNumericCellValue()).shortValue();
         }
     }
@@ -307,6 +327,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return null;
         } else {
+          wasNull=false;
           return cell.getStringCellValue();
         }
     }
@@ -692,6 +713,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return null;
         } else {
+          wasNull=false;
           return BigDecimal.valueOf(cell.getNumericCellValue());
         }
     }
@@ -776,6 +798,7 @@ public class XlsResultSet implements ResultSet {
           wasNull=true;
           return null;
         } else {
+          wasNull=false;
           return new Date(cell.getDateCellValue().getTime());
         }
     }
