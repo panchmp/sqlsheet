@@ -56,6 +56,7 @@ public class XlsResultSet implements ResultSet {
   private static final double BAD_DOUBLE = 0;
   protected Statement statement;
   private Workbook workbook;
+  private FormulaEvaluator evaluator;
   private Sheet sheet;
   private XlsResultSetMetaData metadata;
   private int firstSheetRowOffset = 0;
@@ -66,14 +67,16 @@ public class XlsResultSet implements ResultSet {
   private boolean isClosed;
   private boolean wasNull;
 
-  public XlsResultSet(Workbook wb, Sheet s, int firstSheetRowOffset, int firstSheetColOffset) throws SQLException {
-    if (s == null)
-      throw new IllegalArgumentException("null sheet");
-    if (wb == null)
-      throw new IllegalArgumentException("null workbook");
+  public XlsResultSet(Workbook wb, Sheet s, int firstSheetRowOffset, int firstSheetColOffset)
+      throws SQLException {
+    if (s == null) throw new IllegalArgumentException("null sheet");
+    if (wb == null) throw new IllegalArgumentException("null workbook");
     formatter = new DataFormatter();
     workbook = wb;
     sheet = s;
+
+    evaluator = wb.getCreationHelper().createFormulaEvaluator();
+
     this.firstSheetRowOffset = firstSheetRowOffset;
     this.firstSheetColOffset = firstSheetColOffset;
 
@@ -101,10 +104,39 @@ public class XlsResultSet implements ResultSet {
     if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
       wasNull = true;
       return false;
+    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+      switch (evaluator.evaluateFormulaCell(cell)) {
+        case BOOLEAN:
+          wasNull = false;
+          return cell.getBooleanCellValue();
+
+          // @todo: maybe try to parse the Double
+        case NUMERIC:
+          throw new SQLException(
+              "Found a formula returning a Double, when a Boolean was expected.");
+
+          // @todo: maybe try to parse the String
+        case STRING:
+          throw new SQLException("Found a formula returning a String, when a Double was expected.");
+
+        case BLANK:
+          wasNull = true;
+          return false;
+
+        case ERROR:
+          throw new SQLException(
+              "Found a formula returning an Error, when a Double was expected.\n("
+                  + cell.getErrorCellValue()
+                  + ")");
+      }
     } else {
       wasNull = false;
       return cell.getBooleanCellValue();
     }
+
+    // this should never happen
+    wasNull = true;
+    return false;
   }
 
   @Override
@@ -119,10 +151,39 @@ public class XlsResultSet implements ResultSet {
     if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
       wasNull = true;
       return 0d;
+    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+      switch (evaluator.evaluateFormulaCell(cell)) {
+          // @todo: maybe try to parse the Boolean
+        case BOOLEAN:
+          throw new SQLException(
+              "Found a formula returning a Boolean, when a Numeric was expected.");
+        case NUMERIC:
+          wasNull = false;
+          return cell.getNumericCellValue();
+
+          // @todo: maybe try to parse the String
+        case STRING:
+          throw new SQLException(
+              "Found a formula returning a String, when a Numeric was expected.");
+
+        case BLANK:
+          wasNull = true;
+          return 0d;
+
+        case ERROR:
+          throw new SQLException(
+              "Found a formula returning an Error, when a Double was expected.\n("
+                  + cell.getErrorCellValue()
+                  + ")");
+      }
     } else {
       wasNull = false;
       return cell.getNumericCellValue();
     }
+
+    // this should never happen
+    wasNull = true;
+    return 0d;
   }
 
   @Override
@@ -137,10 +198,41 @@ public class XlsResultSet implements ResultSet {
     if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
       wasNull = true;
       return (byte) 0;
+    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+      switch (evaluator.evaluateFormulaCell(cell)) {
+
+          // @todo: maybe try to parse the Boolean
+        case BOOLEAN:
+          throw new SQLException(
+              "Found a formula returning a Boolean, when a Numeric was expected.");
+
+        case NUMERIC:
+          wasNull = false;
+          return Double.valueOf(cell.getNumericCellValue()).byteValue();
+
+          // @todo: maybe try to parse the String
+        case STRING:
+          throw new SQLException(
+              "Found a formula returning a String, when a Numeric was expected.");
+
+        case BLANK:
+          wasNull = true;
+          return (byte) 0;
+
+        case ERROR:
+          throw new SQLException(
+              "Found a formula returning an Error, when a Numeric was expected.\n("
+                  + cell.getErrorCellValue()
+                  + ")");
+      }
     } else {
       wasNull = false;
       return Double.valueOf(cell.getNumericCellValue()).byteValue();
     }
+
+    // this should never happen
+    wasNull = true;
+    return (byte) 0;
   }
 
   @Override
@@ -155,10 +247,41 @@ public class XlsResultSet implements ResultSet {
     if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
       wasNull = true;
       return 0f;
+    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+      switch (evaluator.evaluateFormulaCell(cell)) {
+
+          // @todo: maybe try to parse the Boolean
+        case BOOLEAN:
+          throw new SQLException(
+              "Found a formula returning a Boolean, when a Numeric was expected.");
+
+        case NUMERIC:
+          wasNull = false;
+          return Double.valueOf(cell.getNumericCellValue()).floatValue();
+
+          // @todo: maybe try to parse the String
+        case STRING:
+          throw new SQLException(
+              "Found a formula returning a String, when a Numeric was expected.");
+
+        case BLANK:
+          wasNull = true;
+          return (float) 0;
+
+        case ERROR:
+          throw new SQLException(
+              "Found a formula returning an Error, when a Numeric was expected.\n("
+                  + cell.getErrorCellValue()
+                  + ")");
+      }
     } else {
       wasNull = false;
       return Double.valueOf(cell.getNumericCellValue()).floatValue();
     }
+
+    // this should never happen
+    wasNull = true;
+    return 0f;
   }
 
   @Override
@@ -173,10 +296,41 @@ public class XlsResultSet implements ResultSet {
     if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
       wasNull = true;
       return 0;
+    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+      switch (evaluator.evaluateFormulaCell(cell)) {
+
+          // @todo: maybe try to parse the Boolean
+        case BOOLEAN:
+          throw new SQLException(
+              "Found a formula returning a Boolean, when a Numeric was expected.");
+
+        case NUMERIC:
+          wasNull = false;
+          return Double.valueOf(cell.getNumericCellValue()).intValue();
+
+          // @todo: maybe try to parse the String
+        case STRING:
+          throw new SQLException(
+              "Found a formula returning a String, when a Numeric was expected.");
+
+        case BLANK:
+          wasNull = true;
+          return (int) 0;
+
+        case ERROR:
+          throw new SQLException(
+              "Found a formula returning an Error, when a Numeric was expected.\n("
+                  + cell.getErrorCellValue()
+                  + ")");
+      }
     } else {
       wasNull = false;
       return Double.valueOf(cell.getNumericCellValue()).intValue();
     }
+
+    // this should never happen
+    wasNull = true;
+    return 0;
   }
 
   @Override
@@ -191,10 +345,41 @@ public class XlsResultSet implements ResultSet {
     if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
       wasNull = true;
       return 0;
+    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+      switch (evaluator.evaluateFormulaCell(cell)) {
+
+          // @todo: maybe try to parse the Boolean
+        case BOOLEAN:
+          throw new SQLException(
+              "Found a formula returning a Boolean, when a Numeric was expected.");
+
+        case NUMERIC:
+          wasNull = false;
+          return Double.valueOf(cell.getNumericCellValue()).longValue();
+
+          // @todo: maybe try to parse the String
+        case STRING:
+          throw new SQLException(
+              "Found a formula returning a String, when a Numeric was expected.");
+
+        case BLANK:
+          wasNull = true;
+          return (long) 0;
+
+        case ERROR:
+          throw new SQLException(
+              "Found a formula returning an Error, when a Numeric was expected.\n("
+                  + cell.getErrorCellValue()
+                  + ")");
+      }
     } else {
       wasNull = false;
       return Double.valueOf(cell.getNumericCellValue()).longValue();
     }
+
+    // this should never happen
+    wasNull = true;
+    return 0l;
   }
 
   @Override
@@ -213,23 +398,32 @@ public class XlsResultSet implements ResultSet {
         return null;
       }
       switch (cell.getCellType()) {
-
         case BOOLEAN:
           if (columnType == Types.VARCHAR || columnType == Types.BOOLEAN) {
             wasNull = false;
             return cell.getBooleanCellValue();
           } else
             throw new RuntimeException(
-                    "The cell (" + getCurrentRow() + "," + columnIndex + ") is a boolean and cannot be cast to (" +
-                     XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
+                "The cell ("
+                    + getCurrentRow()
+                    + ","
+                    + columnIndex
+                    + ") is a boolean and cannot be cast to ("
+                    + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                    + ".");
         case STRING:
           if (columnType == Types.VARCHAR) {
             wasNull = false;
             return cell.getStringCellValue();
           } else
             throw new RuntimeException(
-                    "The cell (" + getCurrentRow() + "," + columnIndex + ") is a string cell and cannot be cast to (" +
-                     XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
+                "The cell ("
+                    + getCurrentRow()
+                    + ","
+                    + columnIndex
+                    + ") is a string cell and cannot be cast to ("
+                    + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                    + ".");
         case NUMERIC:
           if (DateUtil.isCellDateFormatted(cell)) {
             java.util.Date value = cell.getDateCellValue();
@@ -238,6 +432,33 @@ public class XlsResultSet implements ResultSet {
           } else {
             wasNull = false;
             return new BigDecimal(cell.getNumericCellValue(), CTX_NN_15_EVEN).doubleValue();
+          }
+        case FORMULA:
+          switch (evaluator.evaluateFormulaCell(cell)) {
+
+              // @todo: maybe try to parse the Boolean
+            case BOOLEAN:
+              wasNull = false;
+              return cell.getBooleanCellValue();
+
+            case NUMERIC:
+              wasNull = false;
+              return cell.getNumericCellValue();
+
+              // @todo: maybe try to parse the String
+            case STRING:
+              wasNull = false;
+              return cell.getStringCellValue();
+
+            case BLANK:
+              wasNull = true;
+              return null;
+
+            case ERROR:
+              throw new SQLException(
+                  "Found a formula returning an Error, when a Numeric was expected.\n("
+                      + cell.getErrorCellValue()
+                      + ")");
           }
         default:
           wasNull = true;
@@ -305,10 +526,41 @@ public class XlsResultSet implements ResultSet {
     if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
       wasNull = true;
       return 0;
+    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+      switch (evaluator.evaluateFormulaCell(cell)) {
+
+          // @todo: maybe try to parse the Boolean
+        case BOOLEAN:
+          throw new SQLException(
+              "Found a formula returning a Boolean, when a Numeric was expected.");
+
+        case NUMERIC:
+          wasNull = false;
+          return Double.valueOf(cell.getNumericCellValue()).shortValue();
+
+          // @todo: maybe try to parse the String
+        case STRING:
+          throw new SQLException(
+              "Found a formula returning a String, when a Numeric was expected.");
+
+        case BLANK:
+          wasNull = true;
+          return (short) 0;
+
+        case ERROR:
+          throw new SQLException(
+              "Found a formula returning an Error, when a Numeric was expected.\n("
+                  + cell.getErrorCellValue()
+                  + ")");
+      }
     } else {
       wasNull = false;
       return Double.valueOf(cell.getNumericCellValue()).shortValue();
     }
+
+    // this should never happen
+    wasNull = true;
+    return (short) 0;
   }
 
   @Override
@@ -333,16 +585,26 @@ public class XlsResultSet implements ResultSet {
             return Boolean.toString(cell.getBooleanCellValue());
           } else
             throw new RuntimeException(
-                    "The cell (" + getCurrentRow() + "," + columnIndex + ") is a boolean and cannot be cast to (" +
-                     XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
+                "The cell ("
+                    + getCurrentRow()
+                    + ","
+                    + columnIndex
+                    + ") is a boolean and cannot be cast to ("
+                    + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                    + ".");
         case STRING:
           if (columnType == Types.VARCHAR) {
             wasNull = false;
             return cell.getStringCellValue();
           } else
             throw new RuntimeException(
-                    "The cell (" + getCurrentRow() + "," + columnIndex + ") is a string cell and cannot be cast to (" +
-                     XlsResultSetMetaData.columnTypeNameMap.get(columnType) + ".");
+                "The cell ("
+                    + getCurrentRow()
+                    + ","
+                    + columnIndex
+                    + ") is a string cell and cannot be cast to ("
+                    + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                    + ".");
         case NUMERIC:
           if (DateUtil.isCellDateFormatted(cell)) {
             java.util.Date value = cell.getDateCellValue();
@@ -351,6 +613,56 @@ public class XlsResultSet implements ResultSet {
           } else {
             wasNull = false;
             return new BigDecimal(cell.getNumericCellValue(), CTX_NN_15_EVEN).toPlainString();
+          }
+        case FORMULA:
+          switch (evaluator.evaluateFormulaCell(cell)) {
+            case BOOLEAN:
+              if (columnType == Types.VARCHAR || columnType == Types.BOOLEAN) {
+                wasNull = false;
+                return Boolean.toString(cell.getBooleanCellValue());
+              } else
+                throw new RuntimeException(
+                    "The cell ("
+                        + getCurrentRow()
+                        + ","
+                        + columnIndex
+                        + ") is a boolean and cannot be cast to ("
+                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                        + ".");
+
+            case NUMERIC:
+              if (DateUtil.isCellDateFormatted(cell)) {
+                java.util.Date value = cell.getDateCellValue();
+                wasNull = false;
+                return new java.sql.Date(value.getTime()).toString();
+              } else {
+                wasNull = false;
+                return new BigDecimal(cell.getNumericCellValue(), CTX_NN_15_EVEN).toPlainString();
+              }
+
+            case STRING:
+              if (columnType == Types.VARCHAR) {
+                wasNull = false;
+                return cell.getStringCellValue();
+              } else
+                throw new RuntimeException(
+                    "The cell ("
+                        + getCurrentRow()
+                        + ","
+                        + columnIndex
+                        + ") is a string cell and cannot be cast to ("
+                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                        + ".");
+
+            case BLANK:
+              wasNull = true;
+              return null;
+
+            case ERROR:
+              throw new SQLException(
+                  "Found a formula returning an Error, when a Numeric was expected.\n("
+                      + cell.getErrorCellValue()
+                      + ")");
           }
         default:
           wasNull = true;
@@ -368,86 +680,72 @@ public class XlsResultSet implements ResultSet {
 
   public void updateBoolean(int columnIndex, boolean x) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateBoolean(String jdbcColumn, boolean x) throws SQLException {
     Cell cell = getCell(jdbcColumn);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateByte(int columnIndex, byte x) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateByte(String jdbcColumn, byte x) throws SQLException {
     Cell cell = getCell(jdbcColumn);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateDouble(int columnIndex, double x) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateDouble(String jdbcColumn, double x) throws SQLException {
     Cell cell = getCell(jdbcColumn);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateFloat(int columnIndex, float x) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateFloat(String jdbcColumn, float x) throws SQLException {
     Cell cell = getCell(jdbcColumn);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateInt(int columnIndex, int x) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateInt(String jdbcColumn, int x) throws SQLException {
     Cell cell = getCell(jdbcColumn);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateLong(int columnIndex, long x) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateLong(String jdbcColumn, long x) throws SQLException {
     Cell cell = getCell(jdbcColumn);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateNull(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell != null)
-      cell.setCellValue((String) null); // REVIEW
+    if (cell != null) cell.setCellValue((String) null); // REVIEW
   }
 
   public void updateNull(String jdbcColumn) throws SQLException {
     Cell cell = getCell(jdbcColumn);
-    if (cell != null)
-      cell.setCellValue((String) null); // REVIEW
+    if (cell != null) cell.setCellValue((String) null); // REVIEW
   }
 
   public void updateObject(int columnIndex, Object x) throws SQLException {
@@ -460,26 +758,22 @@ public class XlsResultSet implements ResultSet {
 
   public void updateShort(int columnIndex, short x) throws SQLException {
     Cell cell = findOrCreateCell(columnIndex);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateShort(String jdbcColumn, short x) throws SQLException {
     Cell cell = findOrCreateCell(jdbcColumn);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateString(int columnIndex, String x) throws SQLException {
     Cell cell = findOrCreateCell(columnIndex);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   public void updateString(String jdbcColumn, String x) throws SQLException {
     Cell cell = findOrCreateCell(jdbcColumn);
-    if (cell != null)
-      cell.setCellValue(x);
+    if (cell != null) cell.setCellValue(x);
   }
 
   // ResultSet implementation - everything else
@@ -548,15 +842,13 @@ public class XlsResultSet implements ResultSet {
   }
 
   public boolean next() throws SQLException {
-    if (isAfterLast())
-      return false;
+    if (isAfterLast()) return false;
     cursorSheetRow++;
     return !isAfterLast() && (sheet.getRow(cursorSheetRow) != null);
   }
 
   public boolean previous() throws SQLException {
-    if (isBeforeFirst())
-      return false;
+    if (isBeforeFirst()) return false;
     cursorSheetRow--;
     return isBeforeFirst();
   }
@@ -576,42 +868,39 @@ public class XlsResultSet implements ResultSet {
   }
 
   private void updateObject(Cell cell, Object x) throws SQLException {
-    if (x instanceof String)
-      cell.setCellValue((String) x);
-    else if (x instanceof char[])
-      cell.setCellValue(new String((char[]) x));
+    if (x instanceof String) cell.setCellValue((String) x);
+    else if (x instanceof char[]) cell.setCellValue(new String((char[]) x));
     else if (x instanceof Double)
-      if (x.equals(Double.NEGATIVE_INFINITY) || x.equals(Double.POSITIVE_INFINITY) || x.equals(Double.NaN))
-        cell.setCellValue(BAD_DOUBLE);
-      else
-        cell.setCellValue((Double) x);
+      if (x.equals(Double.NEGATIVE_INFINITY)
+          || x.equals(Double.POSITIVE_INFINITY)
+          || x.equals(Double.NaN)) cell.setCellValue(BAD_DOUBLE);
+      else cell.setCellValue((Double) x);
     else if (x instanceof Number)
       cell.setCellValue(((Number) x).doubleValue()); // } else if (x instanceof java.sql.Date) {
     // cell.setCellValue(new java.util.Date(((java.sql.Date)x).getTime()));
     // if (dateStyle != null) cell.setCellStyle(dateStyle);
     else if (x instanceof java.util.Date) {
       cell.setCellValue(DateUtil.getExcelDate((java.util.Date) x));
-      if (dateStyle != null)
-        cell.setCellStyle(dateStyle);
-    } else if (x instanceof Boolean)
-      cell.setCellValue((Boolean) x);
-    else if (x == null)
-      cell.setCellValue((String) null);
+      if (dateStyle != null) cell.setCellStyle(dateStyle);
+    } else if (x instanceof Boolean) cell.setCellValue((Boolean) x);
+    else if (x == null) cell.setCellValue((String) null);
     else
       throw new SQLException(
-              "Unknown value type for ExcelResultSet.updateObject: " + x + " (" + x.getClass().getName() + ")");
+          "Unknown value type for ExcelResultSet.updateObject: "
+              + x
+              + " ("
+              + x.getClass().getName()
+              + ")");
   }
 
   private Row getCurrentRow() {
-    if (sheet.getRow(cursorSheetRow) == null)
-      sheet.createRow(cursorSheetRow);
+    if (sheet.getRow(cursorSheetRow) == null) sheet.createRow(cursorSheetRow);
     return sheet.getRow(cursorSheetRow);
   }
 
   private Cell findOrCreateCell(int jdbcColumn) {
     Cell cell = getCell(jdbcColumn);
-    if (cell == null)
-      cell = getCurrentRow().createCell((short) (jdbcColumn - 1));
+    if (cell == null) cell = getCurrentRow().createCell((short) (jdbcColumn - 1));
     return cell;
   }
 
@@ -629,28 +918,27 @@ public class XlsResultSet implements ResultSet {
   protected Cell getCell(int columnIndex) {
     Row row = sheet.getRow(cursorSheetRow);
 
-    return row != null
-            ? row.getCell((short) (columnIndex + firstSheetColOffset - 1))
-            : null;
+    return row != null ? row.getCell((short) (columnIndex + firstSheetColOffset - 1)) : null;
   }
 
   private Cell getCell(String columnLabel) throws SQLException {
     Row row = sheet.getRow(cursorSheetRow);
 
-    return row != null
-            ? row.getCell(getSheetColumnNamed(columnLabel) + firstSheetColOffset)
-            : null;
+    return row != null ? row.getCell(getSheetColumnNamed(columnLabel) + firstSheetColOffset) : null;
   }
 
   private short getSheetColumnNamed(String name) throws SQLException {
     int count = metadata.getColumnCount();
     for (short i = 0; i < count; i++) {
       String col = metadata.getColumnName(i + 1);
-      if (col.equalsIgnoreCase(name))
-        return i;
+      if (col.equalsIgnoreCase(name)) return i;
     }
-    throw new SQLException("Column " + name + " not found. Avaliable Columns are " + Arrays.deepToString(
-                           metadata.columnNames.toArray(new String[metadata.columnNames.size()])));
+    throw new SQLException(
+        "Column "
+            + name
+            + " not found. Avaliable Columns are "
+            + Arrays.deepToString(
+                metadata.columnNames.toArray(new String[metadata.columnNames.size()])));
   }
 
   private IllegalStateException nyi() {
@@ -669,8 +957,9 @@ public class XlsResultSet implements ResultSet {
   public void close() throws SQLException {
     isClosed = true;
 
-    //help the GC by nulling all objects
+    // help the GC by nulling all objects
     workbook = null;
+    evaluator = null;
     sheet = null;
     metadata = null;
     dateStyle = null;
@@ -714,10 +1003,41 @@ public class XlsResultSet implements ResultSet {
     if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
       wasNull = true;
       return null;
+    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+      switch (evaluator.evaluateFormulaCell(cell)) {
+
+          // @todo: maybe try to parse the Boolean
+        case BOOLEAN:
+          throw new SQLException(
+              "Found a formula returning a Boolean, when a Numeric was expected.");
+
+        case NUMERIC:
+          wasNull = false;
+          return BigDecimal.valueOf(cell.getNumericCellValue());
+
+          // @todo: maybe try to parse the String
+        case STRING:
+          throw new SQLException(
+              "Found a formula returning a String, when a Numeric was expected.");
+
+        case BLANK:
+          wasNull = true;
+          return null;
+
+        case ERROR:
+          throw new SQLException(
+              "Found a formula returning an Error, when a Numeric was expected.\n("
+                  + cell.getErrorCellValue()
+                  + ")");
+      }
     } else {
       wasNull = false;
       return BigDecimal.valueOf(cell.getNumericCellValue());
     }
+
+    // this should never happen
+    wasNull = true;
+    return null;
   }
 
   @Override
@@ -729,17 +1049,13 @@ public class XlsResultSet implements ResultSet {
   @Override
   public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
     BigDecimal d = getBigDecimal(columnIndex);
-    return d != null
-            ? d.setScale(scale)
-            : null;
+    return d != null ? d.setScale(scale) : null;
   }
 
   @Override
   public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
     BigDecimal d = getBigDecimal(columnLabel);
-    return d != null
-            ? d.setScale(scale)
-            : null;
+    return d != null ? d.setScale(scale) : null;
   }
 
   @Override
@@ -799,12 +1115,41 @@ public class XlsResultSet implements ResultSet {
     if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
       wasNull = true;
       return null;
+    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+      switch (evaluator.evaluateFormulaCell(cell)) {
+        case BOOLEAN:
+          throw new SQLException(
+              "Found a formula returning a Boolean, when a Numeric was expected.");
+
+        case NUMERIC:
+          wasNull = false;
+          return new Date(cell.getDateCellValue().getTime());
+
+          // @todo: maybe try to parse the String
+        case STRING:
+          throw new SQLException(
+              "Found a formula returning a String, when a Numeric was expected.");
+
+        case BLANK:
+          wasNull = true;
+          return null;
+
+        case ERROR:
+          throw new SQLException(
+              "Found a formula returning an Error, when a Numeric was expected.\n("
+                  + cell.getErrorCellValue()
+                  + ")");
+      }
     } else {
       wasNull = false;
       return new Date(cell.getDateCellValue().getTime());
     }
+
+    wasNull = true;
+    return null;
   }
 
+  @Override
   public Date getDate(String columnLabel) throws SQLException {
     int columnIndex = getSheetColumnNamed(columnLabel) + 1;
     return getDate(columnIndex);
@@ -813,8 +1158,7 @@ public class XlsResultSet implements ResultSet {
   @Override
   public Date getDate(int columnIndex, Calendar cal) throws SQLException {
     Date date = getDate(columnIndex);
-    if (date == null)
-      return null;
+    if (date == null) return null;
     else {
       Calendar calendar = Calendar.getInstance();
       calendar.setTime(date);
@@ -826,6 +1170,7 @@ public class XlsResultSet implements ResultSet {
     }
   }
 
+  @Override
   public Date getDate(String columnLabel, Calendar cal) throws SQLException {
     int columnIndex = getSheetColumnNamed(columnLabel) + 1;
     return getDate(columnIndex, cal);
@@ -836,6 +1181,7 @@ public class XlsResultSet implements ResultSet {
     throw nyi();
   }
 
+  @Override
   public Object getObject(String colName, Map<String, Class<?>> map) throws SQLException {
     throw nyi();
   }
@@ -1005,7 +1351,8 @@ public class XlsResultSet implements ResultSet {
     throw nyi();
   }
 
-  public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+  public void updateNCharacterStream(String columnLabel, Reader reader, long length)
+      throws SQLException {
     throw nyi();
   }
 
@@ -1021,23 +1368,28 @@ public class XlsResultSet implements ResultSet {
     throw nyi();
   }
 
-  public void updateAsciiStream(String columnLabel, InputStream x, long length) throws SQLException {
+  public void updateAsciiStream(String columnLabel, InputStream x, long length)
+      throws SQLException {
     throw nyi();
   }
 
-  public void updateBinaryStream(String columnLabel, InputStream x, long length) throws SQLException {
+  public void updateBinaryStream(String columnLabel, InputStream x, long length)
+      throws SQLException {
     throw nyi();
   }
 
-  public void updateCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+  public void updateCharacterStream(String columnLabel, Reader reader, long length)
+      throws SQLException {
     throw nyi();
   }
 
-  public void updateBlob(int columnIndex, InputStream inputStream, long length) throws SQLException {
+  public void updateBlob(int columnIndex, InputStream inputStream, long length)
+      throws SQLException {
     throw nyi();
   }
 
-  public void updateBlob(String columnLabel, InputStream inputStream, long length) throws SQLException {
+  public void updateBlob(String columnLabel, InputStream inputStream, long length)
+      throws SQLException {
     throw nyi();
   }
 
@@ -1157,7 +1509,8 @@ public class XlsResultSet implements ResultSet {
     throw nyi();
   }
 
-  public void updateCharacterStream(String jdbcColumn, Reader reader, int length) throws SQLException {
+  public void updateCharacterStream(String jdbcColumn, Reader reader, int length)
+      throws SQLException {
     throw nyi();
   }
 
