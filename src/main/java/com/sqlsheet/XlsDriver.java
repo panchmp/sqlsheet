@@ -79,7 +79,7 @@ public class XlsDriver implements java.sql.Driver {
 
 	/**
 	 *
-	 * @param uriStr 
+	 * @param uriStr the String representation of an URI containing "~" or "${user.home}" 
 	 * @return the expanded URI (resolving "~" and "${user.home}" to the actual $HOME folder
 	 */
 	public static String resolveHomeUriStr(String uriStr) {
@@ -91,7 +91,6 @@ public class XlsDriver implements java.sql.Driver {
     return expandedURIStr;
   }
 
-	@Override
 	/**
      * Attempts to make a database connection to the given URL.
      * The driver should return "null" if it realizes it is the wrong kind
@@ -105,11 +104,11 @@ public class XlsDriver implements java.sql.Driver {
 		 * 
 		 * <p>The {@code url} should point to a file or a resource in the class path.</p>
 		 * <p>Valid samples are:</p>
-		 * <il>
+		 * <ul>
 		 * <li>jdbc:xls:file://${user.home}/dataSource.xlsx</li>
 		 * <li>jdbc:xls:file://~/dataSource.xlsx</li>
 		 * <li>jdbc:xls:resource:/com/sqlsheet/dataSource.xlsx</li>
-		 * </il>
+		 * </ul>
      *
      * <P>The {@code Properties} argument can be used to pass
      * arbitrary string tag/value pairs as connection arguments.
