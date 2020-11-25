@@ -69,11 +69,20 @@ public class XlsDriver implements java.sql.Driver {
     return new DriverPropertyInfo[0];
   }
 	
+	/**
+	 *
+	 * @return the actual $HOME folder of the user
+	 */
 	public static File getHomeFolder() {
 		return new File( System.getProperty("user.home"));
 	}
 
-  public static String resolveHomeUriStr(String uriStr) {
+	/**
+	 *
+	 * @param uriStr 
+	 * @return the expanded URI (resolving "~" and "${user.home}" to the actual $HOME folder
+	 */
+	public static String resolveHomeUriStr(String uriStr) {
     String homePathStr = getHomeFolder().toURI().getPath();
 
     String expandedURIStr = uriStr.replaceFirst("~", Matcher.quoteReplacement(homePathStr));
@@ -83,18 +92,56 @@ public class XlsDriver implements java.sql.Driver {
   }
 
 	@Override
-  public Connection connect(String jdbcUrl, Properties info) throws SQLException {
-    if (jdbcUrl == null) throw new IllegalArgumentException("Null url");
-    if (!acceptsURL(jdbcUrl)) return null; // why is this necessary?
-    if (!jdbcUrl.toLowerCase().startsWith(URL_SCHEME)) {
-      throw new IllegalArgumentException("URL is not " + URL_SCHEME + " (" + jdbcUrl + ")");
+	/**
+     * Attempts to make a database connection to the given URL.
+     * The driver should return "null" if it realizes it is the wrong kind
+     * of driver to connect to the given URL.  This will be common, as when
+     * the JDBC driver manager is asked to connect to a given URL it passes
+     * the URL to each loaded driver in turn.
+     *
+     * <P>The driver should throw an <code>SQLException</code> if it is the right
+     * driver to connect to the given URL but has trouble connecting to
+     * the database.
+		 * 
+		 * <p>The {@code url} should point to a file or a resource in the class path.</p>
+		 * <p>Valid samples are:</p>
+		 * <il>
+		 * <li>jdbc:xls:file://${user.home}/dataSource.xlsx</li>
+		 * <li>jdbc:xls:file://~/dataSource.xlsx</li>
+		 * <li>jdbc:xls:resource:/com/sqlsheet/dataSource.xlsx</li>
+		 * </il>
+     *
+     * <P>The {@code Properties} argument can be used to pass
+     * arbitrary string tag/value pairs as connection arguments.
+     * Normally at least "user" and "password" properties should be
+     * included in the {@code Properties} object.
+     * <p>
+     * <B>Note:</B> If a property is specified as part of the {@code url} and
+     * is also specified in the {@code Properties} object, it is
+     * implementation-defined as to which value will take precedence. For
+     * maximum portability, an application should only specify a property once.
+     *
+     * @param url the URL of the database to which to connect
+     * @param info a list of arbitrary string tag/value pairs as
+     * connection arguments. Normally at least a "user" and
+     * "password" property should be included.
+     * @return a <code>Connection</code> object that represents a
+     *         connection to the URL
+     * @exception SQLException if a database access error occurs or the url is
+     * {@code null}
+     */
+  public Connection connect(String url, Properties info) throws SQLException {
+    if (url == null) throw new IllegalArgumentException("Null url");
+    if (!acceptsURL(url)) return null; // why is this necessary?
+    if (!url.toLowerCase().startsWith(URL_SCHEME)) {
+      throw new IllegalArgumentException("URL is not " + URL_SCHEME + " (" + url + ")");
     }
     // strip any properties from end of URL and set them as additional properties
     String urlProperties;
-    int questionIndex = jdbcUrl.indexOf('?');
+    int questionIndex = url.indexOf('?');
     if (questionIndex >= 0) {
       info = new Properties(info);
-      urlProperties = jdbcUrl.substring(questionIndex);
+      urlProperties = url.substring(questionIndex);
       String[] split = urlProperties.substring(1).split("&");
       for (String each : split) {
         String[] property = each.split("=");
@@ -113,10 +160,10 @@ public class XlsDriver implements java.sql.Driver {
           // we know UTF-8 is available
         }
       }
-      jdbcUrl = jdbcUrl.substring(0, questionIndex);
+      url = url.substring(0, questionIndex);
     }
     try {
-			String workbookUriStr = jdbcUrl.substring(URL_SCHEME.length());
+			String workbookUriStr = url.substring(URL_SCHEME.length());
 			workbookUriStr = resolveHomeUriStr(workbookUriStr);
 			URL workbookUrl=null;
 			try {
