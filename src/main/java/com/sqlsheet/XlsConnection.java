@@ -64,8 +64,7 @@ class XlsConnection implements Connection {
   }
 
   XlsConnection(Workbook workbook, File saveFile, Properties info) {
-    if (workbook == null)
-      throw new IllegalArgumentException();
+    if (workbook == null) throw new IllegalArgumentException();
     this.workbook = workbook;
     this.saveFile = saveFile;
     this.info = info;
@@ -92,13 +91,13 @@ class XlsConnection implements Connection {
     return new XlsPreparedStatement(this, sql);
   }
 
-  public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+  public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
+      throws SQLException {
     return prepareStatement(sql);
   }
 
   public void close() throws SQLException {
-    if (saveFile == null || !writeRequired)
-      return;
+    if (saveFile == null || !writeRequired) return;
     try {
       OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(saveFile));
       workbook.write(outputStream);
@@ -127,8 +126,11 @@ class XlsConnection implements Connection {
         // Try to override file with new content
         // backup should rename file or copy content into new one, handle second condition
         if (saveFile.exists() && !saveFile.delete())
-          logger.log(Level.WARNING,
-                  "Unable to delete file:" + saveFile.getAbsolutePath() + ", you may lose the results.");
+          logger.log(
+              Level.WARNING,
+              "Unable to delete file:"
+                  + saveFile.getAbsolutePath()
+                  + ", you may lose the results.");
         moveFile(newFile, saveFile);
       } catch (IOException ioe) {
         SQLException sqe = new SQLException(ioe.getMessage());
@@ -152,8 +154,13 @@ class XlsConnection implements Connection {
     boolean moved;
     moved = sourceFile.renameTo(destFile);
     if (!moved) {
-      logger.log(Level.WARNING, "Unable to rename file during move:" + sourceFile.getAbsolutePath() + " to " +
-               destFile.getAbsolutePath() + ", performing full copy of data.");
+      logger.log(
+          Level.WARNING,
+          "Unable to rename file during move:"
+              + sourceFile.getAbsolutePath()
+              + " to "
+              + destFile.getAbsolutePath()
+              + ", performing full copy of data.");
       FileChannel source = null;
       FileChannel destination = null;
       try {
@@ -167,10 +174,8 @@ class XlsConnection implements Connection {
           count += destination.transferFrom(source, 0, size - count);
         } while (count < size);
       } finally {
-        if (source != null)
-          source.close();
-        if (destination != null)
-          destination.close();
+        if (source != null) source.close();
+        if (destination != null) destination.close();
       }
     }
   }
@@ -235,16 +240,13 @@ class XlsConnection implements Connection {
   }
 
   @Override
-  public void commit() throws SQLException {
-  }
+  public void commit() throws SQLException {}
 
   @Override
-  public void rollback() throws SQLException {
-  }
+  public void rollback() throws SQLException {}
 
   @Override
-  public void clearWarnings() throws SQLException {
-  }
+  public void clearWarnings() throws SQLException {}
 
   @Override
   public DatabaseMetaData getMetaData() throws SQLException {
@@ -261,12 +263,14 @@ class XlsConnection implements Connection {
     return null;
   }
 
-  public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
+  public Statement createStatement(int resultSetType, int resultSetConcurrency)
+      throws SQLException {
     nyi();
     return null;
   }
 
-  public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+  public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)
+      throws SQLException {
     nyi();
     return null;
   }
@@ -280,7 +284,8 @@ class XlsConnection implements Connection {
     nyi();
   }
 
-  public CallableStatement prepareCall(String str, int param, int param2, int param3) throws SQLException {
+  public CallableStatement prepareCall(String str, int param, int param2, int param3)
+      throws SQLException {
     nyi();
     return null;
   }
@@ -325,8 +330,7 @@ class XlsConnection implements Connection {
     return false;
   }
 
-  public void setClientInfo(String name, String value) throws SQLClientInfoException {
-  }
+  public void setClientInfo(String name, String value) throws SQLClientInfoException {}
 
   public String getClientInfo(String name) throws SQLException {
     nyi();
@@ -338,8 +342,7 @@ class XlsConnection implements Connection {
     return null;
   }
 
-  public void setClientInfo(Properties properties) throws SQLClientInfoException {
-  }
+  public void setClientInfo(Properties properties) throws SQLClientInfoException {}
 
   public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
     nyi();
@@ -351,10 +354,10 @@ class XlsConnection implements Connection {
     return null;
   }
 
-  public PreparedStatement prepareStatement(String str, int param, int param2, int param3) throws SQLException {
+  public PreparedStatement prepareStatement(String str, int param, int param2, int param3)
+      throws SQLException {
     nyi();
     return null;
-
   }
 
   public void releaseSavepoint(Savepoint savepoint) throws SQLException {
@@ -368,16 +371,15 @@ class XlsConnection implements Connection {
   public Savepoint setSavepoint() throws SQLException {
     nyi();
     return null;
-
   }
 
   public Savepoint setSavepoint(String str) throws SQLException {
     nyi();
     return null;
-
   }
 
-  public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+  public Statement createStatement(
+      int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
     nyi();
     return null;
   }

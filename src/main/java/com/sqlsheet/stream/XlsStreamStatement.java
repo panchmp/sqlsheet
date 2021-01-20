@@ -7,7 +7,7 @@
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software 
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -32,240 +32,232 @@ import com.sqlsheet.parser.SqlSheetParser;
  */
 public class XlsStreamStatement implements Statement {
 
-    XlsStreamConnection connection;
-    SqlSheetParser      parser;
+  XlsStreamConnection connection;
+  SqlSheetParser parser;
 
-    public XlsStreamStatement(XlsStreamConnection c) {
-        if (c == null)
-            throw new IllegalArgumentException();
-        this.connection = c;
+  public XlsStreamStatement(XlsStreamConnection c) {
+    if (c == null) throw new IllegalArgumentException();
+    this.connection = c;
+  }
+
+  public Connection getConnection() throws SQLException {
+    return connection;
+  }
+
+  public void close() throws SQLException {}
+
+  public boolean execute(String sql) throws SQLException {
+    executeQuery(sql);
+    return false;
+  }
+
+  public int executeUpdate(String sql) throws SQLException {
+    executeQuery(sql);
+    return 1;
+  }
+
+  public ResultSet executeQuery(String query) throws SQLException {
+    ParsedStatement parsed = parse(query);
+    if (parsed instanceof SelectStarStatement) {
+      return doSelect((SelectStarStatement) parsed);
+    } else {
+      throw new IllegalStateException(parsed.getClass().getName());
     }
+  }
 
-    public Connection getConnection() throws SQLException {
-        return connection;
-    }
+  protected ParsedStatement parse(String sql) throws SQLException {
+    if (sql == null) throw new IllegalArgumentException();
+    if (parser == null) parser = new SqlSheetParser();
+    return parser.parse(sql);
+  }
 
-    public void close() throws SQLException {
-    }
+  protected ResultSet doSelect(SelectStarStatement sss) throws SQLException {
+    XlsStreamResultSet out = findOrCreateResultSetFor(sss.getTable());
+    out.beforeFirst();
+    return out;
+  }
 
-    public boolean execute(String sql) throws SQLException {
-        executeQuery(sql);
-        return false;
-    }
+  private XlsStreamResultSet findOrCreateResultSetFor(String tableName) throws SQLException {
+    return new XlsStreamResultSet(tableName, connection);
+  }
 
-    public int executeUpdate(String sql) throws SQLException {
-        executeQuery(sql);
-        return 1;
-    }
+  public void setEscapeProcessing(boolean p0) throws SQLException {
+    nyi();
+  }
 
-    public ResultSet executeQuery(String query) throws SQLException {
-        ParsedStatement parsed = parse(query);
-        if (parsed instanceof SelectStarStatement) {
-            return doSelect((SelectStarStatement) parsed);
-        } else {
-            throw new IllegalStateException(parsed.getClass().getName());
-        }
-    }
+  public void setCursorName(String p0) throws SQLException {
+    nyi();
+  }
 
-    protected ParsedStatement parse(String sql) throws SQLException {
-        if (sql == null)
-            throw new IllegalArgumentException();
-        if (parser == null)
-            parser = new SqlSheetParser();
-        return parser.parse(sql);
-    }
+  public int getMaxFieldSize() throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    protected ResultSet doSelect(SelectStarStatement sss) throws SQLException {
-        XlsStreamResultSet out = findOrCreateResultSetFor(sss.getTable());
-        out.beforeFirst();
-        return out;
-    }
+  public void setMaxFieldSize(int p0) throws SQLException {
+    nyi();
+  }
 
-    private XlsStreamResultSet findOrCreateResultSetFor(String tableName) throws SQLException {
-        return new XlsStreamResultSet(tableName, connection);
-    }
+  public int getMaxRows() throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public void setEscapeProcessing(boolean p0) throws SQLException {
-        nyi();
-    }
+  public void setMaxRows(int p0) throws SQLException {
+    nyi();
+  }
 
-    public void setCursorName(String p0) throws SQLException {
-        nyi();
-    }
+  public int getQueryTimeout() throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public int getMaxFieldSize() throws SQLException {
-        nyi();
-        return -1;
-    }
+  public void setQueryTimeout(int p0) throws SQLException {
+    nyi();
+  }
 
-    public void setMaxFieldSize(int p0) throws SQLException {
-        nyi();
-    }
+  public SQLWarning getWarnings() throws SQLException {
+    nyi();
+    return null;
+  }
 
-    public int getMaxRows() throws SQLException {
-        nyi();
-        return -1;
-    }
+  public ResultSet getResultSet() throws SQLException {
+    nyi();
+    return null;
+  }
 
-    public void setMaxRows(int p0) throws SQLException {
-        nyi();
-    }
+  public int getUpdateCount() throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public int getQueryTimeout() throws SQLException {
-        nyi();
-        return -1;
-    }
+  public boolean getMoreResults() throws SQLException {
+    nyi();
+    return false;
+  }
 
-    public void setQueryTimeout(int p0) throws SQLException {
-        nyi();
-    }
+  public boolean getMoreResults(int current) throws SQLException {
+    nyi();
+    return false;
+  }
 
-    public SQLWarning getWarnings() throws SQLException {
-        nyi();
-        return null;
-    }
+  public int getFetchDirection() throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public ResultSet getResultSet() throws SQLException {
-        nyi();
-        return null;
-    }
+  public void setFetchDirection(int p0) throws SQLException {
+    nyi();
+  }
 
-    public int getUpdateCount() throws SQLException {
-        nyi();
-        return -1;
-    }
+  public int getFetchSize() throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public boolean getMoreResults() throws SQLException {
-        nyi();
-        return false;
-    }
+  public void setFetchSize(int p0) throws SQLException {
+    nyi();
+  }
 
-    public boolean getMoreResults(int current) throws SQLException {
-        nyi();
-        return false;
-    }
+  public int getResultSetConcurrency() throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public int getFetchDirection() throws SQLException {
-        nyi();
-        return -1;
-    }
+  public int getResultSetType() throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public void setFetchDirection(int p0) throws SQLException {
-        nyi();
-    }
+  public void cancel() throws SQLException {
+    nyi();
+  }
 
-    public int getFetchSize() throws SQLException {
-        nyi();
-        return -1;
-    }
+  public void clearWarnings() throws SQLException {
+    nyi();
+  }
 
-    public void setFetchSize(int p0) throws SQLException {
-        nyi();
-    }
+  public void addBatch(String p0) throws SQLException {
+    nyi();
+  }
 
-    public int getResultSetConcurrency() throws SQLException {
-        nyi();
-        return -1;
-    }
+  public void clearBatch() throws SQLException {
+    nyi();
+  }
 
-    public int getResultSetType() throws SQLException {
-        nyi();
-        return -1;
-    }
+  public int[] executeBatch() throws SQLException {
+    nyi();
+    return null;
+  }
 
-    public void cancel() throws SQLException {
-        nyi();
-    }
+  public ResultSet getGeneratedKeys() throws SQLException {
+    nyi();
+    return null;
+  }
 
-    public void clearWarnings() throws SQLException {
-        nyi();
-    }
+  public int executeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public void addBatch(String p0) throws SQLException {
-        nyi();
-    }
+  public int executeUpdate(String sql, int[] columnIndexes) throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public void clearBatch() throws SQLException {
-        nyi();
-    }
+  public int executeUpdate(String sql, String[] columnNames) throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public int[] executeBatch() throws SQLException {
-        nyi();
-        return null;
-    }
+  public boolean execute(String sql, int autoGeneratedKeys) throws SQLException {
+    nyi();
+    return false;
+  }
 
-    public ResultSet getGeneratedKeys() throws SQLException {
-        nyi();
-        return null;
-    }
+  public boolean execute(String sql, int[] columnIndexes) throws SQLException {
 
-    public int executeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
-        nyi();
-        return -1;
-    }
+    nyi();
+    return false;
+  }
 
-    public int executeUpdate(String sql, int[] columnIndexes) throws SQLException {
-        nyi();
-        return -1;
-    }
+  public boolean execute(String sql, String[] columnNames) throws SQLException {
+    nyi();
+    return false;
+  }
 
-    public int executeUpdate(String sql, String[] columnNames) throws SQLException {
-        nyi();
-        return -1;
-    }
+  public int getResultSetHoldability() throws SQLException {
+    nyi();
+    return -1;
+  }
 
-    public boolean execute(String sql, int autoGeneratedKeys) throws SQLException {
-        nyi();
-        return false;
-    }
+  protected void nyi() throws SQLException {
+    throw new SQLException("NYI");
+  }
 
-    public boolean execute(String sql, int[] columnIndexes) throws SQLException
+  public boolean isClosed() throws SQLException {
+    return false;
+  }
 
-    {
-        nyi();
-        return false;
-    }
+  public boolean isPoolable() throws SQLException {
+    return false;
+  }
 
-    public boolean execute(String sql, String[] columnNames) throws SQLException {
-        nyi();
-        return false;
+  public void setPoolable(boolean poolable) throws SQLException {}
 
-    }
+  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    return false;
+  }
 
-    public int getResultSetHoldability() throws SQLException {
-        nyi();
-        return -1;
-    }
+  public <T> T unwrap(Class<T> iface) throws SQLException {
+    return null;
+  }
 
-    protected void nyi() throws SQLException {
-        throw new SQLException("NYI");
-    }
+  public void closeOnCompletion() throws SQLException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 
-    public boolean isClosed() throws SQLException {
-        return false;
-    }
-
-    public boolean isPoolable() throws SQLException {
-        return false;
-    }
-
-    public void setPoolable(boolean poolable) throws SQLException {
-    }
-
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return false;
-    }
-
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        return null;
-    }
-
-    public void closeOnCompletion() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public boolean isCloseOnCompletion() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+  public boolean isCloseOnCompletion() throws SQLException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 }

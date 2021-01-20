@@ -86,9 +86,7 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public String getDatabaseProductVersion() throws SQLException {
-    return (connection.workbook instanceof XSSFWorkbook)
-            ? "2007"
-            : "97";
+    return (connection.workbook instanceof XSSFWorkbook) ? "2007" : "97";
   }
 
   @Override
@@ -359,67 +357,56 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   @Override
   public String getCatalogSeparator() throws SQLException {
     return ".";
-
   }
 
   @Override
   public boolean supportsSchemasInDataManipulation() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsSchemasInProcedureCalls() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsSchemasInTableDefinitions() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsSchemasInIndexDefinitions() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsSchemasInPrivilegeDefinitions() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsCatalogsInDataManipulation() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsCatalogsInProcedureCalls() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsCatalogsInTableDefinitions() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsCatalogsInIndexDefinitions() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsCatalogsInPrivilegeDefinitions() throws SQLException {
     return false;
-
   }
 
   @Override
@@ -435,79 +422,66 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   @Override
   public boolean supportsSelectForUpdate() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsStoredProcedures() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsSubqueriesInComparisons() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsSubqueriesInExists() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsSubqueriesInIns() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsSubqueriesInQuantifieds() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsCorrelatedSubqueries() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsUnion() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsUnionAll() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsOpenCursorsAcrossCommit() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsOpenCursorsAcrossRollback() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsOpenStatementsAcrossCommit() throws SQLException {
     return false;
-
   }
 
   @Override
   public boolean supportsOpenStatementsAcrossRollback() throws SQLException {
     return false;
-
   }
 
   @Override
@@ -517,13 +491,13 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public int getMaxCharLiteralLength() throws SQLException {
-    //@todo: check and set the correct value
+    // @todo: check and set the correct value
     return 256;
   }
 
   @Override
   public int getMaxColumnNameLength() throws SQLException {
-    //@todo: check and set the correct value
+    // @todo: check and set the correct value
     return 256;
   }
 
@@ -544,19 +518,19 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public int getMaxColumnsInSelect() throws SQLException {
-    //@todo: check and set the correct value, we accept only '*' so far
+    // @todo: check and set the correct value, we accept only '*' so far
     return 0;
   }
 
   @Override
   public int getMaxColumnsInTable() throws SQLException {
-    //@todo: check and set the correct value
+    // @todo: check and set the correct value
     return 256;
   }
 
   @Override
   public int getMaxConnections() throws SQLException {
-    //@todo: check and set the correct value
+    // @todo: check and set the correct value
     return 1024;
   }
 
@@ -572,7 +546,7 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public int getMaxSchemaNameLength() throws SQLException {
-    //@todo: check and set the correct value
+    // @todo: check and set the correct value
     return 256;
   }
 
@@ -583,16 +557,16 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public int getMaxCatalogNameLength() throws SQLException {
-    //@todo: check and set the correct value
+    // @todo: check and set the correct value
     return 256;
   }
 
   @Override
   public int getMaxRowSize() throws SQLException {
-    //@todo: obeye the correct connection's ROW OFFSET
+    // @todo: obeye the correct connection's ROW OFFSET
     return (connection.getWorkBook() instanceof XSSFWorkbook)
-            ? SpreadsheetVersion.EXCEL2007.getMaxRows()
-            : SpreadsheetVersion.EXCEL97.getMaxRows();
+        ? SpreadsheetVersion.EXCEL2007.getMaxRows()
+        : SpreadsheetVersion.EXCEL97.getMaxRows();
   }
 
   @Override
@@ -602,19 +576,19 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public int getMaxStatementLength() throws SQLException {
-    //@todo: check and set the correct value
+    // @todo: check and set the correct value
     return Integer.MAX_VALUE;
   }
 
   @Override
   public int getMaxStatements() throws SQLException {
-    //@todo: check and set the correct value
+    // @todo: check and set the correct value
     return Integer.MAX_VALUE;
   }
 
   @Override
   public int getMaxTableNameLength() throws SQLException {
-    //@todo: check and set the correct value
+    // @todo: check and set the correct value
     return 32;
   }
 
@@ -664,77 +638,80 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public ResultSet getProcedures(String string, String string1, String string2) throws SQLException {
+  public ResultSet getProcedures(String string, String string1, String string2)
+      throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getProcedureColumns(String string, String string1, String string2, String string3) throws SQLException {
+  public ResultSet getProcedureColumns(
+      String string, String string1, String string2, String string3) throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getTables(String catalog,
-                             String schemaPattern,
-                             String tableNamePattern,
-                             String[] types) throws SQLException {
+  public ResultSet getTables(
+      String catalog, String schemaPattern, String tableNamePattern, String[] types)
+      throws SQLException {
 
-    ResultSetImpl resultSet = new ResultSetImpl(
-                  new Object[]{"TABLE_CAT", String.class},
-                  new Object[]{"TABLE_SCHEM", String.class},
-                  new Object[]{"TABLE_NAME", String.class},
-                  new Object[]{"TABLE_TYPE", String.class},
-                  new Object[]{"REMARKS", String.class},
-                  new Object[]{"TYPE_CAT", String.class},
-                  new Object[]{"TYPE_SCHEM", String.class},
-                  new Object[]{"TYPE_NAME", String.class},
-                  new Object[]{"SELF_REFERENCING_COL_NAME", String.class},
-                  new Object[]{"REF_GENERATION", String.class}
-          );
+    ResultSetImpl resultSet =
+        new ResultSetImpl(
+            new Object[] {"TABLE_CAT", String.class},
+            new Object[] {"TABLE_SCHEM", String.class},
+            new Object[] {"TABLE_NAME", String.class},
+            new Object[] {"TABLE_TYPE", String.class},
+            new Object[] {"REMARKS", String.class},
+            new Object[] {"TYPE_CAT", String.class},
+            new Object[] {"TYPE_SCHEM", String.class},
+            new Object[] {"TYPE_NAME", String.class},
+            new Object[] {"SELF_REFERENCING_COL_NAME", String.class},
+            new Object[] {"REF_GENERATION", String.class});
 
-    MatchingEngine schemaMatcher = GlobPattern.compile(schemaPattern != null
-                   ? schemaPattern
-                   : "%", '%', '_', GlobPattern.HANDLE_ESCAPES);
-    MatchingEngine tableNameMatcher = GlobPattern.compile(tableNamePattern != null
-                   ? tableNamePattern
-                   : "%", '%', '_', GlobPattern.HANDLE_ESCAPES);
+    MatchingEngine schemaMatcher =
+        GlobPattern.compile(
+            schemaPattern != null ? schemaPattern : "%", '%', '_', GlobPattern.HANDLE_ESCAPES);
+    MatchingEngine tableNameMatcher =
+        GlobPattern.compile(
+            tableNamePattern != null ? tableNamePattern : "%",
+            '%',
+            '_',
+            GlobPattern.HANDLE_ESCAPES);
 
     String fileName = connection.saveFile.getName();
     int indexOf = fileName.indexOf('.');
-    if (indexOf >= 0)
-      fileName = fileName.substring(0, indexOf);
+    if (indexOf >= 0) fileName = fileName.substring(0, indexOf);
 
-    if ((schemaPattern == null || schemaMatcher.matches(fileName)) &&
-        (types == null || Arrays.asList(types).contains("TABLE")))
+    if ((schemaPattern == null || schemaMatcher.matches(fileName))
+        && (types == null || Arrays.asList(types).contains("TABLE")))
       for (int i = 0; i < connection.workbook.getNumberOfSheets(); i++) {
         String tableName = connection.workbook.getSheetName(i);
 
         if (!tableName.startsWith("!") && tableNameMatcher.matches(tableName))
           resultSet.addRow(
-                  null,
-                  fileName,
-                  connection.workbook.getSheetName(i),
-                  "TABLE",
-                  "",
-                  null,
-                  null,
-                  null,
-                  null,
-                  null
-          );
+              null,
+              fileName,
+              connection.workbook.getSheetName(i),
+              "TABLE",
+              "",
+              null,
+              null,
+              null,
+              null,
+              null);
       }
     return resultSet;
   }
 
   @Override
   public ResultSet getSchemas() throws SQLException {
-    ResultSetImpl resultSet = new ResultSetImpl(new Object[]{"TABLE_SCHEM", String.class},
-            new Object[]{"TABLE_CATALOG", String.class});
+    ResultSetImpl resultSet =
+        new ResultSetImpl(
+            new Object[] {"TABLE_SCHEM", String.class},
+            new Object[] {"TABLE_CATALOG", String.class});
 
     String fileName = connection.saveFile.getName();
     int indexOf = fileName.indexOf('.');
-    if (indexOf >= 0)
-      fileName = fileName.substring(0, indexOf);
+    if (indexOf >= 0) fileName = fileName.substring(0, indexOf);
     resultSet.addRow(fileName, null);
 
     return resultSet;
@@ -742,68 +719,71 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public ResultSet getCatalogs() throws SQLException {
-    ResultSetImpl resultSet = new ResultSetImpl(new Object[]{"TABLE_CAT", String.class});
+    ResultSetImpl resultSet = new ResultSetImpl(new Object[] {"TABLE_CAT", String.class});
     return resultSet;
   }
 
   @Override
   public ResultSet getTableTypes() throws SQLException {
-    ResultSetImpl resultSet = new ResultSetImpl(new Object[]{"TABLE_TYPE", String.class});
+    ResultSetImpl resultSet = new ResultSetImpl(new Object[] {"TABLE_TYPE", String.class});
     resultSet.addRow("TABLE");
     return resultSet;
   }
 
   @Override
-  public ResultSet getColumns(String catalog,
-                              String schemaPattern,
-                              String tableNamePattern,
-                              String columnNamePattern) throws SQLException {
+  public ResultSet getColumns(
+      String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern)
+      throws SQLException {
 
-    ResultSetImpl resultSet = new ResultSetImpl(
-                  new Object[]{"TABLE_CAT", String.class},
-                  new Object[]{"TABLE_SCHEM", String.class},
-                  new Object[]{"TABLE_NAME", String.class},
-                  new Object[]{"COLUMN_NAME", String.class},
-                  new Object[]{"DATA_TYPE", Integer.class},
-                  new Object[]{"TYPE_NAME", String.class},
-                  new Object[]{"COLUMN_SIZE", Integer.class},
-                  new Object[]{"BUFFER_LENGTH", String.class},
-                  new Object[]{"DECIMAL_DIGITS", Integer.class},
-                  new Object[]{"NUM_PREC_RADIX", Integer.class},
-                  new Object[]{"NULLABLE", Integer.class},
-                  new Object[]{"REMARKS", String.class},
-                  new Object[]{"COLUMN_DEF", String.class},
-                  new Object[]{"SQL_DATA_TYPE", Integer.class},
-                  new Object[]{"SQL_DATETIME_SUB", Integer.class},
-                  new Object[]{"CHAR_OCTET_LENGTH", Integer.class},
-                  new Object[]{"ORDINAL_POSITION", Integer.class},
-                  new Object[]{"IS_NULLABLE", String.class},
-                  new Object[]{"SCOPE_CATALOG", String.class},
-                  new Object[]{"SCOPE_SCHEMA", String.class},
-                  new Object[]{"SCOPE_TABLE", String.class},
-                  new Object[]{"SOURCE_DATA_TYPE", Short.class},
-                  new Object[]{"IS_AUTOINCREMENT", String.class},
-                  new Object[]{"IS_GENERATEDCOLUMN", String.class}
-          );
+    ResultSetImpl resultSet =
+        new ResultSetImpl(
+            new Object[] {"TABLE_CAT", String.class},
+            new Object[] {"TABLE_SCHEM", String.class},
+            new Object[] {"TABLE_NAME", String.class},
+            new Object[] {"COLUMN_NAME", String.class},
+            new Object[] {"DATA_TYPE", Integer.class},
+            new Object[] {"TYPE_NAME", String.class},
+            new Object[] {"COLUMN_SIZE", Integer.class},
+            new Object[] {"BUFFER_LENGTH", String.class},
+            new Object[] {"DECIMAL_DIGITS", Integer.class},
+            new Object[] {"NUM_PREC_RADIX", Integer.class},
+            new Object[] {"NULLABLE", Integer.class},
+            new Object[] {"REMARKS", String.class},
+            new Object[] {"COLUMN_DEF", String.class},
+            new Object[] {"SQL_DATA_TYPE", Integer.class},
+            new Object[] {"SQL_DATETIME_SUB", Integer.class},
+            new Object[] {"CHAR_OCTET_LENGTH", Integer.class},
+            new Object[] {"ORDINAL_POSITION", Integer.class},
+            new Object[] {"IS_NULLABLE", String.class},
+            new Object[] {"SCOPE_CATALOG", String.class},
+            new Object[] {"SCOPE_SCHEMA", String.class},
+            new Object[] {"SCOPE_TABLE", String.class},
+            new Object[] {"SOURCE_DATA_TYPE", Short.class},
+            new Object[] {"IS_AUTOINCREMENT", String.class},
+            new Object[] {"IS_GENERATEDCOLUMN", String.class});
 
     String fileName = connection.saveFile.getName();
     int indexOf = fileName.indexOf('.');
-    if (indexOf >= 0)
-      fileName = fileName.substring(0, indexOf);
+    if (indexOf >= 0) fileName = fileName.substring(0, indexOf);
 
     int firstSheetRowOffset = connection.getInt(XlsDriver.HEADLINE, DEFAULT_HEADLINE);
     int firstSheetColOffset = connection.getInt(XlsDriver.FIRST_COL, DEFAULT_FIRST_COL);
 
-    MatchingEngine schemaMatcher = GlobPattern.compile(schemaPattern != null
-                   ? schemaPattern
-                   : "%", '%', '_', GlobPattern.HANDLE_ESCAPES);
-    MatchingEngine tableNameMatcher = GlobPattern.compile(tableNamePattern != null
-                   ? tableNamePattern
-                   : "%", '%', '_', GlobPattern.HANDLE_ESCAPES);
-    MatchingEngine columnNameMatcher = GlobPattern.compile(columnNamePattern != null
-                   ? columnNamePattern
-                   : "%", '%', '_',
-                   GlobPattern.HANDLE_ESCAPES);
+    MatchingEngine schemaMatcher =
+        GlobPattern.compile(
+            schemaPattern != null ? schemaPattern : "%", '%', '_', GlobPattern.HANDLE_ESCAPES);
+    MatchingEngine tableNameMatcher =
+        GlobPattern.compile(
+            tableNamePattern != null ? tableNamePattern : "%",
+            '%',
+            '_',
+            GlobPattern.HANDLE_ESCAPES);
+    MatchingEngine columnNameMatcher =
+        GlobPattern.compile(
+            columnNamePattern != null ? columnNamePattern : "%",
+            '%',
+            '_',
+            GlobPattern.HANDLE_ESCAPES);
 
     if (schemaPattern == null || schemaMatcher.matches(fileName))
       for (int i = 0; i < connection.workbook.getNumberOfSheets(); i++) {
@@ -818,8 +798,7 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
           int r = firstSheetRowOffset - 1;
 
           Row row = sheet.getRow(r);
-          if (row == null)
-            throw new SQLException("No header row in sheet");
+          if (row == null) throw new SQLException("No header row in sheet");
           for (short c = (short) firstSheetColOffset; c < row.getLastCellNum(); c++) {
             Cell cell = row.getCell(c);
             String columnName = formatter.formatCellValue(cell);
@@ -835,14 +814,18 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
           row = sheet.getRow(++r);
           if (row == null)
-            for (short c = (short) firstSheetColOffset; c < (short) firstSheetColOffset + columnNames.size(); c++) {
+            for (short c = (short) firstSheetColOffset;
+                c < (short) firstSheetColOffset + columnNames.size();
+                c++) {
               CellStyle columnStyle = sheet.getColumnStyle(c);
               short dataFormat = columnStyle.getDataFormat();
-              //@todo: set the actual type based on the formats
+              // @todo: set the actual type based on the formats
               columnTypes.add(Types.VARCHAR);
             }
           else
-            for (short c = (short) firstSheetColOffset; c < (short) firstSheetColOffset + columnNames.size(); c++) {
+            for (short c = (short) firstSheetColOffset;
+                c < (short) firstSheetColOffset + columnNames.size();
+                c++) {
               Cell cell = row.getCell(c);
               if (cell != null) {
                 int typeCode;
@@ -855,36 +838,40 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
                     typeCode = Types.VARCHAR;
                     break;
                   case NUMERIC:
-                    if (DateUtil.isCellDateFormatted(cell))
-                      typeCode = Types.DATE;
-                    else
-                      typeCode = Types.DOUBLE;
+                    if (DateUtil.isCellDateFormatted(cell)) typeCode = Types.DATE;
+                    else typeCode = Types.DOUBLE;
                     break;
                   case BLANK:
                     typeCode = Types.NULL;
                     break;
                   case FORMULA:
-                            try {
-                    cell.getStringCellValue();
-                    typeCode = Types.VARCHAR;
-                  } catch (Exception e) {
-                    cell.getNumericCellValue();
-                    typeCode = Types.DOUBLE;
-                  }
-                  break;
+                    try {
+                      cell.getStringCellValue();
+                      typeCode = Types.VARCHAR;
+                    } catch (Exception e) {
+                      cell.getNumericCellValue();
+                      typeCode = Types.DOUBLE;
+                    }
+                    break;
                   case ERROR:
-                    throw new RuntimeException("The ExcelType ( ERROR ) is not supported - Cell (" + r +
-                                               "," + c + ")");
+                    throw new RuntimeException(
+                        "The ExcelType ( ERROR ) is not supported - Cell (" + r + "," + c + ")");
 
                   default:
-                    throw new RuntimeException("The ExcelType (" + excelCellType + ") is not supported - Cell (" +
-                                               r + "," + c + ")");
+                    throw new RuntimeException(
+                        "The ExcelType ("
+                            + excelCellType
+                            + ") is not supported - Cell ("
+                            + r
+                            + ","
+                            + c
+                            + ")");
                 }
                 columnTypes.add(typeCode);
               } else {
                 CellStyle columnStyle = sheet.getColumnStyle(c);
                 short dataFormat = columnStyle.getDataFormat();
-                //@todo: set the actual type based on the formats
+                // @todo: set the actual type based on the formats
 
                 columnTypes.add(Types.VARCHAR);
               }
@@ -900,13 +887,13 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
               switch (columnTypes.get(c)) {
                 case Types.BOOLEAN:
                   typeName = Boolean.class.getName();
-                  //@todo: check if 1 is correct
+                  // @todo: check if 1 is correct
                   columnSize = 1;
                   decimalDigits = 0;
                   break;
                 case Types.DATE:
                   typeName = java.sql.Date.class.getName();
-                  //@todo: check if 8 is correct
+                  // @todo: check if 8 is correct
                   columnSize = 8;
                   decimalDigits = 0;
                   break;
@@ -923,31 +910,35 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
               }
 
               resultSet.addRow(
-                      null, // TABLE_CAT
-                      fileName, // TABLE_SCHEM
-                      tableName, // TABLE_NAME
-                      columnNames.get(c), // COLUMN_NAME
-                      columnTypes.get(c), // DATA_TYPE
-                      typeName, // TYPE_NAME
-                      columnSize, // COLUMN_SIZE
-                      null, // BUFFER_LENGTH
-                      decimalDigits, // DECIMAL_DIGITS
-                      10, // NUM_PREC_RADIX
-                      DatabaseMetaData.columnNullable, // NULLABLE
-                      "", // REMARKS
-                      null, // COLUMN_DEF String => default value for the column, which should be interpreted as a string when the value is enclosed in single quotes (may be null)             
-                      null, //SQL_DATA_TYPE int => unused 
-                      null, // SQL_DATETIME_SUB int => unused 
-                      4096, // CHAR_OCTET_LENGTH int => for char types the maximum number of bytes in the column 
-                      c, // ORDINAL_POSITION
-                      "YES", // String => ISO rules are used to determine the nullability for a column. 
-                      null, // SCOPE_CATALOG
-                      null, // SCOPE_SCHEMA
-                      null, // SCOPE_TABLE
-                      null, // SOURCE_DATA_TYPE
-                      "NO", // IS_AUTOINCREMENT String => Indicates whether this column is auto incremented 
-                      "NO" // IS_GENERATEDCOLUMN String => Indicates whether this is a generated column 
-              );
+                  null, // TABLE_CAT
+                  fileName, // TABLE_SCHEM
+                  tableName, // TABLE_NAME
+                  columnNames.get(c), // COLUMN_NAME
+                  columnTypes.get(c), // DATA_TYPE
+                  typeName, // TYPE_NAME
+                  columnSize, // COLUMN_SIZE
+                  null, // BUFFER_LENGTH
+                  decimalDigits, // DECIMAL_DIGITS
+                  10, // NUM_PREC_RADIX
+                  DatabaseMetaData.columnNullable, // NULLABLE
+                  "", // REMARKS
+                  null, // COLUMN_DEF String => default value for the column, which should be
+                        // interpreted as a string when the value is enclosed in single quotes (may
+                        // be null)
+                  null, // SQL_DATA_TYPE int => unused
+                  null, // SQL_DATETIME_SUB int => unused
+                  4096, // CHAR_OCTET_LENGTH int => for char types the maximum number of bytes in
+                        // the column
+                  c, // ORDINAL_POSITION
+                  "YES", // String => ISO rules are used to determine the nullability for a column.
+                  null, // SCOPE_CATALOG
+                  null, // SCOPE_SCHEMA
+                  null, // SCOPE_TABLE
+                  null, // SOURCE_DATA_TYPE
+                  "NO", // IS_AUTOINCREMENT String => Indicates whether this column is auto
+                        // incremented
+                  "NO" // IS_GENERATEDCOLUMN String => Indicates whether this is a generated column
+                  );
             }
         }
       }
@@ -955,248 +946,248 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public ResultSet getColumnPrivileges(String string, String string1, String string2, String string3) throws SQLException {
+  public ResultSet getColumnPrivileges(
+      String string, String string1, String string2, String string3) throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getTablePrivileges(String string, String string1, String string2) throws SQLException {
+  public ResultSet getTablePrivileges(String string, String string1, String string2)
+      throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getBestRowIdentifier(String string, String string1, String string2, int i, boolean bln) throws SQLException {
+  public ResultSet getBestRowIdentifier(
+      String string, String string1, String string2, int i, boolean bln) throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getVersionColumns(String string, String string1, String string2) throws SQLException {
+  public ResultSet getVersionColumns(String string, String string1, String string2)
+      throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getPrimaryKeys(String catalog,
-                       String schema,
-                       String table) throws SQLException {
-    ResultSetImpl resultSet = new ResultSetImpl(
-                  new Object[]{"TABLE_CAT", String.class},
-                  new Object[]{"TABLE_SCHEM", String.class},
-                  new Object[]{"TABLE_NAME", String.class},
-                  new Object[]{"COLUMN_NAME", String.class},
-                  new Object[]{"KEY_SEQ", Short.class},
-                  new Object[]{"PK_NAME", String.class}
-          );
+  public ResultSet getPrimaryKeys(String catalog, String schema, String table) throws SQLException {
+    ResultSetImpl resultSet =
+        new ResultSetImpl(
+            new Object[] {"TABLE_CAT", String.class},
+            new Object[] {"TABLE_SCHEM", String.class},
+            new Object[] {"TABLE_NAME", String.class},
+            new Object[] {"COLUMN_NAME", String.class},
+            new Object[] {"KEY_SEQ", Short.class},
+            new Object[] {"PK_NAME", String.class});
     return resultSet;
   }
 
   @Override
-  public ResultSet getImportedKeys(String catalog,
-                        String schema,
-                        String table) throws SQLException {
-    ResultSetImpl resultSet = new ResultSetImpl(
-                  new Object[]{"PKTABLE_CAT", String.class},
-                  new Object[]{"PKTABLE_SCHEM", String.class},
-                  new Object[]{"PKTABLE_NAME", String.class},
-                  new Object[]{"PKCOLUMN_NAME", String.class},
-                  new Object[]{"FKTABLE_CAT", String.class},
-                  new Object[]{"FKTABLE_SCHEM", String.class},
-                  new Object[]{"FKTABLE_NAME", String.class},
-                  new Object[]{"FKCOLUMN_NAME", String.class},
-                  new Object[]{"KEY_SEQ", Short.class},
-                  new Object[]{"UPDATE_RULE", Short.class},
-                  new Object[]{"DELETE_RULE", Short.class},
-                  new Object[]{"FK_NAME", String.class},
-                  new Object[]{"PK_NAME", String.class},
-                  new Object[]{"DEFERRABILITY", Short.class}
-          );
+  public ResultSet getImportedKeys(String catalog, String schema, String table)
+      throws SQLException {
+    ResultSetImpl resultSet =
+        new ResultSetImpl(
+            new Object[] {"PKTABLE_CAT", String.class},
+            new Object[] {"PKTABLE_SCHEM", String.class},
+            new Object[] {"PKTABLE_NAME", String.class},
+            new Object[] {"PKCOLUMN_NAME", String.class},
+            new Object[] {"FKTABLE_CAT", String.class},
+            new Object[] {"FKTABLE_SCHEM", String.class},
+            new Object[] {"FKTABLE_NAME", String.class},
+            new Object[] {"FKCOLUMN_NAME", String.class},
+            new Object[] {"KEY_SEQ", Short.class},
+            new Object[] {"UPDATE_RULE", Short.class},
+            new Object[] {"DELETE_RULE", Short.class},
+            new Object[] {"FK_NAME", String.class},
+            new Object[] {"PK_NAME", String.class},
+            new Object[] {"DEFERRABILITY", Short.class});
     return resultSet;
   }
 
   @Override
-  public ResultSet getExportedKeys(String catalog,
-                        String schema,
-                        String table) throws SQLException {
-    ResultSetImpl resultSet = new ResultSetImpl(
-                  new Object[]{"PKTABLE_CAT", String.class},
-                  new Object[]{"PKTABLE_SCHEM", String.class},
-                  new Object[]{"PKTABLE_NAME", String.class},
-                  new Object[]{"PKCOLUMN_NAME", String.class},
-                  new Object[]{"FKTABLE_CAT", String.class},
-                  new Object[]{"FKTABLE_SCHEM", String.class},
-                  new Object[]{"FKTABLE_NAME", String.class},
-                  new Object[]{"FKCOLUMN_NAME", String.class},
-                  new Object[]{"KEY_SEQ", Short.class},
-                  new Object[]{"UPDATE_RULE", Short.class},
-                  new Object[]{"DELETE_RULE", Short.class},
-                  new Object[]{"FK_NAME", String.class},
-                  new Object[]{"PK_NAME", String.class},
-                  new Object[]{"DEFERRABILITY", Short.class}
-          );
+  public ResultSet getExportedKeys(String catalog, String schema, String table)
+      throws SQLException {
+    ResultSetImpl resultSet =
+        new ResultSetImpl(
+            new Object[] {"PKTABLE_CAT", String.class},
+            new Object[] {"PKTABLE_SCHEM", String.class},
+            new Object[] {"PKTABLE_NAME", String.class},
+            new Object[] {"PKCOLUMN_NAME", String.class},
+            new Object[] {"FKTABLE_CAT", String.class},
+            new Object[] {"FKTABLE_SCHEM", String.class},
+            new Object[] {"FKTABLE_NAME", String.class},
+            new Object[] {"FKCOLUMN_NAME", String.class},
+            new Object[] {"KEY_SEQ", Short.class},
+            new Object[] {"UPDATE_RULE", Short.class},
+            new Object[] {"DELETE_RULE", Short.class},
+            new Object[] {"FK_NAME", String.class},
+            new Object[] {"PK_NAME", String.class},
+            new Object[] {"DEFERRABILITY", Short.class});
     return resultSet;
   }
 
   @Override
-  public ResultSet getCrossReference(String parentCatalog,
-                          String parentSchema,
-                          String parentTable,
-                          String foreignCatalog,
-                          String foreignSchema,
-                          String foreignTable) throws SQLException {
-    ResultSetImpl resultSet = new ResultSetImpl(
-                  new Object[]{"PKTABLE_CAT", String.class},
-                  new Object[]{"PKTABLE_SCHEM", String.class},
-                  new Object[]{"PKTABLE_NAME", String.class},
-                  new Object[]{"PKCOLUMN_NAME", String.class},
-                  new Object[]{"FKTABLE_CAT", String.class},
-                  new Object[]{"FKTABLE_SCHEM", String.class},
-                  new Object[]{"FKTABLE_NAME", String.class},
-                  new Object[]{"FKCOLUMN_NAME", String.class},
-                  new Object[]{"KEY_SEQ", Short.class},
-                  new Object[]{"UPDATE_RULE", Short.class},
-                  new Object[]{"DELETE_RULE", Short.class},
-                  new Object[]{"FK_NAME", String.class},
-                  new Object[]{"PK_NAME", String.class},
-                  new Object[]{"DEFERRABILITY", Short.class}
-          );
+  public ResultSet getCrossReference(
+      String parentCatalog,
+      String parentSchema,
+      String parentTable,
+      String foreignCatalog,
+      String foreignSchema,
+      String foreignTable)
+      throws SQLException {
+    ResultSetImpl resultSet =
+        new ResultSetImpl(
+            new Object[] {"PKTABLE_CAT", String.class},
+            new Object[] {"PKTABLE_SCHEM", String.class},
+            new Object[] {"PKTABLE_NAME", String.class},
+            new Object[] {"PKCOLUMN_NAME", String.class},
+            new Object[] {"FKTABLE_CAT", String.class},
+            new Object[] {"FKTABLE_SCHEM", String.class},
+            new Object[] {"FKTABLE_NAME", String.class},
+            new Object[] {"FKCOLUMN_NAME", String.class},
+            new Object[] {"KEY_SEQ", Short.class},
+            new Object[] {"UPDATE_RULE", Short.class},
+            new Object[] {"DELETE_RULE", Short.class},
+            new Object[] {"FK_NAME", String.class},
+            new Object[] {"PK_NAME", String.class},
+            new Object[] {"DEFERRABILITY", Short.class});
     return resultSet;
   }
 
   @Override
   public ResultSet getTypeInfo() throws SQLException {
-    ResultSetImpl resultSet = new ResultSetImpl(
-                  new Object[]{"TYPE_NAME", String.class},
-                  new Object[]{"DATA_TYPE", Integer.class},
-                  new Object[]{"PRECISION", Integer.class},
-                  new Object[]{"LITERAL_PREFIX", String.class},
-                  new Object[]{"LITERAL_SUFFIX", String.class},
-                  new Object[]{"CREATE_PARAMS", String.class},
-                  new Object[]{"NULLABLE", Short.class},
-                  new Object[]{"CASE_SENSITIVE", Boolean.class},
-                  new Object[]{"SEARCHABLE", String.class},
-                  new Object[]{"UNSIGNED_ATTRIBUTE", Boolean.class},
-                  new Object[]{"FIXED_PREC_SCALE", Boolean.class},
-                  new Object[]{"AUTO_INCREMENT", Boolean.class},
-                  new Object[]{"LOCAL_TYPE_NAME", String.class},
-                  new Object[]{"MINIMUM_SCALE", String.class},
-                  new Object[]{"MAXIMUM_SCALE", String.class},
-                  new Object[]{"SQL_DATA_TYPE", String.class},
-                  new Object[]{"SQL_DATETIME_SUB", String.class},
-                  new Object[]{"NUM_PREC_RADIX", String.class}
-          );
-    
-    //@todo: maybe encapsulate these 4 Data Types in order to get consistent parameters
-    
+    ResultSetImpl resultSet =
+        new ResultSetImpl(
+            new Object[] {"TYPE_NAME", String.class},
+            new Object[] {"DATA_TYPE", Integer.class},
+            new Object[] {"PRECISION", Integer.class},
+            new Object[] {"LITERAL_PREFIX", String.class},
+            new Object[] {"LITERAL_SUFFIX", String.class},
+            new Object[] {"CREATE_PARAMS", String.class},
+            new Object[] {"NULLABLE", Short.class},
+            new Object[] {"CASE_SENSITIVE", Boolean.class},
+            new Object[] {"SEARCHABLE", String.class},
+            new Object[] {"UNSIGNED_ATTRIBUTE", Boolean.class},
+            new Object[] {"FIXED_PREC_SCALE", Boolean.class},
+            new Object[] {"AUTO_INCREMENT", Boolean.class},
+            new Object[] {"LOCAL_TYPE_NAME", String.class},
+            new Object[] {"MINIMUM_SCALE", String.class},
+            new Object[] {"MAXIMUM_SCALE", String.class},
+            new Object[] {"SQL_DATA_TYPE", String.class},
+            new Object[] {"SQL_DATETIME_SUB", String.class},
+            new Object[] {"NUM_PREC_RADIX", String.class});
+
+    // @todo: maybe encapsulate these 4 Data Types in order to get consistent parameters
+
     resultSet.addRow(
-            "VARCHAR", // TYPE_NAME String => Type name 
-            Types.VARCHAR, // DATA_TYPE int => SQL data type from java.sql.Types 
-            4096, // PRECISION int => maximum precision 
-            null, //  LITERAL_PREFIX String => prefix used to quote a literal (may be null) 
-            null, // LITERAL_SUFFIX String => suffix used to quote a literal (may be null) 
-            null, // CREATE_PARAMS String => parameters used in creating the type (may be null) 
-            typeNullable, // NULLABLE short => can you use NULL for this type. 
-            true, // CASE_SENSITIVE boolean=> is it case sensitive. 
-            typePredNone, // SEARCHABLE short => can you use "WHERE" based on this type: 
-            true, // UNSIGNED_ATTRIBUTE boolean => is it unsigned. 
-            false, // FIXED_PREC_SCALE boolean => can it be a money value. 
-            false, // AUTO_INCREMENT boolean => can it be used for an auto-increment value. 
-            null, // LOCAL_TYPE_NAME String => localized version of type name (may be null) 
-            0, // MINIMUM_SCALE short => minimum scale supported 
-            0, // MAXIMUM_SCALE short => maximum scale supported 
-            0, // SQL_DATA_TYPE int => unused 
-            0, // SQL_DATETIME_SUB int => unused 
-            10 // NUM_PREC_RADIX int => usually 2 or 10 
-    );
-    
+        "VARCHAR", // TYPE_NAME String => Type name
+        Types.VARCHAR, // DATA_TYPE int => SQL data type from java.sql.Types
+        4096, // PRECISION int => maximum precision
+        null, //  LITERAL_PREFIX String => prefix used to quote a literal (may be null)
+        null, // LITERAL_SUFFIX String => suffix used to quote a literal (may be null)
+        null, // CREATE_PARAMS String => parameters used in creating the type (may be null)
+        typeNullable, // NULLABLE short => can you use NULL for this type.
+        true, // CASE_SENSITIVE boolean=> is it case sensitive.
+        typePredNone, // SEARCHABLE short => can you use "WHERE" based on this type:
+        true, // UNSIGNED_ATTRIBUTE boolean => is it unsigned.
+        false, // FIXED_PREC_SCALE boolean => can it be a money value.
+        false, // AUTO_INCREMENT boolean => can it be used for an auto-increment value.
+        null, // LOCAL_TYPE_NAME String => localized version of type name (may be null)
+        0, // MINIMUM_SCALE short => minimum scale supported
+        0, // MAXIMUM_SCALE short => maximum scale supported
+        0, // SQL_DATA_TYPE int => unused
+        0, // SQL_DATETIME_SUB int => unused
+        10 // NUM_PREC_RADIX int => usually 2 or 10
+        );
+
     resultSet.addRow(
-            "DOUBLE", // TYPE_NAME String => Type name 
-            Types.DOUBLE, // DATA_TYPE int => SQL data type from java.sql.Types 
-            Double.BYTES, // PRECISION int => maximum precision 
-            null, //  LITERAL_PREFIX String => prefix used to quote a literal (may be null) 
-            null, // LITERAL_SUFFIX String => suffix used to quote a literal (may be null) 
-            null, // CREATE_PARAMS String => parameters used in creating the type (may be null) 
-            typeNullable, // NULLABLE short => can you use NULL for this type. 
-            false, // CASE_SENSITIVE boolean=> is it case sensitive. 
-            typePredNone, // SEARCHABLE short => can you use "WHERE" based on this type: 
-            true, // UNSIGNED_ATTRIBUTE boolean => is it unsigned. 
-            false, // FIXED_PREC_SCALE boolean => can it be a money value. 
-            false, // AUTO_INCREMENT boolean => can it be used for an auto-increment value. 
-            null, // LOCAL_TYPE_NAME String => localized version of type name (may be null) 
-            0, // MINIMUM_SCALE short => minimum scale supported 
-            15, // MAXIMUM_SCALE short => maximum scale supported 
-            0, // SQL_DATA_TYPE int => unused 
-            0, // SQL_DATETIME_SUB int => unused 
-            10 // NUM_PREC_RADIX int => usually 2 or 10 
-    );
-    
+        "DOUBLE", // TYPE_NAME String => Type name
+        Types.DOUBLE, // DATA_TYPE int => SQL data type from java.sql.Types
+        Double.BYTES, // PRECISION int => maximum precision
+        null, //  LITERAL_PREFIX String => prefix used to quote a literal (may be null)
+        null, // LITERAL_SUFFIX String => suffix used to quote a literal (may be null)
+        null, // CREATE_PARAMS String => parameters used in creating the type (may be null)
+        typeNullable, // NULLABLE short => can you use NULL for this type.
+        false, // CASE_SENSITIVE boolean=> is it case sensitive.
+        typePredNone, // SEARCHABLE short => can you use "WHERE" based on this type:
+        true, // UNSIGNED_ATTRIBUTE boolean => is it unsigned.
+        false, // FIXED_PREC_SCALE boolean => can it be a money value.
+        false, // AUTO_INCREMENT boolean => can it be used for an auto-increment value.
+        null, // LOCAL_TYPE_NAME String => localized version of type name (may be null)
+        0, // MINIMUM_SCALE short => minimum scale supported
+        15, // MAXIMUM_SCALE short => maximum scale supported
+        0, // SQL_DATA_TYPE int => unused
+        0, // SQL_DATETIME_SUB int => unused
+        10 // NUM_PREC_RADIX int => usually 2 or 10
+        );
+
     resultSet.addRow(
-            "BOOLEAN", // TYPE_NAME String => Type name 
-            Types.BOOLEAN, // DATA_TYPE int => SQL data type from java.sql.Types
-            //@todo: doublcheck the correct precision
-            1, // PRECISION int => maximum precision 
-            null, //  LITERAL_PREFIX String => prefix used to quote a literal (may be null) 
-            null, // LITERAL_SUFFIX String => suffix used to quote a literal (may be null) 
-            null, // CREATE_PARAMS String => parameters used in creating the type (may be null) 
-            typeNullable, // NULLABLE short => can you use NULL for this type. 
-            false, // CASE_SENSITIVE boolean=> is it case sensitive. 
-            typePredNone, // SEARCHABLE short => can you use "WHERE" based on this type: 
-            true, // UNSIGNED_ATTRIBUTE boolean => is it unsigned. 
-            false, // FIXED_PREC_SCALE boolean => can it be a money value. 
-            false, // AUTO_INCREMENT boolean => can it be used for an auto-increment value. 
-            null, // LOCAL_TYPE_NAME String => localized version of type name (may be null) 
-            0, // MINIMUM_SCALE short => minimum scale supported 
-            0, // MAXIMUM_SCALE short => maximum scale supported 
-            0, // SQL_DATA_TYPE int => unused 
-            0, // SQL_DATETIME_SUB int => unused 
-            10 // NUM_PREC_RADIX int => usually 2 or 10 
-    );
-    
+        "BOOLEAN", // TYPE_NAME String => Type name
+        Types.BOOLEAN, // DATA_TYPE int => SQL data type from java.sql.Types
+        // @todo: doublcheck the correct precision
+        1, // PRECISION int => maximum precision
+        null, //  LITERAL_PREFIX String => prefix used to quote a literal (may be null)
+        null, // LITERAL_SUFFIX String => suffix used to quote a literal (may be null)
+        null, // CREATE_PARAMS String => parameters used in creating the type (may be null)
+        typeNullable, // NULLABLE short => can you use NULL for this type.
+        false, // CASE_SENSITIVE boolean=> is it case sensitive.
+        typePredNone, // SEARCHABLE short => can you use "WHERE" based on this type:
+        true, // UNSIGNED_ATTRIBUTE boolean => is it unsigned.
+        false, // FIXED_PREC_SCALE boolean => can it be a money value.
+        false, // AUTO_INCREMENT boolean => can it be used for an auto-increment value.
+        null, // LOCAL_TYPE_NAME String => localized version of type name (may be null)
+        0, // MINIMUM_SCALE short => minimum scale supported
+        0, // MAXIMUM_SCALE short => maximum scale supported
+        0, // SQL_DATA_TYPE int => unused
+        0, // SQL_DATETIME_SUB int => unused
+        10 // NUM_PREC_RADIX int => usually 2 or 10
+        );
+
     resultSet.addRow(
-            "DATE", // TYPE_NAME String => Type name 
-            Types.DATE, // DATA_TYPE int => SQL data type from java.sql.Types 
-            //@todo: doublcheck the correct precision
-            8, // PRECISION int => maximum precision 
-            null, //  LITERAL_PREFIX String => prefix used to quote a literal (may be null) 
-            null, // LITERAL_SUFFIX String => suffix used to quote a literal (may be null) 
-            null, // CREATE_PARAMS String => parameters used in creating the type (may be null) 
-            typeNullable, // NULLABLE short => can you use NULL for this type. 
-            false, // CASE_SENSITIVE boolean=> is it case sensitive. 
-            typePredNone, // SEARCHABLE short => can you use "WHERE" based on this type: 
-            true, // UNSIGNED_ATTRIBUTE boolean => is it unsigned. 
-            false, // FIXED_PREC_SCALE boolean => can it be a money value. 
-            false, // AUTO_INCREMENT boolean => can it be used for an auto-increment value. 
-            null, // LOCAL_TYPE_NAME String => localized version of type name (may be null) 
-            0, // MINIMUM_SCALE short => minimum scale supported 
-            0, // MAXIMUM_SCALE short => maximum scale supported 
-            0, // SQL_DATA_TYPE int => unused 
-            0, // SQL_DATETIME_SUB int => unused 
-            10 // NUM_PREC_RADIX int => usually 2 or 10 
-    );
+        "DATE", // TYPE_NAME String => Type name
+        Types.DATE, // DATA_TYPE int => SQL data type from java.sql.Types
+        // @todo: doublcheck the correct precision
+        8, // PRECISION int => maximum precision
+        null, //  LITERAL_PREFIX String => prefix used to quote a literal (may be null)
+        null, // LITERAL_SUFFIX String => suffix used to quote a literal (may be null)
+        null, // CREATE_PARAMS String => parameters used in creating the type (may be null)
+        typeNullable, // NULLABLE short => can you use NULL for this type.
+        false, // CASE_SENSITIVE boolean=> is it case sensitive.
+        typePredNone, // SEARCHABLE short => can you use "WHERE" based on this type:
+        true, // UNSIGNED_ATTRIBUTE boolean => is it unsigned.
+        false, // FIXED_PREC_SCALE boolean => can it be a money value.
+        false, // AUTO_INCREMENT boolean => can it be used for an auto-increment value.
+        null, // LOCAL_TYPE_NAME String => localized version of type name (may be null)
+        0, // MINIMUM_SCALE short => minimum scale supported
+        0, // MAXIMUM_SCALE short => maximum scale supported
+        0, // SQL_DATA_TYPE int => unused
+        0, // SQL_DATETIME_SUB int => unused
+        10 // NUM_PREC_RADIX int => usually 2 or 10
+        );
 
     return resultSet;
   }
 
   @Override
-  public ResultSet getIndexInfo(String catalog,
-                                String schema,
-                                String table,
-                                boolean unique,
-                                boolean approximate) throws SQLException {
+  public ResultSet getIndexInfo(
+      String catalog, String schema, String table, boolean unique, boolean approximate)
+      throws SQLException {
 
-    ResultSetImpl resultSet = new ResultSetImpl(
-                  new Object[]{"TABLE_CAT", String.class},
-                  new Object[]{"TABLE_SCHEM", String.class},
-                  new Object[]{"TABLE_NAME", String.class},
-                  new Object[]{"NON_UNIQUE", Boolean.class},
-                  new Object[]{"INDEX_QUALIFIER", String.class},
-                  new Object[]{"INDEX_NAME", String.class},
-                  new Object[]{"TYPE", Short.class},
-                  new Object[]{"ORDINAL_POSITION", Short.class},
-                  new Object[]{"COLUMN_NAME", String.class},
-                  new Object[]{"ASC_OR_DESC", String.class},
-                  new Object[]{"CARDINALITY", String.class},
-                  new Object[]{"PAGES", Integer.class},
-                  new Object[]{"FILTER_CONDITION", String.class}
-          );
+    ResultSetImpl resultSet =
+        new ResultSetImpl(
+            new Object[] {"TABLE_CAT", String.class},
+            new Object[] {"TABLE_SCHEM", String.class},
+            new Object[] {"TABLE_NAME", String.class},
+            new Object[] {"NON_UNIQUE", Boolean.class},
+            new Object[] {"INDEX_QUALIFIER", String.class},
+            new Object[] {"INDEX_NAME", String.class},
+            new Object[] {"TYPE", Short.class},
+            new Object[] {"ORDINAL_POSITION", Short.class},
+            new Object[] {"COLUMN_NAME", String.class},
+            new Object[] {"ASC_OR_DESC", String.class},
+            new Object[] {"CARDINALITY", String.class},
+            new Object[] {"PAGES", Integer.class},
+            new Object[] {"FILTER_CONDITION", String.class});
     return resultSet;
   }
 
@@ -1261,7 +1252,8 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public ResultSet getUDTs(String string, String string1, String string2, int[] ints) throws SQLException {
+  public ResultSet getUDTs(String string, String string1, String string2, int[] ints)
+      throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
@@ -1291,17 +1283,20 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public ResultSet getSuperTypes(String string, String string1, String string2) throws SQLException {
+  public ResultSet getSuperTypes(String string, String string1, String string2)
+      throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getSuperTables(String string, String string1, String string2) throws SQLException {
+  public ResultSet getSuperTables(String string, String string1, String string2)
+      throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getAttributes(String string, String string1, String string2, String string3) throws SQLException {
+  public ResultSet getAttributes(String string, String string1, String string2, String string3)
+      throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
@@ -1317,9 +1312,7 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public int getDatabaseMajorVersion() throws SQLException {
-    return (connection.workbook instanceof XSSFWorkbook)
-            ? 2007
-            : 97;
+    return (connection.workbook instanceof XSSFWorkbook) ? 2007 : 97;
   }
 
   @Override
@@ -1358,8 +1351,7 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public ResultSet getSchemas(String catalog,
-                              String schemaPattern) throws SQLException {
+  public ResultSet getSchemas(String catalog, String schemaPattern) throws SQLException {
     return getSchemas();
   }
 
@@ -1384,12 +1376,14 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public ResultSet getFunctionColumns(String string, String string1, String string2, String string3) throws SQLException {
+  public ResultSet getFunctionColumns(String string, String string1, String string2, String string3)
+      throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getPseudoColumns(String string, String string1, String string2, String string3) throws SQLException {
+  public ResultSet getPseudoColumns(String string, String string1, String string2, String string3)
+      throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
