@@ -289,7 +289,7 @@ public class XLSX2CSV {
                         String sstIndex = value.toString();
                         try {
                             int idx = Integer.parseInt(sstIndex);
-                            XSSFRichTextString rtss = new XSSFRichTextString(sharedStringsTable.getEntryAt(idx));
+                            XSSFRichTextString rtss = new XSSFRichTextString(sharedStringsTable.getItemAt(idx).getString());
                             thisStr = '"' + rtss.toString() + '"';
                         } catch (NumberFormatException ex) {
                             output.println("Failed to parse SST index '" + sstIndex + "': " + ex.toString());
