@@ -17,15 +17,21 @@ package com.sqlsheet;
 
 import de.vandermeer.asciitable.AT_Context;
 import de.vandermeer.asciitable.AsciiTable;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.DateFormatConverter;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.text.DateFormat;
 import java.util.Locale;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.DateFormatConverter;
-import org.junit.*;
+
+import static org.junit.Assert.*;
 
 /**
  *
@@ -46,7 +52,7 @@ public class XlsDatabaseMetaDataTest {
     {"Row3", new java.util.Date(), Boolean.TRUE, 3, "Test", new java.util.Date(), Boolean.FALSE, 3 * Math.PI}
   };
 
-  public XlsDatabaseMetaDataTest() throws SQLException, IOException, ClassNotFoundException {
+  public XlsDatabaseMetaDataTest() throws SQLException, IOException {
     Workbook workBook = WorkbookFactory.create(true);
     Sheet sheet = workBook.createSheet("TestSheet1");
     int r = DEFAULT_HEADLINE - 1;
@@ -112,55 +118,55 @@ public class XlsDatabaseMetaDataTest {
   }
 
   @Test
-  public void testAllProceduresAreCallable() throws Exception {
+  public void testAllProceduresAreCallable() {
   }
 
   @Test
-  public void testAllTablesAreSelectable() throws Exception {
+  public void testAllTablesAreSelectable() {
   }
 
   @Test
-  public void testGetURL() throws Exception {
+  public void testGetURL() {
   }
 
   @Test
-  public void testGetUserName() throws Exception {
+  public void testGetUserName() {
   }
 
   @Test
-  public void testIsReadOnly() throws Exception {
+  public void testIsReadOnly() {
   }
 
   @Test
-  public void testNullsAreSortedHigh() throws Exception {
+  public void testNullsAreSortedHigh() {
   }
 
   @Test
-  public void testNullsAreSortedLow() throws Exception {
+  public void testNullsAreSortedLow() {
   }
 
   @Test
-  public void testNullsAreSortedAtStart() throws Exception {
+  public void testNullsAreSortedAtStart() {
   }
 
   @Test
-  public void testNullsAreSortedAtEnd() throws Exception {
+  public void testNullsAreSortedAtEnd() {
   }
 
   @Test
-  public void testGetDatabaseProductName() throws Exception {
+  public void testGetDatabaseProductName() {
   }
 
   @Test
-  public void testGetDatabaseProductVersion() throws Exception {
+  public void testGetDatabaseProductVersion() {
   }
 
   @Test
-  public void testGetDriverName() throws Exception {
+  public void testGetDriverName() {
   }
 
   @Test
-  public void testGetDriverVersion() throws Exception {
+  public void testGetDriverVersion() {
   }
 
   @Test
@@ -172,423 +178,423 @@ public class XlsDatabaseMetaDataTest {
   }
 
   @Test
-  public void testUsesLocalFiles() throws Exception {
+  public void testUsesLocalFiles() {
   }
 
   @Test
-  public void testUsesLocalFilePerTable() throws Exception {
+  public void testUsesLocalFilePerTable() {
   }
 
   @Test
-  public void testSupportsMixedCaseIdentifiers() throws Exception {
+  public void testSupportsMixedCaseIdentifiers() {
   }
 
   @Test
-  public void testStoresUpperCaseIdentifiers() throws Exception {
+  public void testStoresUpperCaseIdentifiers() {
   }
 
   @Test
-  public void testStoresLowerCaseIdentifiers() throws Exception {
+  public void testStoresLowerCaseIdentifiers() {
   }
 
   @Test
-  public void testStoresMixedCaseIdentifiers() throws Exception {
+  public void testStoresMixedCaseIdentifiers() {
   }
 
   @Test
-  public void testSupportsMixedCaseQuotedIdentifiers() throws Exception {
+  public void testSupportsMixedCaseQuotedIdentifiers() {
   }
 
   @Test
-  public void testStoresUpperCaseQuotedIdentifiers() throws Exception {
+  public void testStoresUpperCaseQuotedIdentifiers() {
   }
 
   @Test
-  public void testStoresLowerCaseQuotedIdentifiers() throws Exception {
+  public void testStoresLowerCaseQuotedIdentifiers() {
   }
 
   @Test
-  public void testStoresMixedCaseQuotedIdentifiers() throws Exception {
+  public void testStoresMixedCaseQuotedIdentifiers() {
   }
 
   @Test
-  public void testGetIdentifierQuoteString() throws Exception {
+  public void testGetIdentifierQuoteString() {
   }
 
   @Test
-  public void testGetSQLKeywords() throws Exception {
+  public void testGetSQLKeywords() {
   }
 
   @Test
-  public void testGetNumericFunctions() throws Exception {
+  public void testGetNumericFunctions() {
   }
 
   @Test
-  public void testGetStringFunctions() throws Exception {
+  public void testGetStringFunctions() {
   }
 
   @Test
-  public void testGetSystemFunctions() throws Exception {
+  public void testGetSystemFunctions() {
   }
 
   @Test
-  public void testGetTimeDateFunctions() throws Exception {
+  public void testGetTimeDateFunctions() {
   }
 
   @Test
-  public void testGetSearchStringEscape() throws Exception {
+  public void testGetSearchStringEscape() {
   }
 
   @Test
-  public void testGetExtraNameCharacters() throws Exception {
+  public void testGetExtraNameCharacters() {
   }
 
   @Test
-  public void testSupportsAlterTableWithAddColumn() throws Exception {
+  public void testSupportsAlterTableWithAddColumn() {
   }
 
   @Test
-  public void testSupportsAlterTableWithDropColumn() throws Exception {
+  public void testSupportsAlterTableWithDropColumn() {
   }
 
   @Test
-  public void testSupportsColumnAliasing() throws Exception {
+  public void testSupportsColumnAliasing() {
   }
 
   @Test
-  public void testNullPlusNonNullIsNull() throws Exception {
+  public void testNullPlusNonNullIsNull() {
   }
 
   @Test
-  public void testSupportsConvert_0args() throws Exception {
+  public void testSupportsConvert_0args() {
   }
 
   @Test
-  public void testSupportsConvert_int_int() throws Exception {
+  public void testSupportsConvert_int_int() {
   }
 
   @Test
-  public void testSupportsTableCorrelationNames() throws Exception {
+  public void testSupportsTableCorrelationNames() {
   }
 
   @Test
-  public void testSupportsDifferentTableCorrelationNames() throws Exception {
+  public void testSupportsDifferentTableCorrelationNames() {
   }
 
   @Test
-  public void testSupportsExpressionsInOrderBy() throws Exception {
+  public void testSupportsExpressionsInOrderBy() {
   }
 
   @Test
-  public void testSupportsOrderByUnrelated() throws Exception {
+  public void testSupportsOrderByUnrelated() {
   }
 
   @Test
-  public void testSupportsGroupBy() throws Exception {
+  public void testSupportsGroupBy() {
   }
 
   @Test
-  public void testSupportsGroupByUnrelated() throws Exception {
+  public void testSupportsGroupByUnrelated() {
   }
 
   @Test
-  public void testSupportsGroupByBeyondSelect() throws Exception {
+  public void testSupportsGroupByBeyondSelect() {
   }
 
   @Test
-  public void testSupportsLikeEscapeClause() throws Exception {
+  public void testSupportsLikeEscapeClause() {
   }
 
   @Test
-  public void testSupportsMultipleResultSets() throws Exception {
+  public void testSupportsMultipleResultSets() {
   }
 
   @Test
-  public void testSupportsMultipleTransactions() throws Exception {
+  public void testSupportsMultipleTransactions() {
   }
 
   @Test
-  public void testSupportsNonNullableColumns() throws Exception {
+  public void testSupportsNonNullableColumns() {
   }
 
   @Test
-  public void testSupportsMinimumSQLGrammar() throws Exception {
+  public void testSupportsMinimumSQLGrammar() {
   }
 
   @Test
-  public void testSupportsCoreSQLGrammar() throws Exception {
+  public void testSupportsCoreSQLGrammar() {
   }
 
   @Test
-  public void testSupportsExtendedSQLGrammar() throws Exception {
+  public void testSupportsExtendedSQLGrammar() {
   }
 
   @Test
-  public void testSupportsANSI92EntryLevelSQL() throws Exception {
+  public void testSupportsANSI92EntryLevelSQL() {
   }
 
   @Test
-  public void testSupportsANSI92IntermediateSQL() throws Exception {
+  public void testSupportsANSI92IntermediateSQL() {
   }
 
   @Test
-  public void testSupportsANSI92FullSQL() throws Exception {
+  public void testSupportsANSI92FullSQL() {
   }
 
   @Test
-  public void testSupportsIntegrityEnhancementFacility() throws Exception {
+  public void testSupportsIntegrityEnhancementFacility() {
   }
 
   @Test
-  public void testSupportsOuterJoins() throws Exception {
+  public void testSupportsOuterJoins() {
   }
 
   @Test
-  public void testSupportsFullOuterJoins() throws Exception {
+  public void testSupportsFullOuterJoins() {
   }
 
   @Test
-  public void testSupportsLimitedOuterJoins() throws Exception {
+  public void testSupportsLimitedOuterJoins() {
   }
 
   @Test
-  public void testGetSchemaTerm() throws Exception {
+  public void testGetSchemaTerm() {
   }
 
   @Test
-  public void testGetProcedureTerm() throws Exception {
+  public void testGetProcedureTerm() {
   }
 
   @Test
-  public void testGetCatalogTerm() throws Exception {
+  public void testGetCatalogTerm() {
   }
 
   @Test
-  public void testIsCatalogAtStart() throws Exception {
+  public void testIsCatalogAtStart() {
   }
 
   @Test
-  public void testGetCatalogSeparator() throws Exception {
+  public void testGetCatalogSeparator() {
   }
 
   @Test
-  public void testSupportsSchemasInDataManipulation() throws Exception {
+  public void testSupportsSchemasInDataManipulation() {
   }
 
   @Test
-  public void testSupportsSchemasInProcedureCalls() throws Exception {
+  public void testSupportsSchemasInProcedureCalls() {
   }
 
   @Test
-  public void testSupportsSchemasInTableDefinitions() throws Exception {
+  public void testSupportsSchemasInTableDefinitions() {
   }
 
   @Test
-  public void testSupportsSchemasInIndexDefinitions() throws Exception {
+  public void testSupportsSchemasInIndexDefinitions() {
   }
 
   @Test
-  public void testSupportsSchemasInPrivilegeDefinitions() throws Exception {
+  public void testSupportsSchemasInPrivilegeDefinitions() {
   }
 
   @Test
-  public void testSupportsCatalogsInDataManipulation() throws Exception {
+  public void testSupportsCatalogsInDataManipulation() {
   }
 
   @Test
-  public void testSupportsCatalogsInProcedureCalls() throws Exception {
+  public void testSupportsCatalogsInProcedureCalls() {
   }
 
   @Test
-  public void testSupportsCatalogsInTableDefinitions() throws Exception {
+  public void testSupportsCatalogsInTableDefinitions() {
   }
 
   @Test
-  public void testSupportsCatalogsInIndexDefinitions() throws Exception {
+  public void testSupportsCatalogsInIndexDefinitions() {
   }
 
   @Test
-  public void testSupportsCatalogsInPrivilegeDefinitions() throws Exception {
+  public void testSupportsCatalogsInPrivilegeDefinitions() {
   }
 
   @Test
-  public void testSupportsPositionedDelete() throws Exception {
+  public void testSupportsPositionedDelete() {
   }
 
   @Test
-  public void testSupportsPositionedUpdate() throws Exception {
+  public void testSupportsPositionedUpdate() {
   }
 
   @Test
-  public void testSupportsSelectForUpdate() throws Exception {
+  public void testSupportsSelectForUpdate() {
   }
 
   @Test
-  public void testSupportsStoredProcedures() throws Exception {
+  public void testSupportsStoredProcedures() {
   }
 
   @Test
-  public void testSupportsSubqueriesInComparisons() throws Exception {
+  public void testSupportsSubqueriesInComparisons() {
   }
 
   @Test
-  public void testSupportsSubqueriesInExists() throws Exception {
+  public void testSupportsSubqueriesInExists() {
   }
 
   @Test
-  public void testSupportsSubqueriesInIns() throws Exception {
+  public void testSupportsSubqueriesInIns() {
   }
 
   @Test
-  public void testSupportsSubqueriesInQuantifieds() throws Exception {
+  public void testSupportsSubqueriesInQuantifieds() {
   }
 
   @Test
-  public void testSupportsCorrelatedSubqueries() throws Exception {
+  public void testSupportsCorrelatedSubqueries() {
   }
 
   @Test
-  public void testSupportsUnion() throws Exception {
+  public void testSupportsUnion() {
   }
 
   @Test
-  public void testSupportsUnionAll() throws Exception {
+  public void testSupportsUnionAll() {
   }
 
   @Test
-  public void testSupportsOpenCursorsAcrossCommit() throws Exception {
+  public void testSupportsOpenCursorsAcrossCommit() {
   }
 
   @Test
-  public void testSupportsOpenCursorsAcrossRollback() throws Exception {
+  public void testSupportsOpenCursorsAcrossRollback() {
   }
 
   @Test
-  public void testSupportsOpenStatementsAcrossCommit() throws Exception {
+  public void testSupportsOpenStatementsAcrossCommit() {
   }
 
   @Test
-  public void testSupportsOpenStatementsAcrossRollback() throws Exception {
+  public void testSupportsOpenStatementsAcrossRollback() {
   }
 
   @Test
-  public void testGetMaxBinaryLiteralLength() throws Exception {
+  public void testGetMaxBinaryLiteralLength() {
   }
 
   @Test
-  public void testGetMaxCharLiteralLength() throws Exception {
+  public void testGetMaxCharLiteralLength() {
   }
 
   @Test
-  public void testGetMaxColumnNameLength() throws Exception {
+  public void testGetMaxColumnNameLength() {
   }
 
   @Test
-  public void testGetMaxColumnsInGroupBy() throws Exception {
+  public void testGetMaxColumnsInGroupBy() {
   }
 
   @Test
-  public void testGetMaxColumnsInIndex() throws Exception {
+  public void testGetMaxColumnsInIndex() {
   }
 
   @Test
-  public void testGetMaxColumnsInOrderBy() throws Exception {
+  public void testGetMaxColumnsInOrderBy() {
   }
 
   @Test
-  public void testGetMaxColumnsInSelect() throws Exception {
+  public void testGetMaxColumnsInSelect() {
   }
 
   @Test
-  public void testGetMaxColumnsInTable() throws Exception {
+  public void testGetMaxColumnsInTable() {
   }
 
   @Test
-  public void testGetMaxConnections() throws Exception {
+  public void testGetMaxConnections() {
   }
 
   @Test
-  public void testGetMaxCursorNameLength() throws Exception {
+  public void testGetMaxCursorNameLength() {
   }
 
   @Test
-  public void testGetMaxIndexLength() throws Exception {
+  public void testGetMaxIndexLength() {
   }
 
   @Test
-  public void testGetMaxSchemaNameLength() throws Exception {
+  public void testGetMaxSchemaNameLength() {
   }
 
   @Test
-  public void testGetMaxProcedureNameLength() throws Exception {
+  public void testGetMaxProcedureNameLength() {
   }
 
   @Test
-  public void testGetMaxCatalogNameLength() throws Exception {
+  public void testGetMaxCatalogNameLength() {
   }
 
   @Test
-  public void testGetMaxRowSize() throws Exception {
+  public void testGetMaxRowSize() {
   }
 
   @Test
-  public void testDoesMaxRowSizeIncludeBlobs() throws Exception {
+  public void testDoesMaxRowSizeIncludeBlobs() {
   }
 
   @Test
-  public void testGetMaxStatementLength() throws Exception {
+  public void testGetMaxStatementLength() {
   }
 
   @Test
-  public void testGetMaxStatements() throws Exception {
+  public void testGetMaxStatements() {
   }
 
   @Test
-  public void testGetMaxTableNameLength() throws Exception {
+  public void testGetMaxTableNameLength() {
   }
 
   @Test
-  public void testGetMaxTablesInSelect() throws Exception {
+  public void testGetMaxTablesInSelect() {
   }
 
   @Test
-  public void testGetMaxUserNameLength() throws Exception {
+  public void testGetMaxUserNameLength() {
   }
 
   @Test
-  public void testGetDefaultTransactionIsolation() throws Exception {
+  public void testGetDefaultTransactionIsolation() {
   }
 
   @Test
-  public void testSupportsTransactions() throws Exception {
+  public void testSupportsTransactions() {
   }
 
   @Test
-  public void testSupportsTransactionIsolationLevel() throws Exception {
+  public void testSupportsTransactionIsolationLevel() {
   }
 
   @Test
-  public void testSupportsDataDefinitionAndDataManipulationTransactions() throws Exception {
+  public void testSupportsDataDefinitionAndDataManipulationTransactions() {
   }
 
   @Test
-  public void testSupportsDataManipulationTransactionsOnly() throws Exception {
+  public void testSupportsDataManipulationTransactionsOnly() {
   }
 
   @Test
-  public void testDataDefinitionCausesTransactionCommit() throws Exception {
+  public void testDataDefinitionCausesTransactionCommit() {
   }
 
   @Test
-  public void testDataDefinitionIgnoredInTransactions() throws Exception {
+  public void testDataDefinitionIgnoredInTransactions() {
   }
 
   @Test
-  public void testGetProcedures() throws Exception {
+  public void testGetProcedures() {
   }
 
   @Test
-  public void testGetProcedureColumns() throws Exception {
+  public void testGetProcedureColumns() {
   }
 
   @Test
@@ -597,15 +603,15 @@ public class XlsDatabaseMetaDataTest {
     String tableTypeName = null;
     int r = 0;
     while (rs.next()) {
-      assert (rs.getString(1) == null);
-      assert (rs.getString(2).startsWith("DatabaseMetaData_"));
-      assert (rs.getString(3).equals("TestSheet" + (r + 1)));
-      assert (rs.getString(4).equals("TABLE"));
+      assertNull(rs.getString(1));
+      assertTrue(rs.getString(2).startsWith("DatabaseMetaData_"));
+      assertEquals(rs.getString(3), "TestSheet" + (r + 1));
+      assertEquals("TABLE", rs.getString(4));
       r++;
     }
     rs.close();
 
-    assert (r == 3);
+    assertEquals(3, r);
   }
 
   @Test
@@ -621,9 +627,9 @@ public class XlsDatabaseMetaDataTest {
     }
     rs.close();
 
-    assert (r == 1);
-    assert (schemaName.startsWith("DatabaseMetaData_"));
-    assert (catalogName == null);
+    assertEquals(1, r);
+    assertTrue(schemaName.startsWith("DatabaseMetaData_"));
+    assertNull(catalogName);
   }
 
   @Test
@@ -636,8 +642,8 @@ public class XlsDatabaseMetaDataTest {
       r++;
     }
     rs.close();
-    Assert.assertEquals("Number of found Catalogues", 0, r);
-    assert (catalogName == null);
+    assertEquals("Number of found Catalogues", 0, r);
+    assertNull(catalogName);
   }
 
   @Test
@@ -651,8 +657,8 @@ public class XlsDatabaseMetaDataTest {
     }
     rs.close();
 
-    assert (r == 1);
-    assert (tableTypeName.equals("TABLE"));
+    assertEquals(1, r);
+    assertEquals("TABLE", tableTypeName);
   }
 
   @Test
@@ -689,211 +695,211 @@ public class XlsDatabaseMetaDataTest {
 
     System.out.println(at.render());
 
-    Assert.assertEquals("Numbers of Columns in Table", columnNames.length, r);
+    assertEquals("Numbers of Columns in Table", columnNames.length, r);
   }
 
   @Test
-  public void testGetColumnPrivileges() throws Exception {
+  public void testGetColumnPrivileges() {
   }
 
   @Test
-  public void testGetTablePrivileges() throws Exception {
+  public void testGetTablePrivileges() {
   }
 
   @Test
-  public void testGetBestRowIdentifier() throws Exception {
+  public void testGetBestRowIdentifier() {
   }
 
   @Test
-  public void testGetVersionColumns() throws Exception {
+  public void testGetVersionColumns() {
   }
 
   @Test
-  public void testGetPrimaryKeys() throws Exception {
+  public void testGetPrimaryKeys() {
   }
 
   @Test
-  public void testGetImportedKeys() throws Exception {
+  public void testGetImportedKeys() {
   }
 
   @Test
-  public void testGetExportedKeys() throws Exception {
+  public void testGetExportedKeys() {
   }
 
   @Test
-  public void testGetCrossReference() throws Exception {
+  public void testGetCrossReference() {
   }
 
   @Test
-  public void testGetTypeInfo() throws Exception {
+  public void testGetTypeInfo() {
   }
 
   @Test
-  public void testGetIndexInfo() throws Exception {
+  public void testGetIndexInfo() {
   }
 
   @Test
-  public void testSupportsResultSetType() throws Exception {
+  public void testSupportsResultSetType() {
   }
 
   @Test
-  public void testSupportsResultSetConcurrency() throws Exception {
+  public void testSupportsResultSetConcurrency() {
   }
 
   @Test
-  public void testOwnUpdatesAreVisible() throws Exception {
+  public void testOwnUpdatesAreVisible() {
   }
 
   @Test
-  public void testOwnDeletesAreVisible() throws Exception {
+  public void testOwnDeletesAreVisible() {
   }
 
   @Test
-  public void testOwnInsertsAreVisible() throws Exception {
+  public void testOwnInsertsAreVisible() {
   }
 
   @Test
-  public void testOthersUpdatesAreVisible() throws Exception {
+  public void testOthersUpdatesAreVisible() {
   }
 
   @Test
-  public void testOthersDeletesAreVisible() throws Exception {
+  public void testOthersDeletesAreVisible() {
   }
 
   @Test
-  public void testOthersInsertsAreVisible() throws Exception {
+  public void testOthersInsertsAreVisible() {
   }
 
   @Test
-  public void testUpdatesAreDetected() throws Exception {
+  public void testUpdatesAreDetected() {
   }
 
   @Test
-  public void testDeletesAreDetected() throws Exception {
+  public void testDeletesAreDetected() {
   }
 
   @Test
-  public void testInsertsAreDetected() throws Exception {
+  public void testInsertsAreDetected() {
   }
 
   @Test
-  public void testSupportsBatchUpdates() throws Exception {
+  public void testSupportsBatchUpdates() {
   }
 
   @Test
-  public void testGetUDTs() throws Exception {
+  public void testGetUDTs() {
   }
 
   @Test
-  public void testGetConnection() throws Exception {
+  public void testGetConnection() {
   }
 
   @Test
-  public void testSupportsSavepoints() throws Exception {
+  public void testSupportsSavepoints() {
   }
 
   @Test
-  public void testSupportsNamedParameters() throws Exception {
+  public void testSupportsNamedParameters() {
   }
 
   @Test
-  public void testSupportsMultipleOpenResults() throws Exception {
+  public void testSupportsMultipleOpenResults() {
   }
 
   @Test
-  public void testSupportsGetGeneratedKeys() throws Exception {
+  public void testSupportsGetGeneratedKeys() {
   }
 
   @Test
-  public void testGetSuperTypes() throws Exception {
+  public void testGetSuperTypes() {
   }
 
   @Test
-  public void testGetSuperTables() throws Exception {
+  public void testGetSuperTables() {
   }
 
   @Test
-  public void testGetAttributes() throws Exception {
+  public void testGetAttributes() {
   }
 
   @Test
-  public void testSupportsResultSetHoldability() throws Exception {
+  public void testSupportsResultSetHoldability() {
   }
 
   @Test
-  public void testGetResultSetHoldability() throws Exception {
+  public void testGetResultSetHoldability() {
   }
 
   @Test
-  public void testGetDatabaseMajorVersion() throws Exception {
+  public void testGetDatabaseMajorVersion() {
   }
 
   @Test
-  public void testGetDatabaseMinorVersion() throws Exception {
+  public void testGetDatabaseMinorVersion() {
   }
 
   @Test
-  public void testGetJDBCMajorVersion() throws Exception {
+  public void testGetJDBCMajorVersion() {
   }
 
   @Test
-  public void testGetJDBCMinorVersion() throws Exception {
+  public void testGetJDBCMinorVersion() {
   }
 
   @Test
-  public void testGetSQLStateType() throws Exception {
+  public void testGetSQLStateType() {
   }
 
   @Test
-  public void testLocatorsUpdateCopy() throws Exception {
+  public void testLocatorsUpdateCopy() {
   }
 
   @Test
-  public void testSupportsStatementPooling() throws Exception {
+  public void testSupportsStatementPooling() {
   }
 
   @Test
-  public void testGetRowIdLifetime() throws Exception {
+  public void testGetRowIdLifetime() {
   }
 
   @Test
-  public void testGetSchemas_String_String() throws Exception {
+  public void testGetSchemas_String_String() {
   }
 
   @Test
-  public void testSupportsStoredFunctionsUsingCallSyntax() throws Exception {
+  public void testSupportsStoredFunctionsUsingCallSyntax() {
   }
 
   @Test
-  public void testAutoCommitFailureClosesAllResultSets() throws Exception {
+  public void testAutoCommitFailureClosesAllResultSets() {
   }
 
   @Test
-  public void testGetClientInfoProperties() throws Exception {
+  public void testGetClientInfoProperties() {
   }
 
   @Test
-  public void testGetFunctions() throws Exception {
+  public void testGetFunctions() {
   }
 
   @Test
-  public void testGetFunctionColumns() throws Exception {
+  public void testGetFunctionColumns() {
   }
 
   @Test
-  public void testGetPseudoColumns() throws Exception {
+  public void testGetPseudoColumns() {
   }
 
   @Test
-  public void testGeneratedKeyAlwaysReturned() throws Exception {
+  public void testGeneratedKeyAlwaysReturned() {
   }
 
   @Test
-  public void testUnwrap() throws Exception {
+  public void testUnwrap() {
   }
 
   @Test
-  public void testIsWrapperFor() throws Exception {
+  public void testIsWrapperFor() {
   }
 
 }

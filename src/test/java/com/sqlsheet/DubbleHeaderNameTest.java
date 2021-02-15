@@ -1,11 +1,17 @@
 package com.sqlsheet;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author Klaus Hauschild
@@ -35,9 +41,8 @@ public class DubbleHeaderNameTest {
   public void testDuplicate() throws Exception {
     final Statement stmt = connection.createStatement();
     final ResultSet results = stmt.executeQuery("SELECT * FROM \"duplicate\""); // Duplicate is a keyword
-    Assert.assertEquals("The column name must A_1", "A_1", results.getMetaData().getColumnName(2));
-    Assert.assertTrue("The column names must not be the same",
-            !results.getMetaData().getColumnName(2).equals(results.getMetaData().getColumnName(1)));
+    assertEquals("The column name must A_1", "A_1", results.getMetaData().getColumnName(2));
+    assertFalse("The column names must not be the same", results.getMetaData().getColumnName(2).equals(results.getMetaData().getColumnName(1)));
 
   }
 

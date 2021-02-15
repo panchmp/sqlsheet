@@ -1,13 +1,14 @@
 package com.sqlsheet;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @since 6.6
@@ -29,14 +30,14 @@ public class HeadLineTest {
     final ResultSet resultSet = statement.executeQuery("SELECT * FROM headline");
     int line = 1;
     while (resultSet.next()) {
-      Assert.assertEquals(line * 1, resultSet.getInt("A"));
-      Assert.assertEquals(line * 2, resultSet.getInt("B"));
-      Assert.assertEquals(line * 3, resultSet.getInt("C"));
-      Assert.assertEquals(line * 4, resultSet.getInt("D"));
-      Assert.assertEquals(line * 5, resultSet.getInt("E"));
+      assertEquals(line * 1, resultSet.getInt("A"));
+      assertEquals(line * 2, resultSet.getInt("B"));
+      assertEquals(line * 3, resultSet.getInt("C"));
+      assertEquals(line * 4, resultSet.getInt("D"));
+      assertEquals(line * 5, resultSet.getInt("E"));
       line++;
     }
-    Assert.assertEquals(4, line);
+    assertEquals(4, line);
     connection.close();
   }
 

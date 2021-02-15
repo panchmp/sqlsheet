@@ -15,15 +15,21 @@
  */
 package com.sqlsheet;
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.DateFormatConverter;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.text.DateFormat;
 import java.util.Locale;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.DateFormatConverter;
-import org.junit.*;
+
+import static org.junit.Assert.assertEquals;
 
 /** @author Andreas Reichel <andreas@manticore-projects.com> */
 public class XlsFormulaTest {
@@ -122,13 +128,13 @@ public class XlsFormulaTest {
       resultSet = statement.executeQuery("SELECT * FROM TestSheet1");
       int r = 0;
       while (resultSet.next()) {
-        Assert.assertEquals(
+        assertEquals(
             resultSet.getDouble(columnNames[0]) + resultSet.getDouble(columnNames[1]),
             resultSet.getDouble(columnNames[2]),
             1E-12);
         r++;
       }
-      Assert.assertEquals(cellValues.length, r);
+      assertEquals(cellValues.length, r);
 
     } finally {
       if (resultSet != null && !resultSet.isClosed())
