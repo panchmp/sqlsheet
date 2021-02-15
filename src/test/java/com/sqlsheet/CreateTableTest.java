@@ -1,11 +1,16 @@
 package com.sqlsheet;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
 
 public class CreateTableTest {
 
@@ -34,7 +39,7 @@ public class CreateTableTest {
     stmt.executeUpdate("CREATE TABLE \"table\" (\"column\" VARCHAR)");
     final ResultSet trs = stmt.executeQuery("SELECT * FROM \"table\"");
     String columnName = trs.getMetaData().getColumnName(1);
-    Assert.assertEquals("column", columnName);
+    assertEquals("column", columnName);
     stmt.execute("DROP TABLE \"table\"");
     stmt.close();
     trs.close();
@@ -47,7 +52,7 @@ public class CreateTableTest {
     stmt.executeUpdate("CREATE TABLE \"table with very very very very long name\" (\"column\" VARCHAR)");
     final ResultSet trs = stmt.executeQuery("SELECT * FROM \"table with very very very very long name\"");
     String columnName = trs.getMetaData().getColumnName(1);
-    Assert.assertEquals("column", columnName);
+    assertEquals("column", columnName);
     stmt.execute("DROP TABLE \"table with very very very very long name\"");
     stmt.close();
     trs.close();

@@ -1,11 +1,16 @@
 package com.sqlsheet;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Klaus Hauschild
@@ -35,16 +40,16 @@ public class Bug8Test {
   public void testbug8() throws Exception {
     final Statement stmt = connection.createStatement();
     final ResultSet results = stmt.executeQuery("SELECT * FROM bug8");
-    Assert.assertEquals(true, results.next());
-    Assert.assertEquals(null, results.getString("PARENT"));
-    Assert.assertEquals("Foo", results.getString("CHILD"));
-    Assert.assertEquals(1, results.getInt("MIN"));
-    Assert.assertEquals(1, results.getInt("MAX"));
-    Assert.assertEquals(true, results.next());
-    Assert.assertEquals("Foo", results.getString("PARENT"));
-    Assert.assertEquals("Bar", results.getString("CHILD"));
-    Assert.assertEquals(0, results.getInt("MIN"));
-    Assert.assertEquals(3, results.getInt("MAX"));
+    assertTrue(results.next());
+    assertNull(results.getString("PARENT"));
+    assertEquals("Foo", results.getString("CHILD"));
+    assertEquals(1, results.getInt("MIN"));
+    assertEquals(1, results.getInt("MAX"));
+    assertTrue(results.next());
+    assertEquals("Foo", results.getString("PARENT"));
+    assertEquals("Bar", results.getString("CHILD"));
+    assertEquals(0, results.getInt("MIN"));
+    assertEquals(3, results.getInt("MAX"));
   }
 
 }

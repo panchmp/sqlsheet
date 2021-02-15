@@ -1,17 +1,15 @@
 package com.sqlsheet;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Date;
-
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.io.File;
+import java.sql.*;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class XlsDriverStreamingTest {
 
@@ -26,15 +24,15 @@ public class XlsDriverStreamingTest {
                getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile());
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM \"2009\"");
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
-    Long count = 0L;
+    assertEquals(results.getMetaData().getColumnCount(), 3L);
+    long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(Double.class, results.getObject(1).getClass());
-      Assert.assertEquals(String.class, results.getObject(2).getClass());
-      Assert.assertEquals(java.sql.Date.class, results.getObject(3).getClass());
+      assertSame(Double.class, results.getObject(1).getClass());
+      assertSame(String.class, results.getObject(2).getClass());
+      assertSame(java.sql.Date.class, results.getObject(3).getClass());
       count++;
     }
-    Assert.assertEquals(count.longValue(), 3L);
+    assertEquals(count, 3L);
     results.close();
     stmt.close();
     conn.close();
@@ -47,15 +45,15 @@ public class XlsDriverStreamingTest {
                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile() + "?readStreaming=true");
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM \"2009\"");
-    Assert.assertEquals(3L, results.getMetaData().getColumnCount());
-    Long count = 0L;
+    assertEquals(3L, results.getMetaData().getColumnCount());
+    long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(Double.class, results.getObject(1).getClass());
-      Assert.assertEquals(String.class, results.getObject(2).getClass());
-      Assert.assertEquals(Date.class, results.getObject(3).getClass());
+      assertSame(Double.class, results.getObject(1).getClass());
+      assertSame(String.class, results.getObject(2).getClass());
+      assertSame(Date.class, results.getObject(3).getClass());
       count++;
     }
-    Assert.assertEquals(3L, count.longValue());
+    assertEquals(3L, count);
     results.close();
     stmt.close();
     conn.close();
@@ -68,15 +66,15 @@ public class XlsDriverStreamingTest {
                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=true");
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM \"2009\"");
-    Assert.assertEquals(3L, results.getMetaData().getColumnCount());
-    Long count = 0L;
+    assertEquals(3L, results.getMetaData().getColumnCount());
+    long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(Double.class, results.getObject(1).getClass());
-      Assert.assertEquals(String.class, results.getObject(2).getClass());
-      Assert.assertEquals(Date.class, results.getObject(3).getClass());
+      assertSame(Double.class, results.getObject(1).getClass());
+      assertSame(String.class, results.getObject(2).getClass());
+      assertSame(Date.class, results.getObject(3).getClass());
       count++;
     }
-    Assert.assertEquals(3L, count.longValue());
+    assertEquals(3L, count);
     results.close();
     stmt.close();
     conn.close();
@@ -88,17 +86,17 @@ public class XlsDriverStreamingTest {
                "jdbc:xls:file:" + ClassLoader.getSystemResource("big-grid.xls").getFile() + "?readStreaming=true");
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM \"Big Grid\"");
-    Assert.assertEquals(20L, results.getMetaData().getColumnCount());
-    Long count = 0L;
+    assertEquals(20L, results.getMetaData().getColumnCount());
+    long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(String.class, results.getObject(1).getClass());
-      Assert.assertEquals(Double.class, results.getObject(2).getClass());
-      Assert.assertEquals(Double.class, results.getObject(3).getClass());
-      Assert.assertEquals(Double.class, results.getObject(4).getClass());
-      Assert.assertEquals(Date.class, results.getObject(5).getClass());
+      assertSame(String.class, results.getObject(1).getClass());
+      assertSame(Double.class, results.getObject(2).getClass());
+      assertSame(Double.class, results.getObject(3).getClass());
+      assertSame(Double.class, results.getObject(4).getClass());
+      assertSame(Date.class, results.getObject(5).getClass());
       count++;
     }
-    Assert.assertEquals(65535L, count.longValue());
+    assertEquals(65535L, count);
     results.close();
     stmt.close();
     conn.close();
@@ -110,17 +108,17 @@ public class XlsDriverStreamingTest {
                "jdbc:xls:file:" + ClassLoader.getSystemResource("big-grid.xlsx").getFile() + "?readStreaming=true");
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM \"Big Grid\"");
-    Assert.assertEquals(20L, results.getMetaData().getColumnCount());
-    Long count = 0L;
+    assertEquals(20L, results.getMetaData().getColumnCount());
+    long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(String.class, results.getObject(1).getClass());
-      Assert.assertEquals(Double.class, results.getObject(2).getClass());
-      Assert.assertEquals(Double.class, results.getObject(3).getClass());
-      Assert.assertEquals(Double.class, results.getObject(4).getClass());
-      Assert.assertEquals(Date.class, results.getObject(5).getClass());
+      assertSame(String.class, results.getObject(1).getClass());
+      assertSame(Double.class, results.getObject(2).getClass());
+      assertSame(Double.class, results.getObject(3).getClass());
+      assertSame(Double.class, results.getObject(4).getClass());
+      assertSame(Date.class, results.getObject(5).getClass());
       count++;
     }
-    Assert.assertEquals(65535L, count.longValue());
+    assertEquals(65535L, count);
     results.close();
     stmt.close();
     conn.close();
@@ -150,15 +148,15 @@ public class XlsDriverStreamingTest {
     Connection readConnection = DriverManager.getConnection("jdbc:xls:file:" + test.getPath() + "?readStreaming=true");
     Statement readStatementstmt = readConnection.createStatement();
     ResultSet results = readStatementstmt.executeQuery("SELECT * FROM TEST_INSERT");
-    Assert.assertEquals(3L, results.getMetaData().getColumnCount());
-    Long count = 0L;
+    assertEquals(3L, results.getMetaData().getColumnCount());
+    long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(Double.class, results.getObject(1).getClass());
-      Assert.assertEquals(String.class, results.getObject(2).getClass());
-      Assert.assertEquals(Date.class, results.getObject(3).getClass());
+      assertSame(Double.class, results.getObject(1).getClass());
+      assertSame(String.class, results.getObject(2).getClass());
+      assertSame(Date.class, results.getObject(3).getClass());
       count++;
     }
-    Assert.assertEquals(3L, count.longValue());
+    assertEquals(3L, count);
     results.close();
     readStatementstmt.close();
     readConnection.close();
@@ -166,15 +164,15 @@ public class XlsDriverStreamingTest {
     Connection readConnection2 = DriverManager.getConnection("jdbc:xls:file:" + test.getPath());
     Statement readStatementstmt2 = readConnection.createStatement();
     ResultSet results2 = readStatementstmt.executeQuery("SELECT * FROM TEST_INSERT");
-    Assert.assertEquals(3L, results2.getMetaData().getColumnCount());
-    Long count2 = 0L;
+    assertEquals(3L, results2.getMetaData().getColumnCount());
+    long count2 = 0L;
     while (results2.next()) {
-      Assert.assertEquals(Double.class, results2.getObject(1).getClass());
-      Assert.assertEquals(String.class, results2.getObject(2).getClass());
-      Assert.assertEquals(Date.class, results2.getObject(3).getClass());
+      assertSame(Double.class, results2.getObject(1).getClass());
+      assertSame(String.class, results2.getObject(2).getClass());
+      assertSame(Date.class, results2.getObject(3).getClass());
       count2++;
     }
-    Assert.assertEquals(3L, count2.longValue());
+    assertEquals(3L, count2);
     results2.close();
     readStatementstmt2.close();
     readConnection2.close();

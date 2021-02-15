@@ -1,17 +1,12 @@
 package com.sqlsheet;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
-
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.sql.*;
+import java.util.Date;
+
+import static org.junit.Assert.*;
 
 public class DriverTest {
 
@@ -112,19 +107,19 @@ public class DriverTest {
                        "jdbc:xls:file:" + ClassLoader.getSystemResource("bug7.xlsx").getFile() + "?readStreaming=true");
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM bug7");
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 13L);
-    Assert.assertEquals(results.next(), true);
-    Assert.assertEquals(results.next(), true);
-    Assert.assertEquals(results.getString("Zone ID"), results.getString(1));
+    assertEquals(results.getMetaData().getColumnCount(), 13L);
+    assertTrue(results.next());
+    assertTrue(results.next());
+    assertEquals(results.getString("Zone ID"), results.getString(1));
 
     conn = DriverManager
     .getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("bug7.xlsx").getFile() + "?readStreaming=no");
     stmt = conn.createStatement();
     results = stmt.executeQuery("SELECT * FROM bug7");
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 13L);
-    Assert.assertEquals(results.next(), true);
-    Assert.assertEquals(results.next(), true);
-    Assert.assertEquals(results.getLong("Zone ID"), results.getLong(1));
+    assertEquals(results.getMetaData().getColumnCount(), 13L);
+    assertTrue(results.next());
+    assertTrue(results.next());
+    assertEquals(results.getLong("Zone ID"), results.getLong(1));
   }
 
   @Test
@@ -134,27 +129,27 @@ public class DriverTest {
                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=true");
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM SHEET1");
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
+    assertEquals(results.getMetaData().getColumnCount(), 3L);
 
     ResultSetMetaData resultSetMetaData = results.getMetaData();
-    Assert.assertEquals("java.lang.Double", resultSetMetaData.getColumnTypeName(1));
-    Assert.assertEquals("java.lang.String", resultSetMetaData.getColumnTypeName(2));
-    Assert.assertEquals("java.util.Date", resultSetMetaData.getColumnTypeName(3));
+    assertEquals("java.lang.Double", resultSetMetaData.getColumnTypeName(1));
+    assertEquals("java.lang.String", resultSetMetaData.getColumnTypeName(2));
+    assertEquals("java.util.Date", resultSetMetaData.getColumnTypeName(3));
 
   }
 
   private void processBaseResultset(Connection conn, String sql) throws SQLException {
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery(sql);
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
+    assertEquals(results.getMetaData().getColumnCount(), 3L);
     Long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(Double.class, results.getObject(1).getClass());
-      Assert.assertEquals(String.class, results.getObject(2).getClass());
-      Assert.assertEquals(java.sql.Date.class, results.getObject(3).getClass());
+      assertSame(Double.class, results.getObject(1).getClass());
+      assertSame(String.class, results.getObject(2).getClass());
+      assertSame(java.sql.Date.class, results.getObject(3).getClass());
       count++;
     }
-    Assert.assertEquals(count.longValue(), 3L);
+    assertEquals(count.longValue(), 3L);
     results.close();
     stmt.close();
     conn.close();
@@ -163,15 +158,15 @@ public class DriverTest {
   private void processBaseStreamingResultset(Connection conn, String sql) throws SQLException {
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery(sql);
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
+    assertEquals(results.getMetaData().getColumnCount(), 3L);
     Long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(Double.class, results.getObject(1).getClass());
-      Assert.assertEquals(String.class, results.getObject(2).getClass());
-      Assert.assertEquals(java.util.Date.class, results.getObject(3).getClass());
+      assertSame(Double.class, results.getObject(1).getClass());
+      assertSame(String.class, results.getObject(2).getClass());
+      assertSame(java.util.Date.class, results.getObject(3).getClass());
       count++;
     }
-    Assert.assertEquals(count.longValue(), 3L);
+    assertEquals(count.longValue(), 3L);
     results.close();
     stmt.close();
     conn.close();

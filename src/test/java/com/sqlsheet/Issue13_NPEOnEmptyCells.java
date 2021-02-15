@@ -17,6 +17,11 @@ package com.sqlsheet;
 
 import de.vandermeer.asciitable.AT_Context;
 import de.vandermeer.asciitable.AsciiTable;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.DateFormatConverter;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,9 +30,9 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.DateFormatConverter;
-import org.junit.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -144,7 +149,7 @@ public class Issue13_NPEOnEmptyCells {
           }
           
           if (!rs.wasNull())
-            Assert.assertEquals("Column " + (c+1) + " "  + columnNames[c+1] + " fails.", valueByColumnIndex, valueByColumnLabel);
+            assertEquals("Column " + (c+1) + " "  + columnNames[c+1] + " fails.", valueByColumnIndex, valueByColumnLabel);
           
         }
         r++;
@@ -209,7 +214,7 @@ public class Issue13_NPEOnEmptyCells {
           values.add(rs.wasNull() ? "" : value);
 
           if (r % 2 == 0)
-            Assert.assertTrue("Column " + columnNames[c] + " in row " + r + " should be NULL.", rs.wasNull());
+            assertTrue("Column " + columnNames[c] + " in row " + r + " should be NULL.", rs.wasNull());
         }
         at.addRule();
         at.addRow(values);

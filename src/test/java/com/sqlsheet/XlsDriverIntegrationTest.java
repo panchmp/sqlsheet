@@ -1,26 +1,21 @@
 package com.sqlsheet;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import scriptella.configuration.ConfigurationFactory;
 import scriptella.execution.EtlExecutor;
 import scriptella.execution.EtlExecutorException;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class XlsDriverIntegrationTest {
 
