@@ -78,10 +78,8 @@ class XlsConnection implements Connection {
 
   public void close() throws SQLException {
     if (saveFile == null || !writeRequired) return;
-    try {
-      OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(saveFile));
+    try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(saveFile))) {
       workbook.write(outputStream);
-      outputStream.close();
     } catch (IOException exception) {
       throw new SQLException("Error while persisting changes.", exception);
     }
