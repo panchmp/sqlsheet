@@ -109,8 +109,8 @@ public class SqlSheetParser {
     if (statement instanceof CreateTable) {
       final String table = prepareTableIdentifier(((CreateTable) statement).getTable().getName());
       List<ColumnDefinition> cols = ((CreateTable) statement).getColumnDefinitions();
-      final List<String> names = new ArrayList<String>();
-      final List<String> types = new ArrayList<String>();
+      final List<String> names = new ArrayList<>();
+      final List<String> types = new ArrayList<>();
       for (ColumnDefinition cd : cols) {
         names.add(prepareColumnIdentifier(stripUnderscores(cd.getColumnName())));
         types.add(cd.getColDataType().getDataType());
@@ -135,8 +135,8 @@ public class SqlSheetParser {
     if (statement instanceof Insert) {
       final String table = prepareTableIdentifier(((Insert) statement).getTable().getName());
       List<net.sf.jsqlparser.schema.Column> cols = ((Insert) statement).getColumns();
-      final List<String> names = new ArrayList<String>();
-      final List<Object> values = new ArrayList<Object>();
+      final List<String> names = new ArrayList<>();
+      final List<Object> values = new ArrayList<>();
       for (net.sf.jsqlparser.schema.Column cd : cols) {
         names.add(prepareColumnIdentifier(stripUnderscores(cd.getColumnName())));
       }

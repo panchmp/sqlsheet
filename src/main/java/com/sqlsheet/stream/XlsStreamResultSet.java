@@ -67,17 +67,12 @@ public class XlsStreamResultSet implements ResultSet {
   }
 
   XlsType getXlsType(URL inputXls) throws IOException {
-    InputStream input = inputXls.openStream();
-    try {
+    try (InputStream input = inputXls.openStream()) {
       Workbook wb = WorkbookFactory.create(input);
       if (wb instanceof HSSFWorkbook) {
         return XlsType.XLS;
       } else if (wb instanceof XSSFWorkbook) {
         return XlsType.XLSX;
-      }
-    } finally {
-      if (input != null) {
-        input.close();
       }
     }
     return null;
