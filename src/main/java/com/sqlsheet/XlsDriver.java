@@ -257,6 +257,6 @@ public class XlsDriver implements java.sql.Driver {
   }
 
   public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    throw new SQLFeatureNotSupportedException(new UnsupportedOperationException("Not supported yet"));
   }
 }
