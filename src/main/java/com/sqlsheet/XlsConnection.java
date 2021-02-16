@@ -15,35 +15,16 @@
  */
 package com.sqlsheet;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.nio.channels.FileChannel;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
-import java.sql.SQLClientInfoException;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.SQLXML;
-import java.sql.Savepoint;
-import java.sql.Statement;
-import java.sql.Struct;
+import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * SqlSheet implementation of java.sql.Connection.
@@ -53,7 +34,7 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 class XlsConnection implements Connection {
 
-  private static final Logger logger = Logger.getLogger(XlsConnection.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(XlsConnection.class.getName());
   protected Workbook workbook;
   protected File saveFile;
   private Properties info;
@@ -73,7 +54,7 @@ class XlsConnection implements Connection {
   int getInt(String key, int defaultValue) {
     Object value = info.get(key);
     if (value == null) {
-      logger.fine(String.format("Key [%s] not present.", key));
+      logger.info("Key {} not present.", key);
       return defaultValue;
     }
     return Integer.parseInt(value.toString());
@@ -118,22 +99,18 @@ class XlsConnection implements Connection {
           try {
             fileOut.close();
           } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
+              logger.warn(e.getMessage(), e);
           }
         // Move already existing data to not corrupt on fail
         File backup = backupFile(saveFile);
-        logger.log(Level.INFO, "Created backup:" + backup.getAbsolutePath());
+        logger.info("Created backup:{}", backup.getAbsolutePath());
         // Try to override file with new content
         // backup should rename file or copy content into new one, handle second condition
         if (saveFile.exists() && !saveFile.delete())
-          logger.log(
-              Level.WARNING,
-              "Unable to delete file:"
-                  + saveFile.getAbsolutePath()
-                  + ", you may lose the results.");
+          logger.warn("Unable to delete file:{}, you may lose the results.", saveFile.getAbsolutePath());
         moveFile(newFile, saveFile);
       } catch (IOException ioe) {
-        SQLException sqe = new SQLException(ioe.getMessage());
+        SQLException sqe = new SQLException(ioe.getMessage(), ioe);
         sqe.initCause(sqe);
         throw sqe;
       }
@@ -154,13 +131,7 @@ class XlsConnection implements Connection {
     boolean moved;
     moved = sourceFile.renameTo(destFile);
     if (!moved) {
-      logger.log(
-          Level.WARNING,
-          "Unable to rename file during move:"
-              + sourceFile.getAbsolutePath()
-              + " to "
-              + destFile.getAbsolutePath()
-              + ", performing full copy of data.");
+      logger.warn("Unable to rename file during move:{} to {}, performing full copy of data.", sourceFile.getAbsolutePath(), destFile.getAbsolutePath());
       FileChannel source = null;
       FileChannel destination = null;
       try {

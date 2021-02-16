@@ -21,6 +21,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.DateFormatConverter;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +41,7 @@ import static org.junit.Assert.assertTrue;
  * @author Andreas Reichel <andreas@manticore-projects.com>
  */
 public class Issue13_NPEOnEmptyCells {
+  private static final Logger logger = LoggerFactory.getLogger(Issue13_NPEOnEmptyCells.class);
 
   public static final int DEFAULT_HEADLINE = 3;
   public static final int DEFAULT_FIRST_COL = 1;
@@ -221,7 +224,7 @@ public class Issue13_NPEOnEmptyCells {
         r++;
       }
       at.addRule();
-      System.out.println(at.render());
+      logger.debug(at.render());
       
     } finally {
       try {
