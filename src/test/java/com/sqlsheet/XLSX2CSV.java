@@ -196,7 +196,7 @@ public class XLSX2CSV {
            * (non-Javadoc)
            * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
            */
-        public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException {
+        public void startElement(String uri, String localName, String name, Attributes attributes) {
 
             if ("inlineStr".equals(name) || "v".equals(name) || "is".equals(name)) {
                 vIsOpen = true;
@@ -250,7 +250,7 @@ public class XLSX2CSV {
            * (non-Javadoc)
            * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
            */
-        public void endElement(String uri, String localName, String name) throws SAXException {
+        public void endElement(String uri, String localName, String name) {
             String thisStr = null;
 
             // v => contents of a cell
@@ -342,7 +342,7 @@ public class XLSX2CSV {
         /**
          * Captures characters only if a suitable element is open. Originally was just "v"; extended for inlineStr also.
          */
-        public void characters(char[] ch, int start, int length) throws SAXException {
+        public void characters(char[] ch, int start, int length) {
             if (vIsOpen)
                 value.append(ch, start, length);
         }

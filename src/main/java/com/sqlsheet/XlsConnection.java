@@ -64,7 +64,7 @@ class XlsConnection implements Connection {
     return workbook;
   }
 
-  public Statement createStatement() throws SQLException {
+  public Statement createStatement() {
     return new XlsStatement(this);
   }
 
@@ -202,7 +202,7 @@ class XlsConnection implements Connection {
   }
 
   @SuppressWarnings("unchecked")
-  public Map getTypeMap() throws SQLException {
+  public Map getTypeMap() {
     return null;
   }
 
@@ -211,16 +211,16 @@ class XlsConnection implements Connection {
   }
 
   @Override
-  public void commit() throws SQLException {}
+  public void commit() {}
 
   @Override
-  public void rollback() throws SQLException {}
+  public void rollback() {}
 
   @Override
-  public void clearWarnings() throws SQLException {}
+  public void clearWarnings() {}
 
   @Override
-  public DatabaseMetaData getMetaData() throws SQLException {
+  public DatabaseMetaData getMetaData() {
     return new XlsDatabaseMetaData(this);
   }
 
@@ -287,7 +287,7 @@ class XlsConnection implements Connection {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
-  public void setClientInfo(String name, String value) throws SQLClientInfoException {}
+  public void setClientInfo(String name, String value) {}
 
   public String getClientInfo(String name) throws SQLException {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
@@ -297,7 +297,7 @@ class XlsConnection implements Connection {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
-  public void setClientInfo(Properties properties) throws SQLClientInfoException {}
+  public void setClientInfo(Properties properties) {}
 
   public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));

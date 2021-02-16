@@ -59,7 +59,7 @@ public class Issue13_NPEOnEmptyCells {
     {"Row6", new java.util.Date(), Boolean.TRUE, 3d, "Test", new java.util.Date(), Boolean.FALSE, 3 * Math.PI}
   };
 
-  public Issue13_NPEOnEmptyCells() throws SQLException, IOException, ClassNotFoundException {
+  public Issue13_NPEOnEmptyCells() throws SQLException, IOException {
     Workbook workBook = WorkbookFactory.create(true);
     Sheet sheet = workBook.createSheet("TestSheet1");
     int r = DEFAULT_HEADLINE - 1;
@@ -113,7 +113,7 @@ public class Issue13_NPEOnEmptyCells {
   }
   
   @Test
-  public void testColumnLabel() throws SQLException, IOException, ClassNotFoundException {
+  public void testColumnLabel() throws SQLException {
     Statement st = null;
     ResultSet rs = null;
     try {

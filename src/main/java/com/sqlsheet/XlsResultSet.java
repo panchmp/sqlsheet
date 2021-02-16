@@ -79,7 +79,7 @@ public class XlsResultSet implements ResultSet {
   }
 
   @Override
-  public ResultSetMetaData getMetaData() throws SQLException {
+  public ResultSetMetaData getMetaData() {
     return metadata;
   }
 
@@ -663,7 +663,7 @@ public class XlsResultSet implements ResultSet {
     return getString(columnIndex);
   }
 
-  public void updateBoolean(int columnIndex, boolean x) throws SQLException {
+  public void updateBoolean(int columnIndex, boolean x) {
     Cell cell = getCell(columnIndex);
     if (cell != null) cell.setCellValue(x);
   }
@@ -673,7 +673,7 @@ public class XlsResultSet implements ResultSet {
     if (cell != null) cell.setCellValue(x);
   }
 
-  public void updateByte(int columnIndex, byte x) throws SQLException {
+  public void updateByte(int columnIndex, byte x) {
     Cell cell = getCell(columnIndex);
     if (cell != null) cell.setCellValue(x);
   }
@@ -683,7 +683,7 @@ public class XlsResultSet implements ResultSet {
     if (cell != null) cell.setCellValue(x);
   }
 
-  public void updateDouble(int columnIndex, double x) throws SQLException {
+  public void updateDouble(int columnIndex, double x) {
     Cell cell = getCell(columnIndex);
     if (cell != null) cell.setCellValue(x);
   }
@@ -693,7 +693,7 @@ public class XlsResultSet implements ResultSet {
     if (cell != null) cell.setCellValue(x);
   }
 
-  public void updateFloat(int columnIndex, float x) throws SQLException {
+  public void updateFloat(int columnIndex, float x) {
     Cell cell = getCell(columnIndex);
     if (cell != null) cell.setCellValue(x);
   }
@@ -703,7 +703,7 @@ public class XlsResultSet implements ResultSet {
     if (cell != null) cell.setCellValue(x);
   }
 
-  public void updateInt(int columnIndex, int x) throws SQLException {
+  public void updateInt(int columnIndex, int x) {
     Cell cell = getCell(columnIndex);
     if (cell != null) cell.setCellValue(x);
   }
@@ -713,7 +713,7 @@ public class XlsResultSet implements ResultSet {
     if (cell != null) cell.setCellValue(x);
   }
 
-  public void updateLong(int columnIndex, long x) throws SQLException {
+  public void updateLong(int columnIndex, long x) {
     Cell cell = getCell(columnIndex);
     if (cell != null) cell.setCellValue(x);
   }
@@ -723,7 +723,7 @@ public class XlsResultSet implements ResultSet {
     if (cell != null) cell.setCellValue(x);
   }
 
-  public void updateNull(int columnIndex) throws SQLException {
+  public void updateNull(int columnIndex) {
     Cell cell = getCell(columnIndex);
     if (cell != null) cell.setCellValue((String) null); // REVIEW
   }
@@ -741,7 +741,7 @@ public class XlsResultSet implements ResultSet {
     updateObject(findOrCreateCell(jdbcColumn), x);
   }
 
-  public void updateShort(int columnIndex, short x) throws SQLException {
+  public void updateShort(int columnIndex, short x) {
     Cell cell = findOrCreateCell(columnIndex);
     if (cell != null) cell.setCellValue(x);
   }
@@ -751,7 +751,7 @@ public class XlsResultSet implements ResultSet {
     if (cell != null) cell.setCellValue(x);
   }
 
-  public void updateString(int columnIndex, String x) throws SQLException {
+  public void updateString(int columnIndex, String x) {
     Cell cell = findOrCreateCell(columnIndex);
     if (cell != null) cell.setCellValue(x);
   }
@@ -762,25 +762,25 @@ public class XlsResultSet implements ResultSet {
   }
 
   // ResultSet implementation - everything else
-  public boolean absolute(int row) throws SQLException {
+  public boolean absolute(int row) {
     cursorSheetRow = (row - 1) + firstSheetRowOffset;
     return true;
   }
 
-  public void afterLast() throws SQLException {
+  public void afterLast() {
     cursorSheetRow = sheet.getLastRowNum() + 1;
   }
 
-  public void beforeFirst() throws SQLException {
+  public void beforeFirst() {
     cursorSheetRow = firstSheetRowOffset - 1;
   }
 
-  public boolean first() throws SQLException {
+  public boolean first() {
     cursorSheetRow = firstSheetRowOffset;
     return true;
   }
 
-  public int getFetchDirection() throws SQLException {
+  public int getFetchDirection() {
     return FETCH_UNKNOWN;
   }
 
@@ -788,57 +788,57 @@ public class XlsResultSet implements ResultSet {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
-  public int getFetchSize() throws SQLException {
+  public int getFetchSize() {
     return 0;
   }
 
-  public void setFetchSize(int rows) throws SQLException {
+  public void setFetchSize(int rows) {
     // better just ignore it if configuration is not supported
     // throw nyi();
   }
 
-  public int getRow() throws SQLException {
+  public int getRow() {
     return cursorSheetRow - firstSheetRowOffset + 1;
   }
 
-  public int getType() throws SQLException {
+  public int getType() {
     return TYPE_SCROLL_INSENSITIVE;
   }
 
-  public boolean isAfterLast() throws SQLException {
+  public boolean isAfterLast() {
     return cursorSheetRow > sheet.getLastRowNum();
   }
 
-  public boolean isBeforeFirst() throws SQLException {
+  public boolean isBeforeFirst() {
     return cursorSheetRow < firstSheetRowOffset;
   }
 
-  public boolean isFirst() throws SQLException {
+  public boolean isFirst() {
     return cursorSheetRow == firstSheetRowOffset;
   }
 
-  public boolean isLast() throws SQLException {
+  public boolean isLast() {
     return cursorSheetRow == sheet.getLastRowNum();
   }
 
-  public boolean last() throws SQLException {
+  public boolean last() {
     cursorSheetRow = sheet.getLastRowNum();
     return true;
   }
 
-  public boolean next() throws SQLException {
+  public boolean next() {
     if (isAfterLast()) return false;
     cursorSheetRow++;
     return !isAfterLast() && (sheet.getRow(cursorSheetRow) != null);
   }
 
-  public boolean previous() throws SQLException {
+  public boolean previous() {
     if (isBeforeFirst()) return false;
     cursorSheetRow--;
     return isBeforeFirst();
   }
 
-  public void moveToInsertRow() throws SQLException {
+  public void moveToInsertRow() {
     for (; true; cursorSheetRow++) {
       Row row = sheet.getRow(cursorSheetRow);
       if (row == null || (row.getCell((short) 0) == null)) {
@@ -848,7 +848,7 @@ public class XlsResultSet implements ResultSet {
     }
   }
 
-  public void insertRow() throws SQLException {
+  public void insertRow() {
     cursorSheetRow++;
   }
 
@@ -1175,7 +1175,7 @@ public class XlsResultSet implements ResultSet {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
-  public Statement getStatement() throws SQLException {
+  public Statement getStatement() {
     return statement;
   }
 
@@ -1268,7 +1268,7 @@ public class XlsResultSet implements ResultSet {
   }
 
   @Override
-  public boolean isClosed() throws SQLException {
+  public boolean isClosed() {
     return isClosed;
   }
 
@@ -1548,7 +1548,7 @@ public class XlsResultSet implements ResultSet {
   }
 
   @Override
-  public boolean wasNull() throws SQLException {
+  public boolean wasNull() {
     return wasNull;
   }
 

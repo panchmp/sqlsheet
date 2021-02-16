@@ -47,7 +47,7 @@ public class XlsConnectionURLResolverTest {
     {5d, 6d, "A4+B4"}
   };
 
-  public XlsConnectionURLResolverTest() throws SQLException, IOException, ClassNotFoundException {
+  public XlsConnectionURLResolverTest() throws IOException {
     Workbook workBook = WorkbookFactory.create(true);
     Sheet sheet = workBook.createSheet("TestSheet1");
     int r = DEFAULT_HEADLINE - 1;

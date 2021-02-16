@@ -58,7 +58,7 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public boolean next() throws SQLException {
+  public boolean next() {
     if (r < rowData.size() - 1) {
       r++;
       return true;
@@ -66,7 +66,7 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public void close() throws SQLException {
+  public void close() {
     columnNames.clear();
     columnClasses.clear();
     rowData.clear();
@@ -74,7 +74,7 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public boolean wasNull() throws SQLException {
+  public boolean wasNull() {
     return value == null;
   }
 
@@ -415,75 +415,75 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public boolean isBeforeFirst() throws SQLException {
+  public boolean isBeforeFirst() {
     return r < 0;
   }
 
   @Override
-  public boolean isAfterLast() throws SQLException {
+  public boolean isAfterLast() {
     return r >= rowData.size();
   }
 
   @Override
-  public boolean isFirst() throws SQLException {
+  public boolean isFirst() {
     return r == 0;
   }
 
   @Override
-  public boolean isLast() throws SQLException {
+  public boolean isLast() {
     return r == rowData.size() - 1;
   }
 
   @Override
-  public void beforeFirst() throws SQLException {
+  public void beforeFirst() {
     r = -1;
   }
 
   @Override
-  public void afterLast() throws SQLException {
+  public void afterLast() {
     r = rowData.size();
   }
 
   @Override
-  public boolean first() throws SQLException {
+  public boolean first() {
     r = 0;
     return true;
   }
 
   @Override
-  public boolean last() throws SQLException {
+  public boolean last() {
     r = rowData.size() - 1;
     return true;
   }
 
   @Override
-  public int getRow() throws SQLException {
+  public int getRow() {
     return r;
   }
 
   @Override
-  public boolean absolute(int row) throws SQLException {
+  public boolean absolute(int row) {
     r = row;
     return r >= 0 && r < rowData.size();
   }
 
   @Override
-  public boolean relative(int rows) throws SQLException {
+  public boolean relative(int rows) {
     r += rows;
     return r >= 0 && r < rowData.size();
   }
 
   @Override
-  public boolean previous() throws SQLException {
+  public boolean previous() {
     r--;
     return r >= 0 && r < rowData.size();
   }
 
   @Override
-  public void setFetchDirection(int direction) throws SQLException {}
+  public void setFetchDirection(int direction) {}
 
   @Override
-  public int getFetchDirection() throws SQLException {
+  public int getFetchDirection() {
     return ResultSet.FETCH_UNKNOWN;
   }
 
@@ -750,7 +750,7 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public Statement getStatement() throws SQLException {
+  public Statement getStatement() {
     return null;
   }
 
@@ -910,7 +910,7 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public boolean isClosed() throws SQLException {
+  public boolean isClosed() {
     return isClosed;
   }
 
