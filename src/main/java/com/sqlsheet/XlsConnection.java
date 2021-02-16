@@ -64,7 +64,7 @@ class XlsConnection implements Connection {
     return workbook;
   }
 
-  public Statement createStatement() throws SQLException {
+  public Statement createStatement() {
     return new XlsStatement(this);
   }
 
@@ -202,7 +202,7 @@ class XlsConnection implements Connection {
   }
 
   @SuppressWarnings("unchecked")
-  public Map getTypeMap() throws SQLException {
+  public Map getTypeMap() {
     return null;
   }
 
@@ -211,16 +211,16 @@ class XlsConnection implements Connection {
   }
 
   @Override
-  public void commit() throws SQLException {}
+  public void commit() {}
 
   @Override
-  public void rollback() throws SQLException {}
+  public void rollback() {}
 
   @Override
-  public void clearWarnings() throws SQLException {}
+  public void clearWarnings() {}
 
   @Override
-  public DatabaseMetaData getMetaData() throws SQLException {
+  public DatabaseMetaData getMetaData() {
     return new XlsDatabaseMetaData(this);
   }
 
@@ -301,7 +301,7 @@ class XlsConnection implements Connection {
     return false;
   }
 
-  public void setClientInfo(String name, String value) throws SQLClientInfoException {}
+  public void setClientInfo(String name, String value) {}
 
   public String getClientInfo(String name) throws SQLException {
     nyi();
@@ -313,7 +313,7 @@ class XlsConnection implements Connection {
     return null;
   }
 
-  public void setClientInfo(Properties properties) throws SQLClientInfoException {}
+  public void setClientInfo(Properties properties) {}
 
   public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
     nyi();
@@ -377,23 +377,23 @@ class XlsConnection implements Connection {
     this.writeRequired = writeRequired;
   }
 
-  public String getSchema() throws SQLException {
+  public String getSchema() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public void setSchema(String string) throws SQLException {
+  public void setSchema(String string) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public void abort(Executor exctr) throws SQLException {
+  public void abort(Executor exctr) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
+  public void setNetworkTimeout(Executor exctr, int i) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public int getNetworkTimeout() throws SQLException {
+  public int getNetworkTimeout() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }

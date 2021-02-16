@@ -17,7 +17,6 @@ package com.sqlsheet;
 
 import com.sqlsheet.stream.XlsStreamConnection;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -32,7 +31,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.DriverPropertyInfo;
+import java.sql.SQLException;
 import java.util.Properties;
 import java.util.regex.Matcher;
 
@@ -194,7 +196,7 @@ public class XlsDriver implements java.sql.Driver {
   }
 
   private SXSSFWorkbook getOrCreateXlsxStream(URL workbookUrl)
-      throws IOException, InvalidFormatException {
+      throws IOException {
     if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
       File source = new File(workbookUrl.getPath());
       if (source.exists() || (source.length() != 0)) {
@@ -207,7 +209,7 @@ public class XlsDriver implements java.sql.Driver {
     return new SXSSFWorkbook(new XSSFWorkbook(workbookUrl.openStream()), 1000, false);
   }
 
-  private Workbook getOrCreateWorkbook(URL workbookUrl) throws IOException, InvalidFormatException {
+  private Workbook getOrCreateWorkbook(URL workbookUrl) throws IOException {
     if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
       File file = new File(workbookUrl.getPath());
       if (!file.exists() || (file.length() == 0)) {
@@ -240,7 +242,7 @@ public class XlsDriver implements java.sql.Driver {
     }
   }
 
-  public boolean acceptsURL(String url) throws SQLException {
+  public boolean acceptsURL(String url) {
     return url != null && url.trim().toLowerCase().startsWith(URL_SCHEME);
   }
 
@@ -256,7 +258,7 @@ public class XlsDriver implements java.sql.Driver {
     return 0;
   }
 
-  public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
+  public java.util.logging.Logger getParentLogger() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }

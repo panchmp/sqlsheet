@@ -16,27 +16,11 @@
 package com.sqlsheet.stream;
 
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
-import java.sql.SQLClientInfoException;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.SQLXML;
-import java.sql.Savepoint;
-import java.sql.Statement;
-import java.sql.Struct;
+import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.logging.Logger;
-
-import com.sqlsheet.XlsDatabaseMetaData;
 
 /**
  * SqlSheet implementation of java.sql.Connection which uses steaming over XLS
@@ -49,11 +33,11 @@ public class XlsStreamConnection implements Connection {
 
   URL xlsFile;
 
-  public XlsStreamConnection(URL xlsFile) throws SQLException {
+  public XlsStreamConnection(URL xlsFile) {
     this.xlsFile = xlsFile;
   }
 
-  public Statement createStatement() throws SQLException {
+  public Statement createStatement() {
     return new XlsStreamStatement(this);
   }
 
@@ -66,7 +50,7 @@ public class XlsStreamConnection implements Connection {
     return prepareStatement(sql);
   }
 
-  public void close() throws SQLException {}
+  public void close() {}
 
   public boolean getAutoCommit() {
     return false;
@@ -109,7 +93,7 @@ public class XlsStreamConnection implements Connection {
   }
 
   @SuppressWarnings("unchecked")
-  public Map getTypeMap() throws SQLException {
+  public Map getTypeMap() {
     return null;
   }
 
@@ -117,13 +101,13 @@ public class XlsStreamConnection implements Connection {
     nyi();
   }
 
-  public void commit() throws SQLException {}
+  public void commit() {}
 
-  public void rollback() throws SQLException {}
+  public void rollback() {}
 
-  public void clearWarnings() throws SQLException {}
+  public void clearWarnings() {}
 
-  public DatabaseMetaData getMetaData() throws SQLException {
+  public DatabaseMetaData getMetaData() {
     return new XlsStreamDatabaseMetaData(xlsFile);
   }
 
@@ -204,7 +188,7 @@ public class XlsStreamConnection implements Connection {
     return false;
   }
 
-  public void setClientInfo(String name, String value) throws SQLClientInfoException {}
+  public void setClientInfo(String name, String value) {}
 
   public String getClientInfo(String name) throws SQLException {
     nyi();
@@ -216,7 +200,7 @@ public class XlsStreamConnection implements Connection {
     return null;
   }
 
-  public void setClientInfo(Properties properties) throws SQLClientInfoException {}
+  public void setClientInfo(Properties properties) {}
 
   public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
     nyi();
@@ -272,23 +256,23 @@ public class XlsStreamConnection implements Connection {
     return false;
   }
 
-  public String getSchema() throws SQLException {
+  public String getSchema() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public void setSchema(String string) throws SQLException {
+  public void setSchema(String string) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public void abort(Executor exctr) throws SQLException {
+  public void abort(Executor exctr) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
+  public void setNetworkTimeout(Executor exctr, int i) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public int getNetworkTimeout() throws SQLException {
+  public int getNetworkTimeout() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }

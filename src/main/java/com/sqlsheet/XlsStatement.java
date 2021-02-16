@@ -15,27 +15,15 @@
  */
 package com.sqlsheet;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.sqlsheet.parser.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import com.sqlsheet.parser.CreateTableStatement;
-import com.sqlsheet.parser.DropTableStatement;
-import com.sqlsheet.parser.InsertIntoStatement;
-import com.sqlsheet.parser.ParsedStatement;
-import com.sqlsheet.parser.SelectStarStatement;
-import com.sqlsheet.parser.SqlSheetParser;
 import java.sql.*;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SqlSheet implementation of java.sql.Statement.
@@ -84,12 +72,12 @@ public class XlsStatement implements Statement {
     throw new SQLException(message);
   }
 
-  public Connection getConnection() throws SQLException {
+  public Connection getConnection() {
     return connection;
   }
 
   @Override
-  public void close() throws SQLException {
+  public void close() {
     sheet2rs.clear();
     parser = null;
 
@@ -271,12 +259,12 @@ public class XlsStatement implements Statement {
   }
 
   @Override
-  public int getResultSetConcurrency() throws SQLException {
+  public int getResultSetConcurrency() {
     return ResultSet.CONCUR_READ_ONLY;
   }
 
   @Override
-  public int getResultSetType() throws SQLException {
+  public int getResultSetType() {
     return ResultSet.TYPE_FORWARD_ONLY;
   }
 
@@ -337,7 +325,7 @@ public class XlsStatement implements Statement {
   }
 
   @Override
-  public int getResultSetHoldability() throws SQLException {
+  public int getResultSetHoldability() {
     return ResultSet.CLOSE_CURSORS_AT_COMMIT;
   }
 
@@ -346,33 +334,33 @@ public class XlsStatement implements Statement {
   }
 
   @Override
-  public boolean isClosed() throws SQLException {
+  public boolean isClosed() {
     return isClosed;
   }
 
   @Override
-  public boolean isPoolable() throws SQLException {
+  public boolean isPoolable() {
     return false;
   }
 
   @Override
-  public void setPoolable(boolean poolable) throws SQLException {}
+  public void setPoolable(boolean poolable) {}
 
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+  public boolean isWrapperFor(Class<?> iface) {
     return false;
   }
 
-  public <T> T unwrap(Class<T> iface) throws SQLException {
+  public <T> T unwrap(Class<T> iface) {
     return null;
   }
 
   @Override
-  public void closeOnCompletion() throws SQLException {
+  public void closeOnCompletion() {
     isCloseOnCompletion = true;
   }
 
   @Override
-  public boolean isCloseOnCompletion() throws SQLException {
+  public boolean isCloseOnCompletion() {
     return isCloseOnCompletion;
   }
 }

@@ -15,6 +15,8 @@
  */
 package com.sqlsheet;
 
+import org.apache.poi.ss.usermodel.*;
+
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -22,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.poi.ss.usermodel.*;
 
 /**
  * SqlSheet implementation of java.sql.ResultSetMetaData.
@@ -211,7 +211,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     return columnNames.get(jdbcCol - 1);
   }
 
-  public String getCatalogName(int arg0) throws SQLException {
+  public String getCatalogName(int arg0) {
     return null;
   }
 
@@ -223,7 +223,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     return 0;
   }
 
-  public int getColumnType(int jdbcColumn) throws SQLException {
+  public int getColumnType(int jdbcColumn) {
 
     return columnTypeMap.get(jdbcColumn);
   }
@@ -233,63 +233,63 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     return columnTypeNameMap.get(getColumnType(jdbcColumn));
   }
 
-  public int getPrecision(int arg0) throws SQLException {
+  public int getPrecision(int arg0) {
     return 0;
   }
 
-  public int getScale(int arg0) throws SQLException {
+  public int getScale(int arg0) {
     return 0;
   }
 
-  public String getSchemaName(int arg0) throws SQLException {
+  public String getSchemaName(int arg0) {
     return null;
   }
 
-  public String getTableName(int arg0) throws SQLException {
+  public String getTableName(int arg0) {
     return null;
   }
 
-  public boolean isAutoIncrement(int arg0) throws SQLException {
+  public boolean isAutoIncrement(int arg0) {
     return false;
   }
 
-  public boolean isCaseSensitive(int arg0) throws SQLException {
+  public boolean isCaseSensitive(int arg0) {
     return false;
   }
 
-  public boolean isCurrency(int arg0) throws SQLException {
+  public boolean isCurrency(int arg0) {
     return false;
   }
 
-  public boolean isDefinitelyWritable(int arg0) throws SQLException {
+  public boolean isDefinitelyWritable(int arg0) {
     return false;
   }
 
-  public int isNullable(int arg0) throws SQLException {
+  public int isNullable(int arg0) {
     return 0;
   }
 
-  public boolean isReadOnly(int arg0) throws SQLException {
+  public boolean isReadOnly(int arg0) {
     return false;
   }
 
-  public boolean isSearchable(int arg0) throws SQLException {
+  public boolean isSearchable(int arg0) {
     return false;
   }
 
-  public boolean isSigned(int arg0) throws SQLException {
+  public boolean isSigned(int arg0) {
     return false;
   }
 
-  public boolean isWritable(int arg0) throws SQLException {
+  public boolean isWritable(int arg0) {
     return false;
   }
 
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+  public boolean isWrapperFor(Class<?> iface) {
     return false;
   }
 
-  public <T> T unwrap(Class<T> iface) throws SQLException {
+  public <T> T unwrap(Class<T> iface) {
     return null;
   }
 }

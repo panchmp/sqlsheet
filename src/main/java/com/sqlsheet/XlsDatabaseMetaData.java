@@ -18,13 +18,16 @@ package com.sqlsheet;
 
 import com.hrakaroo.glob.GlobPattern;
 import com.hrakaroo.glob.MatchingEngine;
-import static com.sqlsheet.XlsStatement.DEFAULT_FIRST_COL;
-import static com.sqlsheet.XlsStatement.DEFAULT_HEADLINE;
-import java.sql.*;
-import java.util.*;
 import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.sql.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+
+import static com.sqlsheet.XlsStatement.DEFAULT_FIRST_COL;
+import static com.sqlsheet.XlsStatement.DEFAULT_HEADLINE;
 
 public class XlsDatabaseMetaData implements DatabaseMetaData {
 
@@ -35,67 +38,67 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public boolean allProceduresAreCallable() throws SQLException {
+  public boolean allProceduresAreCallable() {
     return false;
   }
 
   @Override
-  public boolean allTablesAreSelectable() throws SQLException {
+  public boolean allTablesAreSelectable() {
     return true;
   }
 
   @Override
-  public String getURL() throws SQLException {
+  public String getURL() {
     return "jdbc:xls:file:filename[?property1=value[&property2=value]]";
   }
 
   @Override
-  public String getUserName() throws SQLException {
+  public String getUserName() {
     return "";
   }
 
   @Override
-  public boolean isReadOnly() throws SQLException {
+  public boolean isReadOnly() {
     return false;
   }
 
   @Override
-  public boolean nullsAreSortedHigh() throws SQLException {
+  public boolean nullsAreSortedHigh() {
     return true;
   }
 
   @Override
-  public boolean nullsAreSortedLow() throws SQLException {
+  public boolean nullsAreSortedLow() {
     return false;
   }
 
   @Override
-  public boolean nullsAreSortedAtStart() throws SQLException {
+  public boolean nullsAreSortedAtStart() {
     return true;
   }
 
   @Override
-  public boolean nullsAreSortedAtEnd() throws SQLException {
+  public boolean nullsAreSortedAtEnd() {
     return false;
   }
 
   @Override
-  public String getDatabaseProductName() throws SQLException {
+  public String getDatabaseProductName() {
     return "Microsoft Excel";
   }
 
   @Override
-  public String getDatabaseProductVersion() throws SQLException {
+  public String getDatabaseProductVersion() {
     return (connection.workbook instanceof XSSFWorkbook) ? "2007" : "97";
   }
 
   @Override
-  public String getDriverName() throws SQLException {
+  public String getDriverName() {
     return "SQLSheet";
   }
 
   @Override
-  public String getDriverVersion() throws SQLException {
+  public String getDriverVersion() {
     return "7.2.0";
   }
 
@@ -110,459 +113,459 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public boolean usesLocalFiles() throws SQLException {
+  public boolean usesLocalFiles() {
     return true;
   }
 
   @Override
-  public boolean usesLocalFilePerTable() throws SQLException {
+  public boolean usesLocalFilePerTable() {
     return false;
   }
 
   @Override
-  public boolean supportsMixedCaseIdentifiers() throws SQLException {
+  public boolean supportsMixedCaseIdentifiers() {
     return true;
   }
 
   @Override
-  public boolean storesUpperCaseIdentifiers() throws SQLException {
+  public boolean storesUpperCaseIdentifiers() {
     return false;
   }
 
   @Override
-  public boolean storesLowerCaseIdentifiers() throws SQLException {
+  public boolean storesLowerCaseIdentifiers() {
     return false;
   }
 
   @Override
-  public boolean storesMixedCaseIdentifiers() throws SQLException {
+  public boolean storesMixedCaseIdentifiers() {
     return true;
   }
 
   @Override
-  public boolean supportsMixedCaseQuotedIdentifiers() throws SQLException {
+  public boolean supportsMixedCaseQuotedIdentifiers() {
     return true;
   }
 
   @Override
-  public boolean storesUpperCaseQuotedIdentifiers() throws SQLException {
+  public boolean storesUpperCaseQuotedIdentifiers() {
     return false;
   }
 
   @Override
-  public boolean storesLowerCaseQuotedIdentifiers() throws SQLException {
+  public boolean storesLowerCaseQuotedIdentifiers() {
     return false;
   }
 
   @Override
-  public boolean storesMixedCaseQuotedIdentifiers() throws SQLException {
+  public boolean storesMixedCaseQuotedIdentifiers() {
     return true;
   }
 
   @Override
-  public String getIdentifierQuoteString() throws SQLException {
+  public String getIdentifierQuoteString() {
     return "\"";
   }
 
   @Override
-  public String getSQLKeywords() throws SQLException {
+  public String getSQLKeywords() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public String getNumericFunctions() throws SQLException {
+  public String getNumericFunctions() {
     return "";
   }
 
   @Override
-  public String getStringFunctions() throws SQLException {
+  public String getStringFunctions() {
     return "";
   }
 
   @Override
-  public String getSystemFunctions() throws SQLException {
+  public String getSystemFunctions() {
     return "";
   }
 
   @Override
-  public String getTimeDateFunctions() throws SQLException {
+  public String getTimeDateFunctions() {
     return "";
   }
 
   @Override
-  public String getSearchStringEscape() throws SQLException {
+  public String getSearchStringEscape() {
     return "";
   }
 
   @Override
-  public String getExtraNameCharacters() throws SQLException {
+  public String getExtraNameCharacters() {
     return "";
   }
 
   @Override
-  public boolean supportsAlterTableWithAddColumn() throws SQLException {
+  public boolean supportsAlterTableWithAddColumn() {
     return false;
   }
 
   @Override
-  public boolean supportsAlterTableWithDropColumn() throws SQLException {
+  public boolean supportsAlterTableWithDropColumn() {
     return false;
   }
 
   @Override
-  public boolean supportsColumnAliasing() throws SQLException {
+  public boolean supportsColumnAliasing() {
     return false;
   }
 
   @Override
-  public boolean nullPlusNonNullIsNull() throws SQLException {
+  public boolean nullPlusNonNullIsNull() {
     return false;
   }
 
   @Override
-  public boolean supportsConvert() throws SQLException {
+  public boolean supportsConvert() {
     return false;
   }
 
   @Override
-  public boolean supportsConvert(int i, int i1) throws SQLException {
+  public boolean supportsConvert(int i, int i1) {
     return false;
   }
 
   @Override
-  public boolean supportsTableCorrelationNames() throws SQLException {
+  public boolean supportsTableCorrelationNames() {
     return false;
   }
 
   @Override
-  public boolean supportsDifferentTableCorrelationNames() throws SQLException {
+  public boolean supportsDifferentTableCorrelationNames() {
     return false;
   }
 
   @Override
-  public boolean supportsExpressionsInOrderBy() throws SQLException {
+  public boolean supportsExpressionsInOrderBy() {
     return false;
   }
 
   @Override
-  public boolean supportsOrderByUnrelated() throws SQLException {
+  public boolean supportsOrderByUnrelated() {
     return false;
   }
 
   @Override
-  public boolean supportsGroupBy() throws SQLException {
+  public boolean supportsGroupBy() {
     return false;
   }
 
   @Override
-  public boolean supportsGroupByUnrelated() throws SQLException {
+  public boolean supportsGroupByUnrelated() {
     return false;
   }
 
   @Override
-  public boolean supportsGroupByBeyondSelect() throws SQLException {
+  public boolean supportsGroupByBeyondSelect() {
     return false;
   }
 
   @Override
-  public boolean supportsLikeEscapeClause() throws SQLException {
+  public boolean supportsLikeEscapeClause() {
     return false;
   }
 
   @Override
-  public boolean supportsMultipleResultSets() throws SQLException {
+  public boolean supportsMultipleResultSets() {
     return false;
   }
 
   @Override
-  public boolean supportsMultipleTransactions() throws SQLException {
+  public boolean supportsMultipleTransactions() {
     return false;
   }
 
   @Override
-  public boolean supportsNonNullableColumns() throws SQLException {
+  public boolean supportsNonNullableColumns() {
     return false;
   }
 
   @Override
-  public boolean supportsMinimumSQLGrammar() throws SQLException {
+  public boolean supportsMinimumSQLGrammar() {
     return true;
   }
 
   @Override
-  public boolean supportsCoreSQLGrammar() throws SQLException {
+  public boolean supportsCoreSQLGrammar() {
     return false;
   }
 
   @Override
-  public boolean supportsExtendedSQLGrammar() throws SQLException {
+  public boolean supportsExtendedSQLGrammar() {
     return false;
   }
 
   @Override
-  public boolean supportsANSI92EntryLevelSQL() throws SQLException {
+  public boolean supportsANSI92EntryLevelSQL() {
     return false;
   }
 
   @Override
-  public boolean supportsANSI92IntermediateSQL() throws SQLException {
+  public boolean supportsANSI92IntermediateSQL() {
     return false;
   }
 
   @Override
-  public boolean supportsANSI92FullSQL() throws SQLException {
+  public boolean supportsANSI92FullSQL() {
     return false;
   }
 
   @Override
-  public boolean supportsIntegrityEnhancementFacility() throws SQLException {
+  public boolean supportsIntegrityEnhancementFacility() {
     return false;
   }
 
   @Override
-  public boolean supportsOuterJoins() throws SQLException {
+  public boolean supportsOuterJoins() {
     return false;
   }
 
   @Override
-  public boolean supportsFullOuterJoins() throws SQLException {
+  public boolean supportsFullOuterJoins() {
     return false;
   }
 
   @Override
-  public boolean supportsLimitedOuterJoins() throws SQLException {
+  public boolean supportsLimitedOuterJoins() {
     return false;
   }
 
   @Override
-  public String getSchemaTerm() throws SQLException {
+  public String getSchemaTerm() {
     return "Filename";
   }
 
   @Override
-  public String getProcedureTerm() throws SQLException {
+  public String getProcedureTerm() {
     return "Procedure";
   }
 
   @Override
-  public String getCatalogTerm() throws SQLException {
+  public String getCatalogTerm() {
     return "Folder";
   }
 
   @Override
-  public boolean isCatalogAtStart() throws SQLException {
+  public boolean isCatalogAtStart() {
     return false;
   }
 
   @Override
-  public String getCatalogSeparator() throws SQLException {
+  public String getCatalogSeparator() {
     return ".";
   }
 
   @Override
-  public boolean supportsSchemasInDataManipulation() throws SQLException {
+  public boolean supportsSchemasInDataManipulation() {
     return false;
   }
 
   @Override
-  public boolean supportsSchemasInProcedureCalls() throws SQLException {
+  public boolean supportsSchemasInProcedureCalls() {
     return false;
   }
 
   @Override
-  public boolean supportsSchemasInTableDefinitions() throws SQLException {
+  public boolean supportsSchemasInTableDefinitions() {
     return false;
   }
 
   @Override
-  public boolean supportsSchemasInIndexDefinitions() throws SQLException {
+  public boolean supportsSchemasInIndexDefinitions() {
     return false;
   }
 
   @Override
-  public boolean supportsSchemasInPrivilegeDefinitions() throws SQLException {
+  public boolean supportsSchemasInPrivilegeDefinitions() {
     return false;
   }
 
   @Override
-  public boolean supportsCatalogsInDataManipulation() throws SQLException {
+  public boolean supportsCatalogsInDataManipulation() {
     return false;
   }
 
   @Override
-  public boolean supportsCatalogsInProcedureCalls() throws SQLException {
+  public boolean supportsCatalogsInProcedureCalls() {
     return false;
   }
 
   @Override
-  public boolean supportsCatalogsInTableDefinitions() throws SQLException {
+  public boolean supportsCatalogsInTableDefinitions() {
     return false;
   }
 
   @Override
-  public boolean supportsCatalogsInIndexDefinitions() throws SQLException {
+  public boolean supportsCatalogsInIndexDefinitions() {
     return false;
   }
 
   @Override
-  public boolean supportsCatalogsInPrivilegeDefinitions() throws SQLException {
+  public boolean supportsCatalogsInPrivilegeDefinitions() {
     return false;
   }
 
   @Override
-  public boolean supportsPositionedDelete() throws SQLException {
+  public boolean supportsPositionedDelete() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean supportsPositionedUpdate() throws SQLException {
+  public boolean supportsPositionedUpdate() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean supportsSelectForUpdate() throws SQLException {
+  public boolean supportsSelectForUpdate() {
     return false;
   }
 
   @Override
-  public boolean supportsStoredProcedures() throws SQLException {
+  public boolean supportsStoredProcedures() {
     return false;
   }
 
   @Override
-  public boolean supportsSubqueriesInComparisons() throws SQLException {
+  public boolean supportsSubqueriesInComparisons() {
     return false;
   }
 
   @Override
-  public boolean supportsSubqueriesInExists() throws SQLException {
+  public boolean supportsSubqueriesInExists() {
     return false;
   }
 
   @Override
-  public boolean supportsSubqueriesInIns() throws SQLException {
+  public boolean supportsSubqueriesInIns() {
     return false;
   }
 
   @Override
-  public boolean supportsSubqueriesInQuantifieds() throws SQLException {
+  public boolean supportsSubqueriesInQuantifieds() {
     return false;
   }
 
   @Override
-  public boolean supportsCorrelatedSubqueries() throws SQLException {
+  public boolean supportsCorrelatedSubqueries() {
     return false;
   }
 
   @Override
-  public boolean supportsUnion() throws SQLException {
+  public boolean supportsUnion() {
     return false;
   }
 
   @Override
-  public boolean supportsUnionAll() throws SQLException {
+  public boolean supportsUnionAll() {
     return false;
   }
 
   @Override
-  public boolean supportsOpenCursorsAcrossCommit() throws SQLException {
+  public boolean supportsOpenCursorsAcrossCommit() {
     return false;
   }
 
   @Override
-  public boolean supportsOpenCursorsAcrossRollback() throws SQLException {
+  public boolean supportsOpenCursorsAcrossRollback() {
     return false;
   }
 
   @Override
-  public boolean supportsOpenStatementsAcrossCommit() throws SQLException {
+  public boolean supportsOpenStatementsAcrossCommit() {
     return false;
   }
 
   @Override
-  public boolean supportsOpenStatementsAcrossRollback() throws SQLException {
+  public boolean supportsOpenStatementsAcrossRollback() {
     return false;
   }
 
   @Override
-  public int getMaxBinaryLiteralLength() throws SQLException {
+  public int getMaxBinaryLiteralLength() {
     return 0;
   }
 
   @Override
-  public int getMaxCharLiteralLength() throws SQLException {
+  public int getMaxCharLiteralLength() {
     // @todo: check and set the correct value
     return 256;
   }
 
   @Override
-  public int getMaxColumnNameLength() throws SQLException {
+  public int getMaxColumnNameLength() {
     // @todo: check and set the correct value
     return 256;
   }
 
   @Override
-  public int getMaxColumnsInGroupBy() throws SQLException {
+  public int getMaxColumnsInGroupBy() {
     return 0;
   }
 
   @Override
-  public int getMaxColumnsInIndex() throws SQLException {
+  public int getMaxColumnsInIndex() {
     return 0;
   }
 
   @Override
-  public int getMaxColumnsInOrderBy() throws SQLException {
+  public int getMaxColumnsInOrderBy() {
     return 0;
   }
 
   @Override
-  public int getMaxColumnsInSelect() throws SQLException {
+  public int getMaxColumnsInSelect() {
     // @todo: check and set the correct value, we accept only '*' so far
     return 0;
   }
 
   @Override
-  public int getMaxColumnsInTable() throws SQLException {
+  public int getMaxColumnsInTable() {
     // @todo: check and set the correct value
     return 256;
   }
 
   @Override
-  public int getMaxConnections() throws SQLException {
+  public int getMaxConnections() {
     // @todo: check and set the correct value
     return 1024;
   }
 
   @Override
-  public int getMaxCursorNameLength() throws SQLException {
+  public int getMaxCursorNameLength() {
     return 0;
   }
 
   @Override
-  public int getMaxIndexLength() throws SQLException {
+  public int getMaxIndexLength() {
     return 0;
   }
 
   @Override
-  public int getMaxSchemaNameLength() throws SQLException {
+  public int getMaxSchemaNameLength() {
     // @todo: check and set the correct value
     return 256;
   }
 
   @Override
-  public int getMaxProcedureNameLength() throws SQLException {
+  public int getMaxProcedureNameLength() {
     return 0;
   }
 
   @Override
-  public int getMaxCatalogNameLength() throws SQLException {
+  public int getMaxCatalogNameLength() {
     // @todo: check and set the correct value
     return 256;
   }
 
   @Override
-  public int getMaxRowSize() throws SQLException {
+  public int getMaxRowSize() {
     // @todo: obeye the correct connection's ROW OFFSET
     return (connection.getWorkBook() instanceof XSSFWorkbook)
         ? SpreadsheetVersion.EXCEL2007.getMaxRows()
@@ -570,82 +573,81 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public boolean doesMaxRowSizeIncludeBlobs() throws SQLException {
+  public boolean doesMaxRowSizeIncludeBlobs() {
     return true;
   }
 
   @Override
-  public int getMaxStatementLength() throws SQLException {
+  public int getMaxStatementLength() {
     // @todo: check and set the correct value
     return Integer.MAX_VALUE;
   }
 
   @Override
-  public int getMaxStatements() throws SQLException {
+  public int getMaxStatements() {
     // @todo: check and set the correct value
     return Integer.MAX_VALUE;
   }
 
   @Override
-  public int getMaxTableNameLength() throws SQLException {
+  public int getMaxTableNameLength() {
     // @todo: check and set the correct value
     return 32;
   }
 
   @Override
-  public int getMaxTablesInSelect() throws SQLException {
+  public int getMaxTablesInSelect() {
     return 1;
   }
 
   @Override
-  public int getMaxUserNameLength() throws SQLException {
+  public int getMaxUserNameLength() {
     return 0;
   }
 
   @Override
-  public int getDefaultTransactionIsolation() throws SQLException {
+  public int getDefaultTransactionIsolation() {
     return java.sql.Connection.TRANSACTION_NONE;
   }
 
   @Override
-  public boolean supportsTransactions() throws SQLException {
+  public boolean supportsTransactions() {
     return false;
   }
 
   @Override
-  public boolean supportsTransactionIsolationLevel(int i) throws SQLException {
+  public boolean supportsTransactionIsolationLevel(int i) {
     return (java.sql.Connection.TRANSACTION_NONE == i);
   }
 
   @Override
-  public boolean supportsDataDefinitionAndDataManipulationTransactions() throws SQLException {
+  public boolean supportsDataDefinitionAndDataManipulationTransactions() {
     return false;
   }
 
   @Override
-  public boolean supportsDataManipulationTransactionsOnly() throws SQLException {
+  public boolean supportsDataManipulationTransactionsOnly() {
     return false;
   }
 
   @Override
-  public boolean dataDefinitionCausesTransactionCommit() throws SQLException {
+  public boolean dataDefinitionCausesTransactionCommit() {
     return false;
   }
 
   @Override
-  public boolean dataDefinitionIgnoredInTransactions() throws SQLException {
+  public boolean dataDefinitionIgnoredInTransactions() {
     return false;
   }
 
   @Override
-  public ResultSet getProcedures(String string, String string1, String string2)
-      throws SQLException {
+  public ResultSet getProcedures(String string, String string1, String string2) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
   public ResultSet getProcedureColumns(
-      String string, String string1, String string2, String string3) throws SQLException {
+      String string, String string1, String string2, String string3) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
@@ -947,25 +949,23 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public ResultSet getColumnPrivileges(
-      String string, String string1, String string2, String string3) throws SQLException {
+      String string, String string1, String string2, String string3) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getTablePrivileges(String string, String string1, String string2)
-      throws SQLException {
+  public ResultSet getTablePrivileges(String string, String string1, String string2) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
   public ResultSet getBestRowIdentifier(
-      String string, String string1, String string2, int i, boolean bln) throws SQLException {
+      String string, String string1, String string2, int i, boolean bln) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getVersionColumns(String string, String string1, String string2)
-      throws SQLException {
+  public ResultSet getVersionColumns(String string, String string1, String string2) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
@@ -1192,161 +1192,157 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public boolean supportsResultSetType(int i) throws SQLException {
+  public boolean supportsResultSetType(int i) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean supportsResultSetConcurrency(int i, int i1) throws SQLException {
+  public boolean supportsResultSetConcurrency(int i, int i1) {
     return false;
   }
 
   @Override
-  public boolean ownUpdatesAreVisible(int i) throws SQLException {
+  public boolean ownUpdatesAreVisible(int i) {
     return true;
   }
 
   @Override
-  public boolean ownDeletesAreVisible(int i) throws SQLException {
+  public boolean ownDeletesAreVisible(int i) {
     return true;
   }
 
   @Override
-  public boolean ownInsertsAreVisible(int i) throws SQLException {
+  public boolean ownInsertsAreVisible(int i) {
     return true;
   }
 
   @Override
-  public boolean othersUpdatesAreVisible(int i) throws SQLException {
+  public boolean othersUpdatesAreVisible(int i) {
     return true;
   }
 
   @Override
-  public boolean othersDeletesAreVisible(int i) throws SQLException {
+  public boolean othersDeletesAreVisible(int i) {
     return true;
   }
 
   @Override
-  public boolean othersInsertsAreVisible(int i) throws SQLException {
+  public boolean othersInsertsAreVisible(int i) {
     return true;
   }
 
   @Override
-  public boolean updatesAreDetected(int i) throws SQLException {
+  public boolean updatesAreDetected(int i) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean deletesAreDetected(int i) throws SQLException {
+  public boolean deletesAreDetected(int i) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean insertsAreDetected(int i) throws SQLException {
+  public boolean insertsAreDetected(int i) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean supportsBatchUpdates() throws SQLException {
+  public boolean supportsBatchUpdates() {
     return false;
   }
 
   @Override
-  public ResultSet getUDTs(String string, String string1, String string2, int[] ints)
-      throws SQLException {
+  public ResultSet getUDTs(String string, String string1, String string2, int[] ints) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public Connection getConnection() throws SQLException {
+  public Connection getConnection() {
     return connection;
   }
 
   @Override
-  public boolean supportsSavepoints() throws SQLException {
+  public boolean supportsSavepoints() {
     return false;
   }
 
   @Override
-  public boolean supportsNamedParameters() throws SQLException {
+  public boolean supportsNamedParameters() {
     return false;
   }
 
   @Override
-  public boolean supportsMultipleOpenResults() throws SQLException {
+  public boolean supportsMultipleOpenResults() {
     return false;
   }
 
   @Override
-  public boolean supportsGetGeneratedKeys() throws SQLException {
+  public boolean supportsGetGeneratedKeys() {
     return false;
   }
 
   @Override
-  public ResultSet getSuperTypes(String string, String string1, String string2)
-      throws SQLException {
+  public ResultSet getSuperTypes(String string, String string1, String string2) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getSuperTables(String string, String string1, String string2)
-      throws SQLException {
+  public ResultSet getSuperTables(String string, String string1, String string2) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getAttributes(String string, String string1, String string2, String string3)
-      throws SQLException {
+  public ResultSet getAttributes(String string, String string1, String string2, String string3) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean supportsResultSetHoldability(int i) throws SQLException {
+  public boolean supportsResultSetHoldability(int i) {
     return (ResultSet.CLOSE_CURSORS_AT_COMMIT == i);
   }
 
   @Override
-  public int getResultSetHoldability() throws SQLException {
+  public int getResultSetHoldability() {
     return ResultSet.CLOSE_CURSORS_AT_COMMIT;
   }
 
   @Override
-  public int getDatabaseMajorVersion() throws SQLException {
+  public int getDatabaseMajorVersion() {
     return (connection.workbook instanceof XSSFWorkbook) ? 2007 : 97;
   }
 
   @Override
-  public int getDatabaseMinorVersion() throws SQLException {
+  public int getDatabaseMinorVersion() {
     return 0;
   }
 
   @Override
-  public int getJDBCMajorVersion() throws SQLException {
+  public int getJDBCMajorVersion() {
     return 4;
   }
 
   @Override
-  public int getJDBCMinorVersion() throws SQLException {
+  public int getJDBCMinorVersion() {
     return 0;
   }
 
   @Override
-  public int getSQLStateType() throws SQLException {
+  public int getSQLStateType() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean locatorsUpdateCopy() throws SQLException {
+  public boolean locatorsUpdateCopy() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean supportsStatementPooling() throws SQLException {
+  public boolean supportsStatementPooling() {
     return false;
   }
 
   @Override
-  public RowIdLifetime getRowIdLifetime() throws SQLException {
+  public RowIdLifetime getRowIdLifetime() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
@@ -1356,49 +1352,47 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
   }
 
   @Override
-  public boolean supportsStoredFunctionsUsingCallSyntax() throws SQLException {
+  public boolean supportsStoredFunctionsUsingCallSyntax() {
     return false;
   }
 
   @Override
-  public boolean autoCommitFailureClosesAllResultSets() throws SQLException {
+  public boolean autoCommitFailureClosesAllResultSets() {
     return true;
   }
 
   @Override
-  public ResultSet getClientInfoProperties() throws SQLException {
+  public ResultSet getClientInfoProperties() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getFunctions(String string, String string1, String string2) throws SQLException {
+  public ResultSet getFunctions(String string, String string1, String string2) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getFunctionColumns(String string, String string1, String string2, String string3)
-      throws SQLException {
+  public ResultSet getFunctionColumns(String string, String string1, String string2, String string3) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public ResultSet getPseudoColumns(String string, String string1, String string2, String string3)
-      throws SQLException {
+  public ResultSet getPseudoColumns(String string, String string1, String string2, String string3) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean generatedKeyAlwaysReturned() throws SQLException {
+  public boolean generatedKeyAlwaysReturned() {
     return false;
   }
 
   @Override
-  public <T> T unwrap(Class<T> type) throws SQLException {
+  public <T> T unwrap(Class<T> type) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
-  public boolean isWrapperFor(Class<?> type) throws SQLException {
+  public boolean isWrapperFor(Class<?> type) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }

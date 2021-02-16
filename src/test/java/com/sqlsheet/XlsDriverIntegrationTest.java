@@ -25,22 +25,22 @@ public class XlsDriverIntegrationTest {
     private static final String testExtractXlsxFile  = "extracttest.xlsx";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
 
     }
 
     @Test
-    public void testGetMinorVersion() throws Exception {
+    public void testGetMinorVersion() {
 
     }
 
     @Before
-    public void init() throws Exception {
+    public void init() {
     }
 
     @Test

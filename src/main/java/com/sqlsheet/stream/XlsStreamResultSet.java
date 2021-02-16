@@ -15,33 +15,19 @@
  */
 package com.sqlsheet.stream;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.NClob;
-import java.sql.Ref;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.RowId;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.SQLXML;
-import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.Calendar;
 import java.util.Map;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * SqlSheet implementation of java.sql.ResultSet which uses steaming over XLS
@@ -71,7 +57,7 @@ public class XlsStreamResultSet implements ResultSet {
     metadata = new XlsStreamingResultSetMetaData(iterator);
   }
 
-  private static Object getObject(XlsSheetIterator.CellValueHolder cell) throws SQLException {
+  private static Object getObject(XlsSheetIterator.CellValueHolder cell) {
     if (cell == null) return null;
     if (cell.dateValue != null) return cell.dateValue;
     if (cell.doubleValue != null) return cell.doubleValue;
@@ -116,7 +102,7 @@ public class XlsStreamResultSet implements ResultSet {
     return iterator.getCurrentRowValue(jdbcColumnIndex);
   }
 
-  public ResultSetMetaData getMetaData() throws SQLException {
+  public ResultSetMetaData getMetaData() {
     return metadata;
   }
 
@@ -136,62 +122,62 @@ public class XlsStreamResultSet implements ResultSet {
     return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
   }
 
-  public boolean getBoolean(int jdbcColumn) throws SQLException {
+  public boolean getBoolean(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell != null && Boolean.parseBoolean(cell.stringValue);
   }
 
-  public boolean getBoolean(String jdbcColumn) throws SQLException {
+  public boolean getBoolean(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell != null && Boolean.parseBoolean(cell.stringValue);
   }
 
-  public double getDouble(int jdbcColumn) throws SQLException {
+  public double getDouble(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell == null ? 0 : cell.doubleValue;
   }
 
-  public double getDouble(String jdbcColumn) throws SQLException {
+  public double getDouble(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell == null ? 0 : cell.doubleValue;
   }
 
-  public byte getByte(int jdbcColumn) throws SQLException {
+  public byte getByte(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (byte) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public byte getByte(String jdbcColumn) throws SQLException {
+  public byte getByte(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (byte) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public float getFloat(int jdbcColumn) throws SQLException {
+  public float getFloat(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (float) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public float getFloat(String jdbcColumn) throws SQLException {
+  public float getFloat(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (float) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public int getInt(int jdbcColumn) throws SQLException {
+  public int getInt(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (int) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public int getInt(String jdbcColumn) throws SQLException {
+  public int getInt(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (int) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public long getLong(int jdbcColumn) throws SQLException {
+  public long getLong(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (long) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public long getLong(String jdbcColumn) throws SQLException {
+  public long getLong(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (long) (cell == null ? 0 : cell.doubleValue);
   }
@@ -204,164 +190,164 @@ public class XlsStreamResultSet implements ResultSet {
     return getObject(getCell(jdbcColumn));
   }
 
-  public short getShort(int jdbcColumn) throws SQLException {
+  public short getShort(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (short) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public short getShort(String jdbcColumn) throws SQLException {
+  public short getShort(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return (short) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public String getString(int jdbcColumn) throws SQLException {
+  public String getString(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell == null ? null : cell.stringValue;
   }
 
-  public String getString(String jdbcColumn) throws SQLException {
+  public String getString(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell == null ? null : cell.stringValue;
   }
 
-  public void updateBoolean(int jdbcColumn, boolean x) throws SQLException {
+  public void updateBoolean(int jdbcColumn, boolean x) {
     throw nyi();
   }
 
-  public void updateBoolean(String jdbcColumn, boolean x) throws SQLException {
+  public void updateBoolean(String jdbcColumn, boolean x) {
     throw nyi();
   }
 
-  public void updateByte(int jdbcColumn, byte x) throws SQLException {
+  public void updateByte(int jdbcColumn, byte x) {
     throw nyi();
   }
 
-  public void updateByte(String jdbcColumn, byte x) throws SQLException {
+  public void updateByte(String jdbcColumn, byte x) {
     throw nyi();
   }
 
-  public void updateDouble(int jdbcColumn, double x) throws SQLException {
+  public void updateDouble(int jdbcColumn, double x) {
     throw nyi();
   }
 
-  public void updateDouble(String jdbcColumn, double x) throws SQLException {
+  public void updateDouble(String jdbcColumn, double x) {
     throw nyi();
   }
 
-  public void updateFloat(int jdbcColumn, float x) throws SQLException {
+  public void updateFloat(int jdbcColumn, float x) {
     throw nyi();
   }
 
-  public void updateFloat(String jdbcColumn, float x) throws SQLException {
+  public void updateFloat(String jdbcColumn, float x) {
     throw nyi();
   }
 
-  public void updateInt(int jdbcColumn, int x) throws SQLException {
+  public void updateInt(int jdbcColumn, int x) {
     throw nyi();
   }
 
-  public void updateInt(String jdbcColumn, int x) throws SQLException {
+  public void updateInt(String jdbcColumn, int x) {
     throw nyi();
   }
 
-  public void updateLong(int jdbcColumn, long x) throws SQLException {
+  public void updateLong(int jdbcColumn, long x) {
     throw nyi();
   }
 
-  public void updateLong(String jdbcColumn, long x) throws SQLException {
+  public void updateLong(String jdbcColumn, long x) {
     throw nyi();
   }
 
-  public void updateNull(int jdbcColumn) throws SQLException {
+  public void updateNull(int jdbcColumn) {
     throw nyi();
   }
 
-  public void updateNull(String jdbcColumn) throws SQLException {
+  public void updateNull(String jdbcColumn) {
     throw nyi();
   }
 
-  public void updateObject(int jdbcColumn, Object x) throws SQLException {
+  public void updateObject(int jdbcColumn, Object x) {
     throw nyi();
   }
 
-  public void updateObject(String jdbcColumn, Object x) throws SQLException {
+  public void updateObject(String jdbcColumn, Object x) {
     throw nyi();
   }
 
-  public void updateShort(int jdbcColumn, short x) throws SQLException {
+  public void updateShort(int jdbcColumn, short x) {
     throw nyi();
   }
 
-  public void updateShort(String jdbcColumn, short x) throws SQLException {
+  public void updateShort(String jdbcColumn, short x) {
     throw nyi();
   }
 
-  public void updateString(int jdbcColumn, String x) throws SQLException {
+  public void updateString(int jdbcColumn, String x) {
     throw nyi();
   }
 
-  public void updateString(String jdbcColumn, String x) throws SQLException {
+  public void updateString(String jdbcColumn, String x) {
     throw nyi();
   }
 
   // ResultSet implementation - everything else
-  public boolean absolute(int row) throws SQLException {
+  public boolean absolute(int row) {
     return true;
   }
 
-  public void afterLast() throws SQLException {}
+  public void afterLast() {}
 
-  public void beforeFirst() throws SQLException {}
+  public void beforeFirst() {}
 
-  public boolean first() throws SQLException {
+  public boolean first() {
     return true;
   }
 
-  public int getFetchDirection() throws SQLException {
+  public int getFetchDirection() {
     return FETCH_FORWARD;
   }
 
-  public void setFetchDirection(int direction) throws SQLException {
+  public void setFetchDirection(int direction) {
     throw nyi();
   }
 
-  public int getFetchSize() throws SQLException {
+  public int getFetchSize() {
     return 0;
   }
 
-  public void setFetchSize(int rows) throws SQLException {
+  public void setFetchSize(int rows) {
     throw nyi();
   }
 
-  public int getRow() throws SQLException {
+  public int getRow() {
     return iterator.getCurrentIteratorRowIndex().intValue();
   }
 
-  public int getType() throws SQLException {
+  public int getType() {
     return TYPE_FORWARD_ONLY;
   }
 
-  public boolean isAfterLast() throws SQLException {
+  public boolean isAfterLast() {
     return iterator.hasNext();
   }
 
-  public boolean isBeforeFirst() throws SQLException {
+  public boolean isBeforeFirst() {
     return iterator.getCurrentIteratorRowIndex() == 0;
   }
 
-  public boolean isFirst() throws SQLException {
+  public boolean isFirst() {
     return iterator.getCurrentIteratorRowIndex() == 1;
   }
 
-  public boolean isLast() throws SQLException {
+  public boolean isLast() {
     return iterator.hasNext();
   }
 
-  public boolean last() throws SQLException {
+  public boolean last() {
     return iterator.hasNext();
   }
 
-  public boolean next() throws SQLException {
+  public boolean next() {
     if (iterator.hasNext()) {
       iterator.next();
       return true;
@@ -370,17 +356,17 @@ public class XlsStreamResultSet implements ResultSet {
     }
   }
 
-  public boolean previous() throws SQLException {
+  public boolean previous() {
     return false;
   }
 
-  public void moveToInsertRow() throws SQLException {
+  public void moveToInsertRow() {
     throw nyi();
   }
 
   // Private methods
 
-  public void insertRow() throws SQLException {
+  public void insertRow() {
     throw nyi();
   }
 
@@ -388,11 +374,11 @@ public class XlsStreamResultSet implements ResultSet {
     return new IllegalStateException("NYI");
   }
 
-  public void cancelRowUpdates() throws SQLException {
+  public void cancelRowUpdates() {
     throw nyi();
   }
 
-  public void clearWarnings() throws SQLException {
+  public void clearWarnings() {
     throw nyi();
   }
 
@@ -400,41 +386,41 @@ public class XlsStreamResultSet implements ResultSet {
     iterator.onClose();
   }
 
-  public void deleteRow() throws SQLException {
+  public void deleteRow() {
     throw nyi();
   }
 
-  public int findColumn(String jdbcColumn) throws SQLException {
+  public int findColumn(String jdbcColumn) {
     throw nyi();
   }
 
-  public Array getArray(int i) throws SQLException {
+  public Array getArray(int i) {
     throw nyi();
   }
 
-  public Array getArray(String colName) throws SQLException {
+  public Array getArray(String colName) {
     throw nyi();
   }
 
-  public InputStream getAsciiStream(int jdbcColumn) throws SQLException {
+  public InputStream getAsciiStream(int jdbcColumn) {
     throw nyi();
   }
 
-  public InputStream getAsciiStream(String jdbcColumn) throws SQLException {
+  public InputStream getAsciiStream(String jdbcColumn) {
     throw nyi();
   }
 
-  public BigDecimal getBigDecimal(int jdbcColumn) throws SQLException {
+  public BigDecimal getBigDecimal(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell == null ? null : BigDecimal.valueOf(cell.doubleValue);
   }
 
-  public BigDecimal getBigDecimal(String jdbcColumn) throws SQLException {
+  public BigDecimal getBigDecimal(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell == null ? null : BigDecimal.valueOf(cell.doubleValue);
   }
 
-  public BigDecimal getBigDecimal(int jdbcColumn, int scale) throws SQLException {
+  public BigDecimal getBigDecimal(int jdbcColumn, int scale) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     if (cell == null) {
       return null;
@@ -444,7 +430,7 @@ public class XlsStreamResultSet implements ResultSet {
     }
   }
 
-  public BigDecimal getBigDecimal(String jdbcColumn, int scale) throws SQLException {
+  public BigDecimal getBigDecimal(String jdbcColumn, int scale) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     if (cell == null) {
       return null;
@@ -454,65 +440,65 @@ public class XlsStreamResultSet implements ResultSet {
     }
   }
 
-  public InputStream getBinaryStream(int jdbcColumn) throws SQLException {
+  public InputStream getBinaryStream(int jdbcColumn) {
     throw nyi();
   }
 
-  public InputStream getBinaryStream(String jdbcColumn) throws SQLException {
+  public InputStream getBinaryStream(String jdbcColumn) {
     throw nyi();
   }
 
-  public Blob getBlob(int i) throws SQLException {
+  public Blob getBlob(int i) {
     throw nyi();
   }
 
-  public Blob getBlob(String colName) throws SQLException {
+  public Blob getBlob(String colName) {
     throw nyi();
   }
 
-  public byte[] getBytes(int jdbcColumn) throws SQLException {
+  public byte[] getBytes(int jdbcColumn) {
     throw nyi();
   }
 
-  public byte[] getBytes(String jdbcColumn) throws SQLException {
+  public byte[] getBytes(String jdbcColumn) {
     throw nyi();
   }
 
-  public Reader getCharacterStream(int jdbcColumn) throws SQLException {
+  public Reader getCharacterStream(int jdbcColumn) {
     throw nyi();
   }
 
-  public Reader getCharacterStream(String jdbcColumn) throws SQLException {
+  public Reader getCharacterStream(String jdbcColumn) {
     throw nyi();
   }
 
-  public Clob getClob(int i) throws SQLException {
+  public Clob getClob(int i) {
     throw nyi();
   }
 
-  public Clob getClob(String colName) throws SQLException {
+  public Clob getClob(String colName) {
     throw nyi();
   }
 
-  public int getConcurrency() throws SQLException {
+  public int getConcurrency() {
     throw nyi();
   }
 
-  public String getCursorName() throws SQLException {
+  public String getCursorName() {
     throw nyi();
   }
 
-  public Date getDate(int jdbcColumn) throws SQLException {
+  public Date getDate(int jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell == null ? null : new Date(cell.dateValue.getTime());
   }
 
-  public Date getDate(String jdbcColumn) throws SQLException {
+  public Date getDate(String jdbcColumn) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     return cell == null ? null : new Date(cell.dateValue.getTime());
   }
 
-  public Date getDate(int jdbcColumn, Calendar cal) throws SQLException {
+  public Date getDate(int jdbcColumn, Calendar cal) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     if (cell == null) {
       return null;
@@ -527,7 +513,7 @@ public class XlsStreamResultSet implements ResultSet {
     }
   }
 
-  public Date getDate(String jdbcColumn, Calendar cal) throws SQLException {
+  public Date getDate(String jdbcColumn, Calendar cal) {
     XlsSheetIterator.CellValueHolder cell = getCell(jdbcColumn);
     if (cell == null) {
       return null;
@@ -542,410 +528,403 @@ public class XlsStreamResultSet implements ResultSet {
     }
   }
 
-  public Object getObject(int i, Map<String, Class<?>> map) throws SQLException {
+  public Object getObject(int i, Map<String, Class<?>> map) {
     throw nyi();
   }
 
-  public Object getObject(String colName, Map<String, Class<?>> map) throws SQLException {
+  public Object getObject(String colName, Map<String, Class<?>> map) {
     throw nyi();
   }
 
-  public Ref getRef(int i) throws SQLException {
+  public Ref getRef(int i) {
     throw nyi();
   }
 
-  public Ref getRef(String colName) throws SQLException {
+  public Ref getRef(String colName) {
     throw nyi();
   }
 
-  public Statement getStatement() throws SQLException {
+  public Statement getStatement() {
     throw nyi();
   }
 
-  public Time getTime(int jdbcColumn) throws SQLException {
+  public Time getTime(int jdbcColumn) {
     throw nyi();
   }
 
-  public Time getTime(String jdbcColumn) throws SQLException {
+  public Time getTime(String jdbcColumn) {
     throw nyi();
   }
 
-  public Time getTime(int jdbcColumn, Calendar cal) throws SQLException {
+  public Time getTime(int jdbcColumn, Calendar cal) {
     throw nyi();
   }
 
-  public Time getTime(String jdbcColumn, Calendar cal) throws SQLException {
+  public Time getTime(String jdbcColumn, Calendar cal) {
     throw nyi();
   }
 
-  public Timestamp getTimestamp(int jdbcColumn, Calendar cal) throws SQLException {
+  public Timestamp getTimestamp(int jdbcColumn, Calendar cal) {
     throw nyi();
   }
 
-  public Timestamp getTimestamp(String jdbcColumn, Calendar cal) throws SQLException {
+  public Timestamp getTimestamp(String jdbcColumn, Calendar cal) {
     throw nyi();
   }
 
-  public URL getURL(int jdbcColumn) throws SQLException {
+  public URL getURL(int jdbcColumn) {
     throw nyi();
   }
 
-  public URL getURL(String jdbcColumn) throws SQLException {
+  public URL getURL(String jdbcColumn) {
     throw nyi();
   }
 
-  public InputStream getUnicodeStream(int jdbcColumn) throws SQLException {
+  public InputStream getUnicodeStream(int jdbcColumn) {
     throw nyi();
   }
 
-  public InputStream getUnicodeStream(String jdbcColumn) throws SQLException {
+  public InputStream getUnicodeStream(String jdbcColumn) {
     throw nyi();
   }
 
-  public SQLWarning getWarnings() throws SQLException {
+  public SQLWarning getWarnings() {
     throw nyi();
   }
 
-  public void moveToCurrentRow() throws SQLException {
+  public void moveToCurrentRow() {
     throw nyi();
   }
 
-  public void refreshRow() throws SQLException {
+  public void refreshRow() {
     throw nyi();
   }
 
-  public boolean relative(int rows) throws SQLException {
+  public boolean relative(int rows) {
     throw nyi();
   }
 
-  public boolean rowDeleted() throws SQLException {
+  public boolean rowDeleted() {
     throw nyi();
   }
 
-  public boolean rowInserted() throws SQLException {
+  public boolean rowInserted() {
     throw nyi();
   }
 
-  public boolean rowUpdated() throws SQLException {
+  public boolean rowUpdated() {
     throw nyi();
   }
 
-  public void updateArray(int jdbcColumn, Array x) throws SQLException {
+  public void updateArray(int jdbcColumn, Array x) {
     throw nyi();
   }
 
-  public void updateArray(String jdbcColumn, Array x) throws SQLException {
+  public void updateArray(String jdbcColumn, Array x) {
     throw nyi();
   }
 
-  public RowId getRowId(int columnIndex) throws SQLException {
+  public RowId getRowId(int columnIndex) {
     throw nyi();
   }
 
-  public RowId getRowId(String columnLabel) throws SQLException {
+  public RowId getRowId(String columnLabel) {
     throw nyi();
   }
 
-  public void updateRowId(int columnIndex, RowId x) throws SQLException {
+  public void updateRowId(int columnIndex, RowId x) {
     throw nyi();
   }
 
-  public void updateRowId(String columnLabel, RowId x) throws SQLException {
+  public void updateRowId(String columnLabel, RowId x) {
     throw nyi();
   }
 
-  public int getHoldability() throws SQLException {
+  public int getHoldability() {
     throw nyi();
   }
 
-  public boolean isClosed() throws SQLException {
+  public boolean isClosed() {
     throw nyi();
   }
 
-  public void updateNString(int columnIndex, String nString) throws SQLException {
+  public void updateNString(int columnIndex, String nString) {
     throw nyi();
   }
 
-  public void updateNString(String columnLabel, String nString) throws SQLException {
+  public void updateNString(String columnLabel, String nString) {
     throw nyi();
   }
 
-  public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
+  public void updateNClob(int columnIndex, NClob nClob) {
     throw nyi();
   }
 
-  public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
+  public void updateNClob(String columnLabel, NClob nClob) {
     throw nyi();
   }
 
-  public NClob getNClob(int columnIndex) throws SQLException {
+  public NClob getNClob(int columnIndex) {
     throw nyi();
   }
 
-  public NClob getNClob(String columnLabel) throws SQLException {
+  public NClob getNClob(String columnLabel) {
     throw nyi();
   }
 
-  public SQLXML getSQLXML(int columnIndex) throws SQLException {
+  public SQLXML getSQLXML(int columnIndex) {
     throw nyi();
   }
 
-  public SQLXML getSQLXML(String columnLabel) throws SQLException {
+  public SQLXML getSQLXML(String columnLabel) {
     throw nyi();
   }
 
-  public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
+  public void updateSQLXML(int columnIndex, SQLXML xmlObject) {
     throw nyi();
   }
 
-  public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+  public void updateSQLXML(String columnLabel, SQLXML xmlObject) {
     throw nyi();
   }
 
-  public String getNString(int columnIndex) throws SQLException {
+  public String getNString(int columnIndex) {
     throw nyi();
   }
 
-  public String getNString(String columnLabel) throws SQLException {
+  public String getNString(String columnLabel) {
     throw nyi();
   }
 
-  public Reader getNCharacterStream(int columnIndex) throws SQLException {
+  public Reader getNCharacterStream(int columnIndex) {
     throw nyi();
   }
 
-  public Reader getNCharacterStream(String columnLabel) throws SQLException {
+  public Reader getNCharacterStream(String columnLabel) {
     throw nyi();
   }
 
-  public void updateNCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
+  public void updateNCharacterStream(int columnIndex, Reader x, long length) {
     throw nyi();
   }
 
-  public void updateNCharacterStream(String columnLabel, Reader reader, long length)
-      throws SQLException {
+  public void updateNCharacterStream(String columnLabel, Reader reader, long length) {
     throw nyi();
   }
 
-  public void updateAsciiStream(int columnIndex, InputStream x, long length) throws SQLException {
+  public void updateAsciiStream(int columnIndex, InputStream x, long length) {
     throw nyi();
   }
 
-  public void updateBinaryStream(int columnIndex, InputStream x, long length) throws SQLException {
+  public void updateBinaryStream(int columnIndex, InputStream x, long length) {
     throw nyi();
   }
 
-  public void updateCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
+  public void updateCharacterStream(int columnIndex, Reader x, long length) {
     throw nyi();
   }
 
-  public void updateAsciiStream(String columnLabel, InputStream x, long length)
-      throws SQLException {
+  public void updateAsciiStream(String columnLabel, InputStream x, long length) {
     throw nyi();
   }
 
-  public void updateBinaryStream(String columnLabel, InputStream x, long length)
-      throws SQLException {
+  public void updateBinaryStream(String columnLabel, InputStream x, long length) {
     throw nyi();
   }
 
-  public void updateCharacterStream(String columnLabel, Reader reader, long length)
-      throws SQLException {
+  public void updateCharacterStream(String columnLabel, Reader reader, long length) {
     throw nyi();
   }
 
-  public void updateBlob(int columnIndex, InputStream inputStream, long length)
-      throws SQLException {
+  public void updateBlob(int columnIndex, InputStream inputStream, long length) {
     throw nyi();
   }
 
-  public void updateBlob(String columnLabel, InputStream inputStream, long length)
-      throws SQLException {
+  public void updateBlob(String columnLabel, InputStream inputStream, long length) {
     throw nyi();
   }
 
-  public void updateClob(int columnIndex, Reader reader, long length) throws SQLException {
+  public void updateClob(int columnIndex, Reader reader, long length) {
     throw nyi();
   }
 
-  public void updateClob(String columnLabel, Reader reader, long length) throws SQLException {
+  public void updateClob(String columnLabel, Reader reader, long length) {
     throw nyi();
   }
 
-  public void updateNClob(int columnIndex, Reader reader, long length) throws SQLException {
+  public void updateNClob(int columnIndex, Reader reader, long length) {
     throw nyi();
   }
 
-  public void updateNClob(String columnLabel, Reader reader, long length) throws SQLException {
+  public void updateNClob(String columnLabel, Reader reader, long length) {
     throw nyi();
   }
 
-  public void updateNCharacterStream(int columnIndex, Reader x) throws SQLException {
+  public void updateNCharacterStream(int columnIndex, Reader x) {
     throw nyi();
   }
 
-  public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException {
+  public void updateNCharacterStream(String columnLabel, Reader reader) {
     throw nyi();
   }
 
-  public void updateAsciiStream(int columnIndex, InputStream x) throws SQLException {
+  public void updateAsciiStream(int columnIndex, InputStream x) {
     throw nyi();
   }
 
-  public void updateBinaryStream(int columnIndex, InputStream x) throws SQLException {
+  public void updateBinaryStream(int columnIndex, InputStream x) {
     throw nyi();
   }
 
-  public void updateCharacterStream(int columnIndex, Reader x) throws SQLException {
+  public void updateCharacterStream(int columnIndex, Reader x) {
     throw nyi();
   }
 
-  public void updateAsciiStream(String columnLabel, InputStream x) throws SQLException {
+  public void updateAsciiStream(String columnLabel, InputStream x) {
     throw nyi();
   }
 
-  public void updateBinaryStream(String columnLabel, InputStream x) throws SQLException {
+  public void updateBinaryStream(String columnLabel, InputStream x) {
     throw nyi();
   }
 
-  public void updateCharacterStream(String columnLabel, Reader reader) throws SQLException {
+  public void updateCharacterStream(String columnLabel, Reader reader) {
     throw nyi();
   }
 
-  public void updateBlob(int columnIndex, InputStream inputStream) throws SQLException {
+  public void updateBlob(int columnIndex, InputStream inputStream) {
     throw nyi();
   }
 
-  public void updateBlob(String columnLabel, InputStream inputStream) throws SQLException {
+  public void updateBlob(String columnLabel, InputStream inputStream) {
     throw nyi();
   }
 
-  public void updateClob(int columnIndex, Reader reader) throws SQLException {
+  public void updateClob(int columnIndex, Reader reader) {
     throw nyi();
   }
 
-  public void updateClob(String columnLabel, Reader reader) throws SQLException {
+  public void updateClob(String columnLabel, Reader reader) {
     throw nyi();
   }
 
-  public void updateNClob(int columnIndex, Reader reader) throws SQLException {
+  public void updateNClob(int columnIndex, Reader reader) {
     throw nyi();
   }
 
-  public void updateNClob(String columnLabel, Reader reader) throws SQLException {
+  public void updateNClob(String columnLabel, Reader reader) {
     throw nyi();
   }
 
-  public void updateAsciiStream(int jdbcColumn, InputStream x, int length) throws SQLException {
+  public void updateAsciiStream(int jdbcColumn, InputStream x, int length) {
     throw nyi();
   }
 
-  public void updateAsciiStream(String jdbcColumn, InputStream x, int length) throws SQLException {
+  public void updateAsciiStream(String jdbcColumn, InputStream x, int length) {
     throw nyi();
   }
 
-  public void updateBigDecimal(int jdbcColumn, BigDecimal x) throws SQLException {
+  public void updateBigDecimal(int jdbcColumn, BigDecimal x) {
     throw nyi();
   }
 
-  public void updateBigDecimal(String jdbcColumn, BigDecimal x) throws SQLException {
+  public void updateBigDecimal(String jdbcColumn, BigDecimal x) {
     throw nyi();
   }
 
-  public void updateBinaryStream(int jdbcColumn, InputStream x, int length) throws SQLException {
+  public void updateBinaryStream(int jdbcColumn, InputStream x, int length) {
     throw nyi();
   }
 
-  public void updateBinaryStream(String jdbcColumn, InputStream x, int length) throws SQLException {
+  public void updateBinaryStream(String jdbcColumn, InputStream x, int length) {
     throw nyi();
   }
 
-  public void updateBlob(int jdbcColumn, Blob x) throws SQLException {
+  public void updateBlob(int jdbcColumn, Blob x) {
     throw nyi();
   }
 
-  public void updateBlob(String jdbcColumn, Blob x) throws SQLException {
+  public void updateBlob(String jdbcColumn, Blob x) {
     throw nyi();
   }
 
-  public void updateBytes(int jdbcColumn, byte[] x) throws SQLException {
+  public void updateBytes(int jdbcColumn, byte[] x) {
     throw nyi();
   }
 
-  public void updateBytes(String jdbcColumn, byte[] x) throws SQLException {
+  public void updateBytes(String jdbcColumn, byte[] x) {
     throw nyi();
   }
 
-  public void updateCharacterStream(int jdbcColumn, Reader x, int length) throws SQLException {
+  public void updateCharacterStream(int jdbcColumn, Reader x, int length) {
     throw nyi();
   }
 
-  public void updateCharacterStream(String jdbcColumn, Reader reader, int length)
-      throws SQLException {
+  public void updateCharacterStream(String jdbcColumn, Reader reader, int length) {
     throw nyi();
   }
 
-  public void updateClob(int jdbcColumn, Clob x) throws SQLException {
+  public void updateClob(int jdbcColumn, Clob x) {
     throw nyi();
   }
 
-  public void updateClob(String jdbcColumn, Clob x) throws SQLException {
+  public void updateClob(String jdbcColumn, Clob x) {
     throw nyi();
   }
 
-  public void updateDate(int jdbcColumn, Date x) throws SQLException {
+  public void updateDate(int jdbcColumn, Date x) {
     throw nyi();
   }
 
-  public void updateDate(String jdbcColumn, Date x) throws SQLException {
+  public void updateDate(String jdbcColumn, Date x) {
     throw nyi();
   }
 
-  public void updateObject(int jdbcColumn, Object x, int scale) throws SQLException {
+  public void updateObject(int jdbcColumn, Object x, int scale) {
     throw nyi();
   }
 
-  public void updateObject(String jdbcColumn, Object x, int scale) throws SQLException {
+  public void updateObject(String jdbcColumn, Object x, int scale) {
     throw nyi();
   }
 
-  public void updateRef(int jdbcColumn, Ref x) throws SQLException {
+  public void updateRef(int jdbcColumn, Ref x) {
     throw nyi();
   }
 
-  public void updateRef(String jdbcColumn, Ref x) throws SQLException {
+  public void updateRef(String jdbcColumn, Ref x) {
     throw nyi();
   }
 
-  public void updateRow() throws SQLException {
+  public void updateRow() {
     throw nyi();
   }
 
-  public void updateTime(int jdbcColumn, Time x) throws SQLException {
+  public void updateTime(int jdbcColumn, Time x) {
     throw nyi();
   }
 
-  public void updateTime(String jdbcColumn, Time x) throws SQLException {
+  public void updateTime(String jdbcColumn, Time x) {
     throw nyi();
   }
 
-  public void updateTimestamp(int jdbcColumn, Timestamp x) throws SQLException {
+  public void updateTimestamp(int jdbcColumn, Timestamp x) {
     throw nyi();
   }
 
-  public void updateTimestamp(String jdbcColumn, Timestamp x) throws SQLException {
+  public void updateTimestamp(String jdbcColumn, Timestamp x) {
     throw nyi();
   }
 
-  public boolean wasNull() throws SQLException {
+  public boolean wasNull() {
     throw nyi();
   }
 
-  public <T> T unwrap(Class<T> iface) throws SQLException {
+  public <T> T unwrap(Class<T> iface) {
     throw nyi();
   }
 
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+  public boolean isWrapperFor(Class<?> iface) {
     throw nyi();
   }
 

@@ -15,15 +15,11 @@
  */
 package com.sqlsheet.stream;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.Statement;
-
 import com.sqlsheet.parser.ParsedStatement;
 import com.sqlsheet.parser.SelectStarStatement;
 import com.sqlsheet.parser.SqlSheetParser;
+
+import java.sql.*;
 
 /**
  * SqlSheet implementation of java.sql.Statement which uses steaming over XLS
@@ -40,11 +36,11 @@ public class XlsStreamStatement implements Statement {
     this.connection = c;
   }
 
-  public Connection getConnection() throws SQLException {
+  public Connection getConnection() {
     return connection;
   }
 
-  public void close() throws SQLException {}
+  public void close() {}
 
   public boolean execute(String sql) throws SQLException {
     executeQuery(sql);
@@ -235,29 +231,29 @@ public class XlsStreamStatement implements Statement {
     throw new SQLException("NYI");
   }
 
-  public boolean isClosed() throws SQLException {
+  public boolean isClosed() {
     return false;
   }
 
-  public boolean isPoolable() throws SQLException {
+  public boolean isPoolable() {
     return false;
   }
 
-  public void setPoolable(boolean poolable) throws SQLException {}
+  public void setPoolable(boolean poolable) {}
 
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+  public boolean isWrapperFor(Class<?> iface) {
     return false;
   }
 
-  public <T> T unwrap(Class<T> iface) throws SQLException {
+  public <T> T unwrap(Class<T> iface) {
     return null;
   }
 
-  public void closeOnCompletion() throws SQLException {
+  public void closeOnCompletion() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public boolean isCloseOnCompletion() throws SQLException {
+  public boolean isCloseOnCompletion() {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }
