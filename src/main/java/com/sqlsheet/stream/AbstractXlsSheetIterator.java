@@ -73,10 +73,9 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
   }
 
   void addCurrentRowValue(CellValueHolder cellValue) {
-    if (getRowValues().get(getCurrentSheetRowIndex()) == null) {
-      getRowValues().put(getCurrentSheetRowIndex(), new ArrayList<>());
-    }
-    getRowValues().get(getCurrentSheetRowIndex()).add(cellValue);
+    getRowValues()
+            .computeIfAbsent(getCurrentSheetRowIndex(), k -> new ArrayList<>())
+            .add(cellValue);
   }
 
   CellValueHolder getCurrentRowValue(int column) {
