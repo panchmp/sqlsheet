@@ -179,53 +179,47 @@ public class XlsStatement implements Statement {
   }
 
   public void setEscapeProcessing(boolean p0) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void setCursorName(String p0) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public int getMaxFieldSize() throws SQLException {
-    nyi();
-    return -1;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void setMaxFieldSize(int p0) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public int getMaxRows() throws SQLException {
-    nyi();
-    return -1;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void setMaxRows(int p0) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public int getQueryTimeout() throws SQLException {
-    nyi();
-    return -1;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void setQueryTimeout(int p0) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public SQLWarning getWarnings() throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public ResultSet getResultSet() throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public int getUpdateCount() throws SQLException {
-    nyi();
-    return -1;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   @Override
@@ -274,20 +268,19 @@ public class XlsStatement implements Statement {
   }
 
   public void clearWarnings() throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void addBatch(String p0) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void clearBatch() throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public int[] executeBatch() throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   @Override
@@ -327,10 +320,6 @@ public class XlsStatement implements Statement {
   @Override
   public int getResultSetHoldability() throws SQLException {
     return ResultSet.CLOSE_CURSORS_AT_COMMIT;
-  }
-
-  protected void nyi() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet."));
   }
 
   @Override

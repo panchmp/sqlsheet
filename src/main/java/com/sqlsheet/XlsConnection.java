@@ -158,7 +158,7 @@ class XlsConnection implements Connection {
 
   @Override
   public void setAutoCommit(boolean autoCommit) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   @Override
@@ -173,7 +173,7 @@ class XlsConnection implements Connection {
 
   @Override
   public void setReadOnly(boolean readOnly) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   @Override
@@ -183,7 +183,7 @@ class XlsConnection implements Connection {
 
   @Override
   public void setCatalog(String catalog) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   @Override
@@ -193,7 +193,7 @@ class XlsConnection implements Connection {
 
   @Override
   public void setTransactionIsolation(int level) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   @Override
@@ -207,7 +207,7 @@ class XlsConnection implements Connection {
   }
 
   public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   @Override
@@ -225,148 +225,120 @@ class XlsConnection implements Connection {
   }
 
   public CallableStatement prepareCall(String sql) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public String nativeSQL(String sql) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public Statement createStatement(int resultSetType, int resultSetConcurrency)
       throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)
       throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public int getHoldability() throws SQLException {
-    nyi();
-    return -1;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void setHoldability(int param) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public CallableStatement prepareCall(String str, int param, int param2, int param3)
       throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public PreparedStatement prepareStatement(String str, int param) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public PreparedStatement prepareStatement(String str, int[] values) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public PreparedStatement prepareStatement(String str, String[] str1) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public Clob createClob() throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public Blob createBlob() throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public NClob createNClob() throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public SQLXML createSQLXML() throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public boolean isValid(int timeout) throws SQLException {
-    nyi();
-    return false;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void setClientInfo(String name, String value) throws SQLClientInfoException {}
 
   public String getClientInfo(String name) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public Properties getClientInfo() throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void setClientInfo(Properties properties) throws SQLClientInfoException {}
 
   public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public PreparedStatement prepareStatement(String str, int param, int param2, int param3)
       throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void rollback(Savepoint savepoint) throws SQLException {
-    nyi();
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public Savepoint setSavepoint() throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public Savepoint setSavepoint(String str) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public Statement createStatement(
       int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-    nyi();
-    return null;
-  }
-
-  private void nyi() throws SQLException {
-    throw new SQLException("NYI");
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public <T> T unwrap(Class<T> iface) throws SQLException {
-    nyi();
-    return null;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public boolean isWrapperFor(Class<?> iface) throws SQLException {
-    nyi();
-    return false;
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public Boolean getWriteRequired() {
@@ -378,22 +350,22 @@ class XlsConnection implements Connection {
   }
 
   public String getSchema() throws SQLException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void setSchema(String string) throws SQLException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void abort(Executor exctr) throws SQLException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public int getNetworkTimeout() throws SQLException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 }
