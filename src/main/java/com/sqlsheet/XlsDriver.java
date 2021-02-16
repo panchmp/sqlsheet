@@ -186,7 +186,7 @@ public class XlsDriver implements java.sql.Driver {
   }
 
   boolean has(Properties info, String key) {
-    Object value = info.get(key);
+    Object value = info.getProperty(key);
     if (value == null) {
       return false;
     }
