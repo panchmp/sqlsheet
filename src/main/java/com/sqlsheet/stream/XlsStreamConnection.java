@@ -31,7 +31,7 @@ public class XlsStreamConnection implements Connection {
 
   private static final Logger logger = Logger.getLogger(XlsStreamConnection.class.getName());
 
-  URL xlsFile;
+  protected final URL xlsFile;
 
   public XlsStreamConnection(URL xlsFile) {
     this.xlsFile = xlsFile;

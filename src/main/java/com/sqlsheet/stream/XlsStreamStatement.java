@@ -28,7 +28,7 @@ import java.sql.*;
  */
 public class XlsStreamStatement implements Statement {
 
-  XlsStreamConnection connection;
+  private final XlsStreamConnection connection;
   SqlSheetParser parser;
 
   public XlsStreamStatement(XlsStreamConnection c) {

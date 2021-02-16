@@ -34,9 +34,9 @@ import java.util.Map;
 public class XlsResultSetMetaData implements ResultSetMetaData {
 
   /** A map between the code ID and the type name */
-  static Map<Integer, String> columnTypeNameMap = new HashMap<>();
+  static final Map<Integer, String> columnTypeNameMap = new HashMap<>();
   /** A map between the code ID and the type class */
-  static Map<Integer, String> columnTypeClassMap = new HashMap<>();
+  static final Map<Integer, String> columnTypeClassMap = new HashMap<>();
 
   static {
     columnTypeNameMap.put(Types.VARCHAR, "VARCHAR");
@@ -46,9 +46,6 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     columnTypeClassMap.put(Types.VARCHAR, "java.lang.String.class");
     columnTypeClassMap.put(Types.DOUBLE, "java.lang.Double.class");
     columnTypeClassMap.put(Types.DATE, "java.sql.Date.class");
-  }
-
-  static {
   }
 
   private final DataFormatter formatter;
@@ -161,14 +158,14 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
         }
       }
       // Retrieve only one type
-      for (Integer columnId : columnTypeScan.keySet()) {
+      for (Map.Entry<Integer, Map<Integer, Integer>> entry : columnTypeScan.entrySet()) {
 
         Integer numberOfVarchar = 0;
         Integer numberOfDouble = 0;
         Integer numberOfDate = 0;
 
         for (Map.Entry<Integer, Integer> columnIdTypeMap :
-            columnTypeScan.get(columnId).entrySet()) {
+                entry.getValue().entrySet()) {
           if (columnIdTypeMap.getKey() == Types.VARCHAR) {
             numberOfVarchar = columnIdTypeMap.getValue();
           } else if (columnIdTypeMap.getKey() == Types.DOUBLE) {
@@ -191,7 +188,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
         if (finalColumnType == null) {
           finalColumnType = Types.VARCHAR;
         }
-        columnTypeMap.put(columnId, finalColumnType);
+        columnTypeMap.put(entry.getKey(), finalColumnType);
       }
     }
 
@@ -266,7 +263,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
   }
 
   public int isNullable(int arg0) {
-    return 0;
+    return ResultSetMetaData.columnNoNulls;
   }
 
   public boolean isReadOnly(int arg0) {

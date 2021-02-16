@@ -38,8 +38,8 @@ import java.util.List;
 public class XlsPreparedStatement extends XlsStatement implements PreparedStatement {
 
   private static final Logger logger = LoggerFactory.getLogger(XlsPreparedStatement.class.getName());
-  private ParsedStatement statement;
-  private List<Object> parameters = new ArrayList<>();
+  private final ParsedStatement statement;
+  private final List<Object> parameters = new ArrayList<>();
 
   public XlsPreparedStatement(XlsConnection conn, String sql) throws SQLException {
     super(conn);
@@ -76,8 +76,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     }
     if (statement instanceof InsertIntoStatement) {
       final InsertIntoStatement iis = (InsertIntoStatement) statement;
-      final List<Object> substitutedValues = new ArrayList<>();
-      substitutedValues.addAll(iis.getValues());
+      final List<Object> substitutedValues = new ArrayList<>(iis.getValues());
       int paramIndex = 0;
       for (int i = 0; i < substitutedValues.size(); i++) {
         Object val = substitutedValues.get(i);

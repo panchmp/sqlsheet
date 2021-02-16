@@ -315,7 +315,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
     }
   }
 
-  class PublicMorozoffHSSFRequest extends HSSFRequest {
+  static class PublicMorozoffHSSFRequest extends HSSFRequest {
     public short processRecord(Record rec) throws HSSFUserException {
       return super.processRecord(rec);
     }
