@@ -72,12 +72,12 @@ public class XlsStatement implements Statement {
     throw new SQLException(message);
   }
 
-  public Connection getConnection() throws SQLException {
+  public Connection getConnection() {
     return connection;
   }
 
   @Override
-  public void close() throws SQLException {
+  public void close() {
     sheet2rs.clear();
     parser = null;
 
@@ -253,12 +253,12 @@ public class XlsStatement implements Statement {
   }
 
   @Override
-  public int getResultSetConcurrency() throws SQLException {
+  public int getResultSetConcurrency() {
     return ResultSet.CONCUR_READ_ONLY;
   }
 
   @Override
-  public int getResultSetType() throws SQLException {
+  public int getResultSetType() {
     return ResultSet.TYPE_FORWARD_ONLY;
   }
 
@@ -318,28 +318,28 @@ public class XlsStatement implements Statement {
   }
 
   @Override
-  public int getResultSetHoldability() throws SQLException {
+  public int getResultSetHoldability() {
     return ResultSet.CLOSE_CURSORS_AT_COMMIT;
   }
 
   @Override
-  public boolean isClosed() throws SQLException {
+  public boolean isClosed() {
     return isClosed;
   }
 
   @Override
-  public boolean isPoolable() throws SQLException {
+  public boolean isPoolable() {
     return false;
   }
 
   @Override
-  public void setPoolable(boolean poolable) throws SQLException {}
+  public void setPoolable(boolean poolable) {}
 
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+  public boolean isWrapperFor(Class<?> iface) {
     return false;
   }
 
-  public <T> T unwrap(Class<T> iface) throws SQLException {
+  public <T> T unwrap(Class<T> iface) {
     return null;
   }
 

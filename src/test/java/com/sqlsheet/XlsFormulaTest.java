@@ -47,7 +47,7 @@ public class XlsFormulaTest {
     {5d, 6d, "A4+B4"}
   };
 
-  public XlsFormulaTest() throws SQLException, IOException, ClassNotFoundException {
+  public XlsFormulaTest() throws SQLException, IOException {
     Workbook workBook = WorkbookFactory.create(true);
     Sheet sheet = workBook.createSheet("TestSheet1");
     int r = DEFAULT_HEADLINE - 1;

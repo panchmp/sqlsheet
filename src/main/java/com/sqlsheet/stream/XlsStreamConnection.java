@@ -33,11 +33,11 @@ public class XlsStreamConnection implements Connection {
 
   URL xlsFile;
 
-  public XlsStreamConnection(URL xlsFile) throws SQLException {
+  public XlsStreamConnection(URL xlsFile) {
     this.xlsFile = xlsFile;
   }
 
-  public Statement createStatement() throws SQLException {
+  public Statement createStatement() {
     return new XlsStreamStatement(this);
   }
 
@@ -50,7 +50,7 @@ public class XlsStreamConnection implements Connection {
     return prepareStatement(sql);
   }
 
-  public void close() throws SQLException {}
+  public void close() {}
 
   public boolean getAutoCommit() {
     return false;
@@ -93,7 +93,7 @@ public class XlsStreamConnection implements Connection {
   }
 
   @SuppressWarnings("unchecked")
-  public Map getTypeMap() throws SQLException {
+  public Map getTypeMap() {
     return null;
   }
 
@@ -101,13 +101,13 @@ public class XlsStreamConnection implements Connection {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
-  public void commit() throws SQLException {}
+  public void commit() {}
 
-  public void rollback() throws SQLException {}
+  public void rollback() {}
 
-  public void clearWarnings() throws SQLException {}
+  public void clearWarnings() {}
 
-  public DatabaseMetaData getMetaData() throws SQLException {
+  public DatabaseMetaData getMetaData() {
     return new XlsStreamDatabaseMetaData(xlsFile);
   }
 
@@ -174,7 +174,7 @@ public class XlsStreamConnection implements Connection {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
-  public void setClientInfo(String name, String value) throws SQLClientInfoException {}
+  public void setClientInfo(String name, String value) {}
 
   public String getClientInfo(String name) throws SQLException {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
@@ -184,7 +184,7 @@ public class XlsStreamConnection implements Connection {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
-  public void setClientInfo(Properties properties) throws SQLClientInfoException {}
+  public void setClientInfo(Properties properties) {}
 
   public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));

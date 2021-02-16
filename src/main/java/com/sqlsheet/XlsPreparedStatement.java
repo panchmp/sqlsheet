@@ -50,7 +50,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
-  public void clearParameters() throws SQLException {
+  public void clearParameters() {
     parameters.clear();
   }
 
@@ -111,59 +111,59 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     parameters.set(p, val);
   }
 
-  public void setBigDecimal(int arg0, BigDecimal arg1) throws SQLException {
+  public void setBigDecimal(int arg0, BigDecimal arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setBoolean(int arg0, boolean arg1) throws SQLException {
+  public void setBoolean(int arg0, boolean arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setByte(int arg0, byte arg1) throws SQLException {
+  public void setByte(int arg0, byte arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setDate(int arg0, Date arg1) throws SQLException {
+  public void setDate(int arg0, Date arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setDouble(int arg0, double arg1) throws SQLException {
+  public void setDouble(int arg0, double arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setFloat(int arg0, float arg1) throws SQLException {
+  public void setFloat(int arg0, float arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setInt(int arg0, int arg1) throws SQLException {
+  public void setInt(int arg0, int arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setLong(int arg0, long arg1) throws SQLException {
+  public void setLong(int arg0, long arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setNull(int arg0, int arg1) throws SQLException {
+  public void setNull(int arg0, int arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setNull(int arg0, int arg1, String arg2) throws SQLException {
+  public void setNull(int arg0, int arg1, String arg2) {
     setParameter(arg0, arg1);
   }
 
-  public void setShort(int arg0, short arg1) throws SQLException {
+  public void setShort(int arg0, short arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setString(int arg0, String arg1) throws SQLException {
+  public void setString(int arg0, String arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setTime(int arg0, Time arg1) throws SQLException {
+  public void setTime(int arg0, Time arg1) {
     setParameter(arg0, arg1);
   }
 
-  public void setTimestamp(int arg0, Timestamp arg1) throws SQLException {
+  public void setTimestamp(int arg0, Timestamp arg1) {
     setParameter(arg0, arg1);
   }
 
@@ -180,7 +180,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     }
   }
 
-  public void setObject(int arg0, Object arg1) throws SQLException {
+  public void setObject(int arg0, Object arg1) {
     // REVIEW really just passing the buck here if the send us something
     // weird
     setParameter(arg0, arg1);

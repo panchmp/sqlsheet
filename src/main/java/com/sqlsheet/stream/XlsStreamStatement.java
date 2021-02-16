@@ -36,11 +36,11 @@ public class XlsStreamStatement implements Statement {
     this.connection = c;
   }
 
-  public Connection getConnection() throws SQLException {
+  public Connection getConnection() {
     return connection;
   }
 
-  public void close() throws SQLException {}
+  public void close() {}
 
   public boolean execute(String sql) throws SQLException {
     executeQuery(sql);
@@ -205,21 +205,21 @@ public class XlsStreamStatement implements Statement {
     throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
-  public boolean isClosed() throws SQLException {
+  public boolean isClosed() {
     return false;
   }
 
-  public boolean isPoolable() throws SQLException {
+  public boolean isPoolable() {
     return false;
   }
 
-  public void setPoolable(boolean poolable) throws SQLException {}
+  public void setPoolable(boolean poolable) {}
 
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+  public boolean isWrapperFor(Class<?> iface) {
     return false;
   }
 
-  public <T> T unwrap(Class<T> iface) throws SQLException {
+  public <T> T unwrap(Class<T> iface) {
     return null;
   }
 
