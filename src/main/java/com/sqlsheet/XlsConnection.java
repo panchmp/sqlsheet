@@ -32,11 +32,12 @@ import java.util.concurrent.Executor;
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 class XlsConnection implements Connection {
-
   private static final Logger logger = LoggerFactory.getLogger(XlsConnection.class.getName());
-  protected Workbook workbook;
-  protected File saveFile;
+
+  protected final Workbook workbook;
+  protected final File saveFile;
   private final Properties info;
+
   private boolean writeRequired;
 
   XlsConnection(Workbook workbook, Properties info) {
