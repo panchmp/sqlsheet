@@ -140,7 +140,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
    * The type of the data value is indicated by an attribute on the cell. The value is usually in a
    * "v" element within the cell.
    */
-  enum xssfDataType {
+  enum XssfDataType {
     BOOL,
     ERROR,
     FORMULA,
@@ -168,7 +168,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
     private boolean vIsOpen;
     // Set when cell start element is seen;
     // used when cell close element is seen.
-    private XlsxSheetIterator.xssfDataType nextDataType;
+    private XssfDataType nextDataType;
     // Used to format numeric cell values.
     private short formatIndex;
     private String formatString;
@@ -191,7 +191,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
       this.stylesTable = styles;
       this.sharedStringsTable = strings;
       this.value = new StringBuffer();
-      this.nextDataType = XlsxSheetIterator.xssfDataType.NUMBER;
+      this.nextDataType = XssfDataType.NUMBER;
       this.formatter = new DataFormatter();
     }
 
@@ -224,17 +224,17 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
         thisColumn = nameToColumn(r.substring(0, firstDigit));
 
         // Set up defaults.
-        this.nextDataType = XlsxSheetIterator.xssfDataType.NUMBER;
+        this.nextDataType = XssfDataType.NUMBER;
         this.formatIndex = -1;
         this.formatString = null;
         String cellType = attributes.get("t");
         String cellStyleStr = attributes.get("s");
-        if ("b".equals(cellType)) nextDataType = XlsxSheetIterator.xssfDataType.BOOL;
-        else if ("e".equals(cellType)) nextDataType = XlsxSheetIterator.xssfDataType.ERROR;
+        if ("b".equals(cellType)) nextDataType = XssfDataType.BOOL;
+        else if ("e".equals(cellType)) nextDataType = XssfDataType.ERROR;
         else if ("inlineStr".equals(cellType))
-          nextDataType = XlsxSheetIterator.xssfDataType.INLINESTR;
-        else if ("s".equals(cellType)) nextDataType = XlsxSheetIterator.xssfDataType.SSTINDEX;
-        else if ("str".equals(cellType)) nextDataType = XlsxSheetIterator.xssfDataType.FORMULA;
+          nextDataType = XssfDataType.INLINESTR;
+        else if ("s".equals(cellType)) nextDataType = XssfDataType.SSTINDEX;
+        else if ("str".equals(cellType)) nextDataType = XssfDataType.FORMULA;
         else if (cellStyleStr != null) {
           // It's a number, but almost certainly one
           // with a special style or format
@@ -254,7 +254,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
       // v => contents of a cell
       if ("v".equals(endElement.getName().getLocalPart())
           || ("c".equals(endElement.getName().getLocalPart())
-              && xssfDataType.INLINESTR.equals(nextDataType))) {
+              && XssfDataType.INLINESTR.equals(nextDataType))) {
         // Process the value contents as required.
         // Do now, as characters() may be called more than once
         switch (nextDataType) {
