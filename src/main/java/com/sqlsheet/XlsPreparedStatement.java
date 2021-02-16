@@ -174,9 +174,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
       reader.read(buff, 0, length);
       setString(parameterIndex, new String(buff));
     } catch (IOException e) {
-      SQLException sqe = new SQLException(e.getMessage());
-      sqe.initCause(e);
-      throw sqe;
+      throw new SQLException(e);
     }
   }
 

@@ -181,9 +181,7 @@ public class XlsDriver implements java.sql.Driver {
         return new XlsConnection(WorkbookFactory.create(workbookUrl.openStream()), info);
       }
     } catch (Exception e) {
-      SQLException sqe = new SQLException(e.getMessage());
-      sqe.initCause(e);
-      throw sqe;
+      throw new SQLException(e);
     }
   }
 
