@@ -130,25 +130,31 @@ public class Issue13_NPEOnEmptyCells {
           
           Object valueByColumnIndex = null;
           Object valueByColumnLabel = null;
-          if (columnNames[c].equals("String")) {
-            valueByColumnIndex = rs.getString(c + 1);
-            valueByColumnLabel = rs.getString(columnLabel);
-            
-          } else if (columnNames[c].equals("Date")){
-            valueByColumnIndex = rs.getDate(c + 1);
-            valueByColumnLabel = rs.getDate(columnLabel);
-            
-          } else if (columnNames[c].equals("Boolean")){
-            valueByColumnIndex = rs.getBoolean(c + 1);
-            valueByColumnLabel = rs.getBoolean(columnLabel);
-            
-          } else if (columnNames[c].equals("Double")){
-            valueByColumnIndex = rs.getDouble(c + 1);
-            valueByColumnLabel = rs.getDouble(columnLabel);
-            
-          } else {
-            valueByColumnIndex = rs.getObject(c + 1);
-            valueByColumnLabel = rs.getObject(columnLabel);
+          switch (columnNames[c]) {
+            case "String":
+              valueByColumnIndex = rs.getString(c + 1);
+              valueByColumnLabel = rs.getString(columnLabel);
+
+              break;
+            case "Date":
+              valueByColumnIndex = rs.getDate(c + 1);
+              valueByColumnLabel = rs.getDate(columnLabel);
+
+              break;
+            case "Boolean":
+              valueByColumnIndex = rs.getBoolean(c + 1);
+              valueByColumnLabel = rs.getBoolean(columnLabel);
+
+              break;
+            case "Double":
+              valueByColumnIndex = rs.getDouble(c + 1);
+              valueByColumnLabel = rs.getDouble(columnLabel);
+
+              break;
+            default:
+              valueByColumnIndex = rs.getObject(c + 1);
+              valueByColumnLabel = rs.getObject(columnLabel);
+              break;
           }
           
           if (!rs.wasNull())
@@ -203,16 +209,23 @@ public class Issue13_NPEOnEmptyCells {
          
         for (int c = 0; c < columnNames.length; c++) {
           Object value = 0;
-          if (columnNames[c].equals("String"))
-            value = rs.getString(c + 1);
-          else if (columnNames[c].equals("Date"))
-            value = rs.getDate(c + 1);
-          else if (columnNames[c].equals("Boolean"))
-            value = rs.getBoolean(c + 1);
-          else if (columnNames[c].equals("Double"))
-            value = rs.getDouble(c + 1);
-          else
-            value = rs.getObject(c+1);
+          switch (columnNames[c]) {
+            case "String":
+              value = rs.getString(c + 1);
+              break;
+            case "Date":
+              value = rs.getDate(c + 1);
+              break;
+            case "Boolean":
+              value = rs.getBoolean(c + 1);
+              break;
+            case "Double":
+              value = rs.getDouble(c + 1);
+              break;
+            default:
+              value = rs.getObject(c + 1);
+              break;
+          }
           
           values.add(rs.wasNull() ? "" : value);
 
