@@ -177,7 +177,7 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
           + '}';
     }
 
-    public Class getType() {
+    public Class<?> getType() {
       if (this.dateValue != null) return dateValue.getClass();
       if (this.doubleValue != null) return doubleValue.getClass();
       if (this.stringValue != null) return stringValue.getClass();
