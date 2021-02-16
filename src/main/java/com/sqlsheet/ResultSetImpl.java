@@ -30,15 +30,15 @@ public class ResultSetImpl implements ResultSet {
   private int r = -1;
   private final ArrayList<Object[]> rowData = new ArrayList<>();
   private final LinkedList<String> columnNames = new LinkedList<>();
-  private final LinkedList<Class> columnClasses = new LinkedList<>();
+  private final LinkedList<Class<?>> columnClasses = new LinkedList<>();
 
   public ResultSetImpl(Object[]... columns) throws SQLException {
     for (Object[] columnDefinition : columns)
       if (columnDefinition.length == 2
           && columnDefinition[0] instanceof String
-          && columnDefinition[1] instanceof Class) {
+          && columnDefinition[1] instanceof Class<?>) {
         columnNames.add((String) columnDefinition[0]);
-        columnClasses.add((Class) columnDefinition[1]);
+        columnClasses.add((Class<?>) columnDefinition[1]);
       } else
         throw new SQLException(
             "Invalid column definition + " + Arrays.deepToString(columnDefinition));
@@ -83,7 +83,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(String.class)) return (String) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a String.");
 
@@ -95,7 +95,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(Boolean.class))
         return (Boolean) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a Boolean.");
@@ -108,7 +108,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(Byte.class)) return (Byte) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a Byte.");
 
@@ -120,7 +120,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(Short.class)) return (Short) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a Short.");
 
@@ -132,7 +132,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(Integer.class))
         return (Integer) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not an Integer.");
@@ -145,7 +145,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(Long.class)) return (Long) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a Long.");
 
@@ -157,7 +157,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(Float.class)) return (Float) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a Float.");
 
@@ -169,7 +169,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(Double.class)) return (Double) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a Double.");
 
@@ -191,7 +191,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(Date.class)) return (Date) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a Date.");
 
@@ -203,7 +203,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(Time.class)) return (Time) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a Time.");
 
@@ -215,7 +215,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(java.sql.Timestamp.class))
         return (java.sql.Timestamp) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a Timestamp.");
@@ -399,7 +399,7 @@ public class ResultSetImpl implements ResultSet {
     int internalColumnIndex = columnIndex - 1;
 
     if (columnClasses.size() > internalColumnIndex) {
-      Class clazz = columnClasses.get(internalColumnIndex);
+      Class<?> clazz = columnClasses.get(internalColumnIndex);
       if (clazz.equals(BigDecimal.class))
         return (BigDecimal) (value = rowData.get(r)[internalColumnIndex]);
       else throw new SQLException("Column " + columnIndex + " is not a BigDecimal.");

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Streaming iterator over XLS files Derived from:
@@ -55,7 +56,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
   int sheetIndex;
 
   BoundSheetRecord[] orderedBSRs;
-  ArrayList boundSheetRecords;
+  List<BoundSheetRecord> boundSheetRecords;
   // For handling formulas with string results
   int nextRow;
   int nextColumn;
@@ -71,7 +72,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
    */
   public void postConstruct() throws SQLException {
     try {
-      boundSheetRecords = new ArrayList();
+      boundSheetRecords = new ArrayList<>();
       sheetIndex = -1;
       inRequiredSheet = false;
       outputFormulaValues = true;
@@ -143,7 +144,7 @@ public class XlsSheetIterator extends AbstractXlsSheetIterator implements HSSFLi
 
     switch (record.getSid()) {
       case BoundSheetRecord.sid:
-        boundSheetRecords.add(record);
+        boundSheetRecords.add((BoundSheetRecord) record);
         break;
       case BOFRecord.sid:
         BOFRecord br = (BOFRecord) record;

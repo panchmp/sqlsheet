@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.*;
 import java.util.Calendar;
@@ -421,8 +422,8 @@ public class XlsStreamResultSet implements ResultSet {
     if (cell == null) {
       return null;
     } else {
-      BigDecimal bigDecimal = BigDecimal.valueOf(cell.doubleValue);
-      return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
+      return BigDecimal.valueOf(cell.doubleValue)
+              .setScale(scale, RoundingMode.HALF_UP);
     }
   }
 
@@ -431,8 +432,8 @@ public class XlsStreamResultSet implements ResultSet {
     if (cell == null) {
       return null;
     } else {
-      BigDecimal bigDecimal = BigDecimal.valueOf(cell.doubleValue);
-      return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
+      return BigDecimal.valueOf(cell.doubleValue)
+              .setScale(scale, RoundingMode.HALF_UP);
     }
   }
 

@@ -201,8 +201,7 @@ class XlsConnection implements Connection {
     return null;
   }
 
-  @SuppressWarnings("unchecked")
-  public Map getTypeMap() {
+  public Map<String, Class<?>> getTypeMap() {
     return null;
   }
 
