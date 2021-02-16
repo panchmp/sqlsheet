@@ -15,25 +15,6 @@
  */
 package com.sqlsheet.stream;
 
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
-import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.EndElement;
-import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
-
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
@@ -43,6 +24,20 @@ import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.StylesTable;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.*;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Streaming iterator over XLSX files Derived from:
@@ -201,7 +196,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
     }
 
     public void startElement(StartElement startElement) {
-      Map<String, String> attributes = new HashMap<String, String>();
+      Map<String, String> attributes = new HashMap<>();
       Iterator attributesIterator = startElement.getAttributes();
       while (attributesIterator.hasNext()) {
         Attribute attr = (Attribute) attributesIterator.next();
@@ -268,7 +263,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
             thisCellValue.stringValue = first == '0' ? "FALSE" : "TRUE";
             break;
           case ERROR:
-            thisCellValue.stringValue = "\"ERROR:" + value.toString() + '"';
+            thisCellValue.stringValue = "\"ERROR:" + value + '"';
             break;
           case FORMULA:
             // A formula could result in a string value,

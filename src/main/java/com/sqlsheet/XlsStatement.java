@@ -35,7 +35,7 @@ public class XlsStatement implements Statement {
   public static final int DEFAULT_HEADLINE = 1;
   public static final int DEFAULT_FIRST_COL = 0;
 
-  private XlsConnection connection;
+  private final XlsConnection connection;
   private final Map<String, XlsResultSet> sheet2rs = new HashMap<>();
   private SqlSheetParser parser;
   private boolean isClosed;
@@ -49,11 +49,11 @@ public class XlsStatement implements Statement {
   private static Sheet getSheetNamed(Workbook wb, String name) throws SQLException {
     if (name == null) throw new IllegalArgumentException();
     name = name.trim();
-    String allSheetNames = "";
+    StringBuilder allSheetNames = new StringBuilder();
     int count = wb.getNumberOfSheets();
     for (int i = 0; i < count; i++) {
       String sheetName = wb.getSheetName(i);
-      allSheetNames += sheetName + ",";
+      allSheetNames.append(sheetName).append(",");
       if (sheetName == null) continue;
       if (sheetName.equalsIgnoreCase(name) || ("\"" + sheetName + "\"").equalsIgnoreCase(name)) {
         return wb.getSheetAt(i);
@@ -65,7 +65,7 @@ public class XlsStatement implements Statement {
       message += " can be found. Are you sure of the Excel file path ?";
     } else {
       if (allSheetNames.length() > 2) {
-        allSheetNames = allSheetNames.substring(0, allSheetNames.length() - 1);
+        allSheetNames = new StringBuilder(allSheetNames.substring(0, allSheetNames.length() - 1));
       }
       message += ". Only the following " + count + " sheets can be found (" + allSheetNames + ")";
     }

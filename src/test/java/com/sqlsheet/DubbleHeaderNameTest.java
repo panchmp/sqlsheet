@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * @author Klaus Hauschild
@@ -42,7 +42,7 @@ public class DubbleHeaderNameTest {
     final Statement stmt = connection.createStatement();
     final ResultSet results = stmt.executeQuery("SELECT * FROM \"duplicate\""); // Duplicate is a keyword
     assertEquals("The column name must A_1", "A_1", results.getMetaData().getColumnName(2));
-    assertFalse("The column names must not be the same", results.getMetaData().getColumnName(2).equals(results.getMetaData().getColumnName(1)));
+    assertNotEquals("The column names must not be the same", results.getMetaData().getColumnName(2), results.getMetaData().getColumnName(1));
 
   }
 

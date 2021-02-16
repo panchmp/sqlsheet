@@ -142,14 +142,14 @@ public class DriverTest {
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery(sql);
     assertEquals(results.getMetaData().getColumnCount(), 3L);
-    Long count = 0L;
+    long count = 0L;
     while (results.next()) {
       assertSame(Double.class, results.getObject(1).getClass());
       assertSame(String.class, results.getObject(2).getClass());
       assertSame(java.sql.Date.class, results.getObject(3).getClass());
       count++;
     }
-    assertEquals(count.longValue(), 3L);
+    assertEquals(3L, count);
     results.close();
     stmt.close();
     conn.close();
@@ -159,14 +159,14 @@ public class DriverTest {
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery(sql);
     assertEquals(results.getMetaData().getColumnCount(), 3L);
-    Long count = 0L;
+    long count = 0L;
     while (results.next()) {
       assertSame(Double.class, results.getObject(1).getClass());
       assertSame(String.class, results.getObject(2).getClass());
       assertSame(java.util.Date.class, results.getObject(3).getClass());
       count++;
     }
-    assertEquals(count.longValue(), 3L);
+    assertEquals(3L, count);
     results.close();
     stmt.close();
     conn.close();

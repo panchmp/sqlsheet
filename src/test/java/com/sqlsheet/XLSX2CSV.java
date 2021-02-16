@@ -265,7 +265,7 @@ public class XLSX2CSV {
                         break;
 
                     case ERROR:
-                        thisStr = "\"ERROR:" + value.toString() + '"';
+                        thisStr = "\"ERROR:" + value + '"';
                         break;
 
                     case FORMULA:

@@ -298,7 +298,7 @@ public class XlsResultSet implements ResultSet {
 
         case BLANK:
           wasNull = true;
-          return (int) 0;
+          return 0;
 
         case ERROR:
           throw new SQLException(
@@ -347,7 +347,7 @@ public class XlsResultSet implements ResultSet {
 
         case BLANK:
           wasNull = true;
-          return (long) 0;
+          return 0;
 
         case ERROR:
           throw new SQLException(

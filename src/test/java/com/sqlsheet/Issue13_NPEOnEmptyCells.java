@@ -130,19 +130,19 @@ public class Issue13_NPEOnEmptyCells {
           
           Object valueByColumnIndex = null;
           Object valueByColumnLabel = null;
-          if (columnNames[c].equals("String")) {
+          if ("String".equals(columnNames[c])) {
             valueByColumnIndex = rs.getString(c + 1);
             valueByColumnLabel = rs.getString(columnLabel);
             
-          } else if (columnNames[c].equals("Date")){
+          } else if ("Date".equals(columnNames[c])){
             valueByColumnIndex = rs.getDate(c + 1);
             valueByColumnLabel = rs.getDate(columnLabel);
             
-          } else if (columnNames[c].equals("Boolean")){
+          } else if ("Boolean".equals(columnNames[c])){
             valueByColumnIndex = rs.getBoolean(c + 1);
             valueByColumnLabel = rs.getBoolean(columnLabel);
             
-          } else if (columnNames[c].equals("Double")){
+          } else if ("Double".equals(columnNames[c])){
             valueByColumnIndex = rs.getDouble(c + 1);
             valueByColumnLabel = rs.getDouble(columnLabel);
             
@@ -203,13 +203,13 @@ public class Issue13_NPEOnEmptyCells {
          
         for (int c = 0; c < columnNames.length; c++) {
           Object value = 0;
-          if (columnNames[c].equals("String"))
+          if ("String".equals(columnNames[c]))
             value = rs.getString(c + 1);
-          else if (columnNames[c].equals("Date"))
+          else if ("Date".equals(columnNames[c]))
             value = rs.getDate(c + 1);
-          else if (columnNames[c].equals("Boolean"))
+          else if ("Boolean".equals(columnNames[c]))
             value = rs.getBoolean(c + 1);
-          else if (columnNames[c].equals("Double"))
+          else if ("Double".equals(columnNames[c]))
             value = rs.getDouble(c + 1);
           else
             value = rs.getObject(c+1);

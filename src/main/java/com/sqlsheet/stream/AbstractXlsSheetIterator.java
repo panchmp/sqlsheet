@@ -15,23 +15,18 @@
  */
 package com.sqlsheet.stream;
 
+import org.apache.poi.ss.usermodel.DateUtil;
+
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.ss.usermodel.DateUtil;
+import java.util.*;
 
 public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iterator<Object> {
 
   private URL fileName;
   private String sheetName;
-  private List<CellValueHolder> columns = new ArrayList<CellValueHolder>();
-  private Map<Long, List<CellValueHolder>> rowValues = new HashMap<Long, List<CellValueHolder>>();
+  private List<CellValueHolder> columns = new ArrayList<>();
+  private Map<Long, List<CellValueHolder>> rowValues = new HashMap<>();
 
   // Counter includes columns row
   private Long currentSheetRowIndex = 0L;
@@ -78,10 +73,9 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
   }
 
   void addCurrentRowValue(CellValueHolder cellValue) {
-    if (getRowValues().get(getCurrentSheetRowIndex()) == null) {
-      getRowValues().put(getCurrentSheetRowIndex(), new ArrayList<CellValueHolder>());
-    }
-    getRowValues().get(getCurrentSheetRowIndex()).add(cellValue);
+    getRowValues()
+            .computeIfAbsent(getCurrentSheetRowIndex(), k -> new ArrayList<>())
+            .add(cellValue);
   }
 
   CellValueHolder getCurrentRowValue(int column) {
@@ -164,7 +158,7 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
     this.currentIteratorRowIndex = currentIteratorRowIndex;
   }
 
-  class CellValueHolder {
+  static class CellValueHolder {
     String stringValue;
     Double doubleValue;
     Date dateValue;
@@ -182,7 +176,7 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
           + '}';
     }
 
-    public Class getType() {
+    public Class<?> getType() {
       if (this.dateValue != null) return dateValue.getClass();
       if (this.doubleValue != null) return doubleValue.getClass();
       if (this.stringValue != null) return stringValue.getClass();

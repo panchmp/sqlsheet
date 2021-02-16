@@ -34,9 +34,9 @@ import java.util.Map;
 public class XlsResultSetMetaData implements ResultSetMetaData {
 
   /** A map between the code ID and the type name */
-  static Map<Integer, String> columnTypeNameMap = new HashMap<Integer, String>();
+  static Map<Integer, String> columnTypeNameMap = new HashMap<>();
   /** A map between the code ID and the type class */
-  static Map<Integer, String> columnTypeClassMap = new HashMap<Integer, String>();
+  static Map<Integer, String> columnTypeClassMap = new HashMap<>();
 
   static {
     columnTypeNameMap.put(Types.VARCHAR, "VARCHAR");
@@ -53,7 +53,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
 
   private final DataFormatter formatter;
   /** A map to get consistently the same data type */
-  Map<Integer, Integer> columnTypeMap = new HashMap<Integer, Integer>();
+  Map<Integer, Integer> columnTypeMap = new HashMap<>();
 
   protected List<String> columnNames;
   private XlsResultSet resultset;
@@ -69,7 +69,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
       throw new SQLException("No header row in sheet");
     }
     formatter = new DataFormatter();
-    columnNames = new ArrayList<String>();
+    columnNames = new ArrayList<>();
     for (short c = (short) firstSheetColOffset; c < row.getLastCellNum(); c++) {
       Cell cell = row.getCell(c);
       String columnName = formatter.formatCellValue(cell);
@@ -89,7 +89,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
 
     // A double map to back the relation between the column Id and the count of type
     Map<Integer, Map<Integer, Integer>> columnTypeScan =
-        new HashMap<Integer, Map<Integer, Integer>>();
+            new HashMap<>();
     while (resultset.next()) {
       int typeCode;
       for (int columnId = 1; columnId <= getColumnCount(); columnId++) {
@@ -147,7 +147,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
         }
         Map<Integer, Integer> columnIdTypeMap = columnTypeScan.get(columnId);
         if (columnIdTypeMap == null) {
-          columnIdTypeMap = new HashMap<Integer, Integer>();
+          columnIdTypeMap = new HashMap<>();
           columnIdTypeMap.put(typeCode, 1);
           columnTypeScan.put(columnId, columnIdTypeMap);
         } else {
@@ -161,14 +161,14 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
         }
       }
       // Retrieve only one type
-      for (Integer columnId : columnTypeScan.keySet()) {
+      for (Map.Entry<Integer, Map<Integer, Integer>> entry : columnTypeScan.entrySet()) {
 
         Integer numberOfVarchar = 0;
         Integer numberOfDouble = 0;
         Integer numberOfDate = 0;
 
         for (Map.Entry<Integer, Integer> columnIdTypeMap :
-            columnTypeScan.get(columnId).entrySet()) {
+                entry.getValue().entrySet()) {
           if (columnIdTypeMap.getKey() == Types.VARCHAR) {
             numberOfVarchar = columnIdTypeMap.getValue();
           } else if (columnIdTypeMap.getKey() == Types.DOUBLE) {
@@ -191,7 +191,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
         if (finalColumnType == null) {
           finalColumnType = Types.VARCHAR;
         }
-        columnTypeMap.put(columnId, finalColumnType);
+        columnTypeMap.put(entry.getKey(), finalColumnType);
       }
     }
 

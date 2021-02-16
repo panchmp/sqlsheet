@@ -90,9 +90,8 @@ public class SqlSheetParser {
       }
       List<SelectItem> selectItems = ((PlainSelect) body).getSelectItems();
       if (selectItems == null
-          || selectItems.isEmpty()
-          || selectItems.size() > 1
-          || !(selectItems.get(0) instanceof AllColumns)) {
+              || selectItems.size() != 1
+              || !(selectItems.get(0) instanceof AllColumns)) {
         throw new SQLException("Only 'SELECT *' is supported on Excel sheets");
       }
       return new SelectStarStatement() {
@@ -109,8 +108,8 @@ public class SqlSheetParser {
     if (statement instanceof CreateTable) {
       final String table = prepareTableIdentifier(((CreateTable) statement).getTable().getName());
       List<ColumnDefinition> cols = ((CreateTable) statement).getColumnDefinitions();
-      final List<String> names = new ArrayList<String>();
-      final List<String> types = new ArrayList<String>();
+      final List<String> names = new ArrayList<>();
+      final List<String> types = new ArrayList<>();
       for (ColumnDefinition cd : cols) {
         names.add(prepareColumnIdentifier(stripUnderscores(cd.getColumnName())));
         types.add(cd.getColDataType().getDataType());
@@ -135,8 +134,8 @@ public class SqlSheetParser {
     if (statement instanceof Insert) {
       final String table = prepareTableIdentifier(((Insert) statement).getTable().getName());
       List<net.sf.jsqlparser.schema.Column> cols = ((Insert) statement).getColumns();
-      final List<String> names = new ArrayList<String>();
-      final List<Object> values = new ArrayList<Object>();
+      final List<String> names = new ArrayList<>();
+      final List<Object> values = new ArrayList<>();
       for (net.sf.jsqlparser.schema.Column cd : cols) {
         names.add(prepareColumnIdentifier(stripUnderscores(cd.getColumnName())));
       }
@@ -149,40 +148,32 @@ public class SqlSheetParser {
         // java.lang.String
         if (exp instanceof StringValue) {
           values.add(((StringValue) exp).getValue());
-          continue;
         }
         // java.sql.Date
         else if (exp instanceof DateValue) {
           values.add(((DateValue) exp).getValue());
-          continue;
         }
         // java.sql.Timestamp
         else if (exp instanceof TimestampValue) {
           values.add(((TimestampValue) exp).getValue());
-          continue;
         }
         // java.sql.Time
         else if (exp instanceof TimeValue) {
           values.add(((TimeValue) exp).getValue());
-          continue;
         }
         // java.lang.Double
         else if (exp instanceof DoubleValue) {
           values.add(((DoubleValue) exp).getValue()); // java.sql.Date
-          continue;
         }
         // java.lang.Long
         else if (exp instanceof LongValue) {
           values.add(((LongValue) exp).getValue()); // java.sql.Date
-          continue;
         }
         // null
         else if (exp instanceof NullValue) {
           values.add(null);
-          continue;
         } else if (exp instanceof net.sf.jsqlparser.expression.JdbcParameter) {
           values.add(JdbcParameter.INSTANCE);
-          continue;
         }
         // doh
         else {

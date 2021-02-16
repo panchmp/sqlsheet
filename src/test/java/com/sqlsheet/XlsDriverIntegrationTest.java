@@ -45,7 +45,7 @@ public class XlsDriverIntegrationTest {
 
     @Test
     public void testExctractFromXls() throws Exception {
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("filePath", dumpExcelToTempFile(testExtractXlsFile, ".xls").toString());
         params.put("params", params);
 
@@ -64,7 +64,7 @@ public class XlsDriverIntegrationTest {
 
     @Test
     public void testLoadToXls() throws Exception {
-        List<ResultMock> pojo = new ArrayList<ResultMock>();
+        List<ResultMock> pojo = new ArrayList<>();
         pojo.add(new ResultMock(1, "test1", new Date()));
         pojo.add(new ResultMock(2, "test2", new Date()));
         pojo.add(new ResultMock(3, "test3", new Date()));
@@ -72,7 +72,7 @@ public class XlsDriverIntegrationTest {
         File xls = File.createTempFile("tmp.", ".xls");
         xls.deleteOnExit();
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("filePath", xls.toURL());
         params.put("params", params);
         params.put("POJO", pojo);
@@ -92,7 +92,7 @@ public class XlsDriverIntegrationTest {
 
     @Test
     public void testExctractFromXlsx() throws Exception {
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("filePath", dumpExcelToTempFile(testExtractXlsxFile, ".xlsx").toString());
         params.put("params", params);
         Map<String, Object> results = executeEtlScriptWithResult(ClassLoader.getSystemResource(extractXlsScriptFile), params);
@@ -104,7 +104,7 @@ public class XlsDriverIntegrationTest {
 
     @Test
     public void testLoadToXlsx() throws Exception {
-        List<ResultMock> pojo = new ArrayList<ResultMock>();
+        List<ResultMock> pojo = new ArrayList<>();
         pojo.add(new ResultMock(1, "test1", new Date()));
         pojo.add(new ResultMock(2, "test2", new Date()));
         pojo.add(new ResultMock(3, "test3", new Date()));
@@ -112,7 +112,7 @@ public class XlsDriverIntegrationTest {
         File xls = File.createTempFile("tmp.", ".xlsx");
         xls.deleteOnExit();
 
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("filePath", xls.toURL().toString());
         params.put("params", params);
         params.put("POJO", pojo);
