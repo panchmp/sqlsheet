@@ -18,13 +18,16 @@ package com.sqlsheet;
 
 import com.hrakaroo.glob.GlobPattern;
 import com.hrakaroo.glob.MatchingEngine;
-import static com.sqlsheet.XlsStatement.DEFAULT_FIRST_COL;
-import static com.sqlsheet.XlsStatement.DEFAULT_HEADLINE;
-import java.sql.*;
-import java.util.*;
 import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.sql.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+
+import static com.sqlsheet.XlsStatement.DEFAULT_FIRST_COL;
+import static com.sqlsheet.XlsStatement.DEFAULT_HEADLINE;
 
 public class XlsDatabaseMetaData implements DatabaseMetaData {
 

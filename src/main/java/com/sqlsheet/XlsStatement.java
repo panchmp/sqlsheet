@@ -15,27 +15,15 @@
  */
 package com.sqlsheet;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.sqlsheet.parser.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import com.sqlsheet.parser.CreateTableStatement;
-import com.sqlsheet.parser.DropTableStatement;
-import com.sqlsheet.parser.InsertIntoStatement;
-import com.sqlsheet.parser.ParsedStatement;
-import com.sqlsheet.parser.SelectStarStatement;
-import com.sqlsheet.parser.SqlSheetParser;
 import java.sql.*;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SqlSheet implementation of java.sql.Statement.
