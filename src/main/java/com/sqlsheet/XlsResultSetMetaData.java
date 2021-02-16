@@ -215,7 +215,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     return null;
   }
 
-  public String getColumnClassName(int jdbcColumn) throws SQLException {
+  public String getColumnClassName(int jdbcColumn) {
     return columnTypeClassMap.get(getColumnType(jdbcColumn));
   }
 
@@ -228,7 +228,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     return columnTypeMap.get(jdbcColumn);
   }
 
-  public String getColumnTypeName(int jdbcColumn) throws SQLException {
+  public String getColumnTypeName(int jdbcColumn) {
 
     return columnTypeNameMap.get(getColumnType(jdbcColumn));
   }

@@ -182,11 +182,11 @@ public class XlsStreamResultSet implements ResultSet {
     return (long) (cell == null ? 0 : cell.doubleValue);
   }
 
-  public Object getObject(String jdbcColumn) throws SQLException {
+  public Object getObject(String jdbcColumn) {
     return getObject(getCell(jdbcColumn));
   }
 
-  public Object getObject(int jdbcColumn) throws SQLException {
+  public Object getObject(int jdbcColumn) {
     return getObject(getCell(jdbcColumn));
   }
 

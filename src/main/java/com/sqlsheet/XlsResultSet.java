@@ -824,13 +824,13 @@ public class XlsResultSet implements ResultSet {
     return true;
   }
 
-  public boolean next() throws SQLException {
+  public boolean next() {
     if (isAfterLast()) return false;
     cursorSheetRow++;
     return !isAfterLast() && (sheet.getRow(cursorSheetRow) != null);
   }
 
-  public boolean previous() throws SQLException {
+  public boolean previous() {
     if (isBeforeFirst()) return false;
     cursorSheetRow--;
     return isBeforeFirst();
