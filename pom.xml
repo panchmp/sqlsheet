@@ -30,6 +30,12 @@
       <version>0.9.0</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.30</version>
+    </dependency>
+
     <!-- Same version between all poi -->
     <dependency>
       <groupId>org.apache.poi</groupId>
@@ -76,6 +82,12 @@
       <groupId>de.vandermeer</groupId>
       <artifactId>asciitable</artifactId>
       <version>0.3.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.30</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

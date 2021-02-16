@@ -23,6 +23,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,8 +41,10 @@ import static org.junit.Assert.*;
  */
 public class XlsDatabaseMetaDataTest {
 
+  private static final Logger logger = LoggerFactory.getLogger(XlsDatabaseMetaDataTest.class);
   public static final int DEFAULT_HEADLINE = 3;
   public static final int DEFAULT_FIRST_COL = 1;
+
 
   private final Connection conn;
   private final DatabaseMetaData metaData;
@@ -61,7 +65,7 @@ public class XlsDatabaseMetaDataTest {
       Cell cell = row.createCell(c);
       cell.setCellValue(columnNames[c - DEFAULT_FIRST_COL] + c);
     }
-    
+
     DataFormat dateFormat = workBook.createDataFormat();
     short dateFormatIndex =
     dateFormat.getFormat(DateFormatConverter.convert(Locale.US, DateFormat.getDateInstance(DateFormat.SHORT, Locale.US)));
@@ -692,8 +696,7 @@ public class XlsDatabaseMetaDataTest {
     }
     at.addRule();
     rs.close();
-
-    System.out.println(at.render());
+    logger.debug(at.render());
 
     assertEquals("Numbers of Columns in Table", columnNames.length, r);
   }

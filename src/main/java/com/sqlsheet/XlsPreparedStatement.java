@@ -15,37 +15,19 @@
  */
 package com.sqlsheet;
 
+import com.sqlsheet.parser.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.NClob;
-import java.sql.ParameterMetaData;
-import java.sql.PreparedStatement;
-import java.sql.Ref;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.RowId;
-import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.sqlsheet.parser.CreateTableStatement;
-import com.sqlsheet.parser.InsertIntoStatement;
-import com.sqlsheet.parser.JdbcParameter;
-import com.sqlsheet.parser.ParsedStatement;
-import com.sqlsheet.parser.SelectStarStatement;
 
 /**
  * SqlSheet implementation of java.sql.PreparedStatement.
@@ -55,7 +37,7 @@ import com.sqlsheet.parser.SelectStarStatement;
  */
 public class XlsPreparedStatement extends XlsStatement implements PreparedStatement {
 
-  private static final Logger logger = Logger.getLogger(XlsPreparedStatement.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(XlsPreparedStatement.class.getName());
   private ParsedStatement statement;
   private List<Object> parameters = new ArrayList<Object>();
 
@@ -99,7 +81,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
       int paramIndex = 0;
       for (int i = 0; i < substitutedValues.size(); i++) {
         Object val = substitutedValues.get(i);
-        logger.log(Level.FINE, "execute Query Insertintostatement: " + substitutedValues.get(i));
+          logger.debug("execute Query Insertintostatement: {}", substitutedValues.get(i));
         if (val instanceof JdbcParameter) {
           substitutedValues.set(i, parameters.get(paramIndex++));
         }

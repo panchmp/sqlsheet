@@ -15,30 +15,25 @@
  */
 package com.sqlsheet;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.DriverPropertyInfo;
-import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.sqlsheet.stream.XlsStreamConnection;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.sqlsheet.stream.XlsStreamConnection;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.sql.*;
+import java.util.Properties;
 import java.util.regex.Matcher;
 
 /**
@@ -48,19 +43,18 @@ import java.util.regex.Matcher;
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsDriver implements java.sql.Driver {
-
+  private static final Logger logger = LoggerFactory.getLogger(XlsDriver.class.getName());
   static final String READ_STREAMING = "readStreaming";
   static final String WRITE_STREAMING = "writeStreaming";
   static final String HEADLINE = "headLine";
   static final String FIRST_COL = "firstColumn";
   private static final String URL_SCHEME = "jdbc:xls:";
-  private static final Logger logger = Logger.getLogger(XlsDriver.class.getName());
 
   static {
     try {
       DriverManager.registerDriver(new XlsDriver());
     } catch (SQLException e) {
-      logger.log(Level.SEVERE, "Couldn't register " + XlsDriver.class.getName(), e);
+      logger.error("Couldn't register {}", XlsDriver.class.getName(), e);
     }
   }
 
@@ -204,7 +198,7 @@ public class XlsDriver implements java.sql.Driver {
     if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
       File source = new File(workbookUrl.getPath());
       if (source.exists() || (source.length() != 0)) {
-        logger.warning("File " + source.getPath() + " is not empty, and will parsed to memory!");
+        logger.warn("File {} is not empty, and will parsed to memory!", source.getPath());
       } else {
         Workbook workbook = new XSSFWorkbook();
         flushWorkbook(workbook, source);
@@ -240,7 +234,7 @@ public class XlsDriver implements java.sql.Driver {
         try {
           fileOut.close();
         } catch (IOException e) {
-          logger.log(Level.WARNING, e.getMessage(), e);
+          logger.warn(e.getMessage(), e);
         }
       }
     }
@@ -262,7 +256,7 @@ public class XlsDriver implements java.sql.Driver {
     return 0;
   }
 
-  public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+  public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }
