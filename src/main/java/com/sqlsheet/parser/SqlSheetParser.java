@@ -94,11 +94,9 @@ public class SqlSheetParser {
               || !(selectItems.get(0) instanceof AllColumns)) {
         throw new SQLException("Only 'SELECT *' is supported on Excel sheets");
       }
-      return new SelectStarStatement() {
-        public String getTable() {
-          String tableName = ((Table) from).getName();
-          return prepareTableIdentifier(tableName);
-        }
+      return (SelectStarStatement) () -> {
+        String tableName = ((Table) from).getName();
+        return prepareTableIdentifier(tableName);
       };
 
     } else
@@ -114,19 +112,7 @@ public class SqlSheetParser {
         names.add(prepareColumnIdentifier(stripUnderscores(cd.getColumnName())));
         types.add(cd.getColDataType().getDataType());
       }
-      return new CreateTableStatement() {
-        public String getTable() {
-          return table;
-        }
-
-        public List<String> getColumns() {
-          return names;
-        }
-
-        public List<String> getTypes() {
-          return types;
-        }
-      };
+      return new SqlSheetCreateTableStatement(table, names, types);
     } else
     //
     // INSERT INTO
@@ -184,27 +170,11 @@ public class SqlSheetParser {
                   + exp.toString());
         }
       }
-      return new InsertIntoStatement() {
-        public String getTable() {
-          return table;
-        }
-
-        public List<String> getColumns() {
-          return names;
-        }
-
-        public List<Object> getValues() {
-          return values;
-        }
-      };
+      return new SqlSheetInsertIntoStatement(table, names, values);
     } else if (statement instanceof Drop) {
 
       final String table = prepareTableIdentifier(((Drop) statement).getName().getName());
-      return new DropTableStatement() {
-        public String getTable() {
-          return table;
-        }
-      };
+      return new SqlSheetDropTableStatement(table);
 
     }
     //
@@ -227,5 +197,65 @@ public class SqlSheetParser {
 
   private String truncateQuotes(String name) {
     return name.replaceAll("\"", "");
+  }
+
+  private static class SqlSheetCreateTableStatement implements CreateTableStatement {
+    private final String table;
+    private final List<String> names;
+    private final List<String> types;
+
+    public SqlSheetCreateTableStatement(String table, List<String> names, List<String> types) {
+      this.table = table;
+      this.names = names;
+      this.types = types;
+    }
+
+    public String getTable() {
+      return table;
+    }
+
+    public List<String> getColumns() {
+      return names;
+    }
+
+    public List<String> getTypes() {
+      return types;
+    }
+  }
+
+  private static class SqlSheetInsertIntoStatement implements InsertIntoStatement {
+    private final String table;
+    private final List<String> names;
+    private final List<Object> values;
+
+    public SqlSheetInsertIntoStatement(String table, List<String> names, List<Object> values) {
+      this.table = table;
+      this.names = names;
+      this.values = values;
+    }
+
+    public String getTable() {
+      return table;
+    }
+
+    public List<String> getColumns() {
+      return names;
+    }
+
+    public List<Object> getValues() {
+      return values;
+    }
+  }
+
+  private static class SqlSheetDropTableStatement implements DropTableStatement {
+    private final String table;
+
+    public SqlSheetDropTableStatement(String table) {
+      this.table = table;
+    }
+
+    public String getTable() {
+      return table;
+    }
   }
 }
