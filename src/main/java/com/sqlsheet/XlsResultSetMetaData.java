@@ -15,6 +15,8 @@
  */
 package com.sqlsheet;
 
+import org.apache.poi.ss.usermodel.*;
+
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -22,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.poi.ss.usermodel.*;
 
 /**
  * SqlSheet implementation of java.sql.ResultSetMetaData.

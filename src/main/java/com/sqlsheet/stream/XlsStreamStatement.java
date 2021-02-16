@@ -15,15 +15,11 @@
  */
 package com.sqlsheet.stream;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.Statement;
-
 import com.sqlsheet.parser.ParsedStatement;
 import com.sqlsheet.parser.SelectStarStatement;
 import com.sqlsheet.parser.SqlSheetParser;
+
+import java.sql.*;
 
 /**
  * SqlSheet implementation of java.sql.Statement which uses steaming over XLS
