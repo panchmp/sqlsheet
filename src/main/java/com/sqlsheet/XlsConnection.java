@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.nio.channels.FileChannel;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
@@ -85,69 +84,6 @@ class XlsConnection implements Connection {
       outputStream.close();
     } catch (IOException exception) {
       throw new SQLException("Error while persisting changes.", exception);
-    }
-  }
-
-  public void _close() throws SQLException {
-    if (saveFile != null && writeRequired) {
-      FileOutputStream fileOut;
-      try {
-        File newFile = File.createTempFile("xlsdriver", "xlsx");
-        fileOut = new FileOutputStream(newFile);
-        workbook.write(fileOut);
-        if (fileOut != null)
-          try {
-            fileOut.close();
-          } catch (IOException e) {
-              logger.warn(e.getMessage(), e);
-          }
-        // Move already existing data to not corrupt on fail
-        File backup = backupFile(saveFile);
-        logger.info("Created backup:{}", backup.getAbsolutePath());
-        // Try to override file with new content
-        // backup should rename file or copy content into new one, handle second condition
-        if (saveFile.exists() && !saveFile.delete())
-          logger.warn("Unable to delete file:{}, you may lose the results.", saveFile.getAbsolutePath());
-        moveFile(newFile, saveFile);
-      } catch (IOException ioe) {
-        SQLException sqe = new SQLException(ioe.getMessage(), ioe);
-        sqe.initCause(sqe);
-        throw sqe;
-      }
-    }
-  }
-
-  private File backupFile(File input) throws IOException {
-
-    File output = null;
-    if (input != null) {
-      output = File.createTempFile(input.getName() + ".", ".bkp", null);
-      moveFile(input, output);
-    }
-    return output;
-  }
-
-  private void moveFile(File sourceFile, File destFile) throws IOException {
-    boolean moved;
-    moved = sourceFile.renameTo(destFile);
-    if (!moved) {
-      logger.warn("Unable to rename file during move:{} to {}, performing full copy of data.", sourceFile.getAbsolutePath(), destFile.getAbsolutePath());
-      FileChannel source = null;
-      FileChannel destination = null;
-      try {
-        source = new FileInputStream(sourceFile).getChannel();
-        destination = new FileOutputStream(destFile).getChannel();
-        // previous code: destination.transferFrom(source, 0, source.size());
-        // to avoid infinite loops, should be:
-        long count = 0;
-        long size = source.size();
-        do {
-          count += destination.transferFrom(source, 0, size - count);
-        } while (count < size);
-      } finally {
-        if (source != null) source.close();
-        if (destination != null) destination.close();
-      }
     }
   }
 
