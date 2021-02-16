@@ -25,8 +25,8 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
 
   private URL fileName;
   private String sheetName;
-  private List<CellValueHolder> columns = new ArrayList<CellValueHolder>();
-  private Map<Long, List<CellValueHolder>> rowValues = new HashMap<Long, List<CellValueHolder>>();
+  private List<CellValueHolder> columns = new ArrayList<>();
+  private Map<Long, List<CellValueHolder>> rowValues = new HashMap<>();
 
   // Counter includes columns row
   private Long currentSheetRowIndex = 0L;
@@ -74,7 +74,7 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
 
   void addCurrentRowValue(CellValueHolder cellValue) {
     if (getRowValues().get(getCurrentSheetRowIndex()) == null) {
-      getRowValues().put(getCurrentSheetRowIndex(), new ArrayList<CellValueHolder>());
+      getRowValues().put(getCurrentSheetRowIndex(), new ArrayList<>());
     }
     getRowValues().get(getCurrentSheetRowIndex()).add(cellValue);
   }
