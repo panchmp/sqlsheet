@@ -106,19 +106,19 @@ public class XlsStreamResultSet implements ResultSet {
     return metadata;
   }
 
-  public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+  public <T> T getObject(int columnIndex, Class<T> type) {
     return (T) getObject(columnIndex);
   }
 
-  public <T> T getObject(String columnName, Class<T> type) throws SQLException {
+  public <T> T getObject(String columnName, Class<T> type) {
     return (T) getObject(columnName);
   }
 
-  public Timestamp getTimestamp(int jdbcColumn) throws SQLException {
+  public Timestamp getTimestamp(int jdbcColumn) {
     return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
   }
 
-  public Timestamp getTimestamp(String jdbcColumn) throws SQLException {
+  public Timestamp getTimestamp(String jdbcColumn) {
     return new Timestamp(((java.util.Date) getObject(jdbcColumn)).getTime());
   }
 
