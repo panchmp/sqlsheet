@@ -89,10 +89,12 @@ public class XlsStatement implements Statement {
     ParsedStatement parsed = parse(sql);
     if (parsed instanceof DropTableStatement) {
       doDropTable((DropTableStatement) parsed);
+      return true;
     } else {
-      executeQuery(parsed);
+      try (ResultSet ignored = executeQuery(parsed)) {
+        return true;
+      }
     }
-    return true;
   }
 
   private ResultSet executeQuery(ParsedStatement parsed) throws SQLException {
@@ -109,8 +111,9 @@ public class XlsStatement implements Statement {
 
   @Override
   public int executeUpdate(String sql) throws SQLException {
-    executeQuery(sql);
-    return 1;
+    try (ResultSet ignored = executeQuery(sql)) {
+      return 1;
+    }
   }
 
   @Override
@@ -355,12 +358,12 @@ public class XlsStatement implements Statement {
   }
 
   @Override
-  public void closeOnCompletion() {
+  public void closeOnCompletion() throws SQLException{
     isCloseOnCompletion = true;
   }
 
   @Override
-  public boolean isCloseOnCompletion() {
+  public boolean isCloseOnCompletion() throws SQLException{
     return isCloseOnCompletion;
   }
 }

@@ -266,7 +266,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
   }
 
   public int isNullable(int arg0) {
-    return 0;
+    return ResultSetMetaData.columnNoNulls;
   }
 
   public boolean isReadOnly(int arg0) {

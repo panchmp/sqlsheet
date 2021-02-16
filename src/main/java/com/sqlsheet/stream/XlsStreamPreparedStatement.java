@@ -54,13 +54,15 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
   }
 
   public boolean execute() throws SQLException {
-    executeQuery();
-    return true;
+    try (ResultSet ignored = executeQuery()) {
+      return true;
+    }
   }
 
   public int executeUpdate() throws SQLException {
-    executeQuery();
-    return -1;
+    try (ResultSet ignored = executeQuery()) {
+      return -1;
+    }
   }
 
   public ResultSet executeQuery() throws SQLException {

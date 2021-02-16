@@ -38,8 +38,8 @@ import java.util.List;
 public class XlsPreparedStatement extends XlsStatement implements PreparedStatement {
 
   private static final Logger logger = LoggerFactory.getLogger(XlsPreparedStatement.class.getName());
-  private ParsedStatement statement;
-  private List<Object> parameters = new ArrayList<>();
+  private final ParsedStatement statement;
+  private final List<Object> parameters = new ArrayList<>();
 
   public XlsPreparedStatement(XlsConnection conn, String sql) throws SQLException {
     super(conn);
@@ -50,18 +50,20 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     nyi();
   }
 
-  public void clearParameters() {
+  public void clearParameters() throws SQLException {
     parameters.clear();
   }
 
   public boolean execute() throws SQLException {
-    executeQuery();
-    return true;
+    try (ResultSet ignored = executeQuery()) {
+      return true;
+    }
   }
 
   public int executeUpdate() throws SQLException {
-    executeQuery();
-    return -1;
+    try (ResultSet ignored = executeQuery()) {
+      return -1;
+    }
   }
 
   public ResultSet executeQuery() throws SQLException {
@@ -110,59 +112,59 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     parameters.set(p, val);
   }
 
-  public void setBigDecimal(int arg0, BigDecimal arg1) {
+  public void setBigDecimal(int arg0, BigDecimal arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setBoolean(int arg0, boolean arg1) {
+  public void setBoolean(int arg0, boolean arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setByte(int arg0, byte arg1) {
+  public void setByte(int arg0, byte arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setDate(int arg0, Date arg1) {
+  public void setDate(int arg0, Date arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setDouble(int arg0, double arg1) {
+  public void setDouble(int arg0, double arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setFloat(int arg0, float arg1) {
+  public void setFloat(int arg0, float arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setInt(int arg0, int arg1) {
+  public void setInt(int arg0, int arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setLong(int arg0, long arg1) {
+  public void setLong(int arg0, long arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setNull(int arg0, int arg1) {
+  public void setNull(int arg0, int arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setNull(int arg0, int arg1, String arg2) {
+  public void setNull(int arg0, int arg1, String arg2) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setShort(int arg0, short arg1) {
+  public void setShort(int arg0, short arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setString(int arg0, String arg1) {
+  public void setString(int arg0, String arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setTime(int arg0, Time arg1) {
+  public void setTime(int arg0, Time arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
-  public void setTimestamp(int arg0, Timestamp arg1) {
+  public void setTimestamp(int arg0, Timestamp arg1) throws SQLException {
     setParameter(arg0, arg1);
   }
 
@@ -173,11 +175,13 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
       reader.read(buff, 0, length);
       setString(parameterIndex, new String(buff));
     } catch (IOException e) {
-      throw new SQLException(e);
+      SQLException sqe = new SQLException(e.getMessage());
+      sqe.initCause(e);
+      throw sqe;
     }
   }
 
-  public void setObject(int arg0, Object arg1) {
+  public void setObject(int arg0, Object arg1) throws SQLException {
     // REVIEW really just passing the buck here if the send us something
     // weird
     setParameter(arg0, arg1);
@@ -324,11 +328,11 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     nyi();
   }
 
-  public void closeOnCompletion() {
+  public void closeOnCompletion() throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
-  public boolean isCloseOnCompletion() {
+  public boolean isCloseOnCompletion() throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }

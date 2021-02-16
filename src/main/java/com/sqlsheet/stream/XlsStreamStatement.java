@@ -43,13 +43,15 @@ public class XlsStreamStatement implements Statement {
   public void close() {}
 
   public boolean execute(String sql) throws SQLException {
-    executeQuery(sql);
-    return false;
+    try (ResultSet ignored = executeQuery(sql)) {
+      return false;
+    }
   }
 
   public int executeUpdate(String sql) throws SQLException {
-    executeQuery(sql);
-    return 1;
+    try (ResultSet ignored = executeQuery(sql)) {
+      return 1;
+    }
   }
 
   public ResultSet executeQuery(String query) throws SQLException {

@@ -948,7 +948,7 @@ public class XlsResultSet implements ResultSet {
     dateStyle = null;
     formatter = null;
 
-    if (statement != null & !statement.isClosed() && statement.isCloseOnCompletion())
+    if (statement != null && !statement.isClosed() && statement.isCloseOnCompletion())
       statement.close();
 
     statement = null;
