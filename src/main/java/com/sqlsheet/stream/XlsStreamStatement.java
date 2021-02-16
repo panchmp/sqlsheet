@@ -228,7 +228,7 @@ public class XlsStreamStatement implements Statement {
   }
 
   protected void nyi() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet."));
+    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
   }
 
   public boolean isClosed() {

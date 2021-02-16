@@ -254,7 +254,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
       // v => contents of a cell
       if ("v".equals(endElement.getName().getLocalPart())
           || ("c".equals(endElement.getName().getLocalPart())
-              && xssfDataType.INLINESTR.equals(nextDataType))) {
+              && xssfDataType.INLINESTR == nextDataType)) {
         // Process the value contents as required.
         // Do now, as characters() may be called more than once
         switch (nextDataType) {

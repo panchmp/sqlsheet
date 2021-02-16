@@ -34,9 +34,10 @@ import java.util.concurrent.Executor;
 class XlsConnection implements Connection {
 
   private static final Logger logger = LoggerFactory.getLogger(XlsConnection.class.getName());
-  protected Workbook workbook;
-  protected File saveFile;
-  private Properties info;
+
+  protected final Workbook workbook;
+  protected final File saveFile;
+  private final Properties info;
   private boolean writeRequired;
 
   XlsConnection(Workbook workbook, Properties info) {
@@ -51,7 +52,7 @@ class XlsConnection implements Connection {
   }
 
   int getInt(String key, int defaultValue) {
-    Object value = info.get(key);
+    Object value = info.getProperty(key);
     if (value == null) {
       logger.info("Key {} not present.", key);
       return defaultValue;
@@ -289,7 +290,7 @@ class XlsConnection implements Connection {
   }
 
   private void nyi() throws SQLException {
-    throw new SQLException("NYI");
+    throw new SQLException(new UnsupportedOperationException("Not supported yet."));
   }
 
   public <T> T unwrap(Class<T> iface) throws SQLException {
@@ -300,10 +301,6 @@ class XlsConnection implements Connection {
   public boolean isWrapperFor(Class<?> iface) throws SQLException {
     nyi();
     return false;
-  }
-
-  public Boolean getWriteRequired() {
-    return writeRequired;
   }
 
   public void setWriteRequired(Boolean writeRequired) {

@@ -84,10 +84,10 @@ public class XlsResultSet implements ResultSet {
   @Override
   public boolean getBoolean(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
       wasNull = true;
       return false;
-    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+    } else if (cell.getCellType() == CellType.FORMULA) {
       switch (evaluator.evaluateFormulaCell(cell)) {
         case BOOLEAN:
           wasNull = false;
@@ -131,10 +131,10 @@ public class XlsResultSet implements ResultSet {
   @Override
   public double getDouble(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
       wasNull = true;
       return 0d;
-    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+    } else if (cell.getCellType() == CellType.FORMULA) {
       switch (evaluator.evaluateFormulaCell(cell)) {
           // @todo: maybe try to parse the Boolean
         case BOOLEAN:
@@ -178,10 +178,10 @@ public class XlsResultSet implements ResultSet {
   @Override
   public byte getByte(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
       wasNull = true;
       return (byte) 0;
-    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+    } else if (cell.getCellType() == CellType.FORMULA) {
       switch (evaluator.evaluateFormulaCell(cell)) {
 
           // @todo: maybe try to parse the Boolean
@@ -227,10 +227,10 @@ public class XlsResultSet implements ResultSet {
   @Override
   public float getFloat(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
       wasNull = true;
       return 0f;
-    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+    } else if (cell.getCellType() == CellType.FORMULA) {
       switch (evaluator.evaluateFormulaCell(cell)) {
 
           // @todo: maybe try to parse the Boolean
@@ -276,10 +276,10 @@ public class XlsResultSet implements ResultSet {
   @Override
   public int getInt(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
       wasNull = true;
       return 0;
-    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+    } else if (cell.getCellType() == CellType.FORMULA) {
       switch (evaluator.evaluateFormulaCell(cell)) {
 
           // @todo: maybe try to parse the Boolean
@@ -325,10 +325,10 @@ public class XlsResultSet implements ResultSet {
   @Override
   public long getLong(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
       wasNull = true;
       return 0;
-    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+    } else if (cell.getCellType() == CellType.FORMULA) {
       switch (evaluator.evaluateFormulaCell(cell)) {
 
           // @todo: maybe try to parse the Boolean
@@ -376,7 +376,7 @@ public class XlsResultSet implements ResultSet {
     Cell cell = getCell(columnIndex);
     int columnType = metadata.getColumnType(columnIndex);
     try {
-      if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+      if (cell == null || cell.getCellType() == CellType.BLANK) {
         wasNull = true;
         return null;
       }
@@ -506,10 +506,10 @@ public class XlsResultSet implements ResultSet {
   @Override
   public short getShort(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
       wasNull = true;
       return 0;
-    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+    } else if (cell.getCellType() == CellType.FORMULA) {
       switch (evaluator.evaluateFormulaCell(cell)) {
 
           // @todo: maybe try to parse the Boolean
@@ -557,7 +557,7 @@ public class XlsResultSet implements ResultSet {
     Cell cell = getCell(columnIndex);
     int columnType = metadata.getColumnType(columnIndex);
     try {
-      if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+      if (cell == null || cell.getCellType() == CellType.BLANK) {
         wasNull = true;
         return null;
       }
@@ -983,10 +983,10 @@ public class XlsResultSet implements ResultSet {
   @Override
   public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
       wasNull = true;
       return null;
-    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+    } else if (cell.getCellType() == CellType.FORMULA) {
       switch (evaluator.evaluateFormulaCell(cell)) {
 
           // @todo: maybe try to parse the Boolean
@@ -1095,10 +1095,10 @@ public class XlsResultSet implements ResultSet {
   @Override
   public Date getDate(int columnIndex) throws SQLException {
     Cell cell = getCell(columnIndex);
-    if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
       wasNull = true;
       return null;
-    } else if (cell.getCellType().equals(CellType.FORMULA)) {
+    } else if (cell.getCellType() == CellType.FORMULA) {
       switch (evaluator.evaluateFormulaCell(cell)) {
         case BOOLEAN:
           throw new SQLException(

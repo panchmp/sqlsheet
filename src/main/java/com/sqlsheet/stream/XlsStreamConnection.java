@@ -242,7 +242,7 @@ public class XlsStreamConnection implements Connection {
   }
 
   private void nyi() throws SQLException {
-    throw new SQLException("NYI");
+    throw new SQLException(new UnsupportedOperationException("Not supported yet."));
   }
 
   public <T> T unwrap(Class<T> iface) throws SQLException {

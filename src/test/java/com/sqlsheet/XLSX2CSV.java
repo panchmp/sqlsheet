@@ -254,7 +254,7 @@ public class XLSX2CSV {
             String thisStr = null;
 
             // v => contents of a cell
-            if ("v".equals(name) || ("c".equals(name) && xssfDataType.INLINESTR.equals(nextDataType))) {
+            if ("v".equals(name) || ("c".equals(name) && xssfDataType.INLINESTR == nextDataType)) {
                 // Process the value contents as required.
                 // Do now, as characters() may be called more than once
                 switch (nextDataType) {
