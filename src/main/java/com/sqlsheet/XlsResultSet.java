@@ -73,9 +73,7 @@ public class XlsResultSet implements ResultSet {
   }
 
   private static SQLException wrapped(Throwable t) {
-    SQLException out = new SQLException(t.getMessage());
-    out.initCause(t);
-    return out;
+    return new SQLException(t);
   }
 
   @Override

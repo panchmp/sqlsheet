@@ -61,9 +61,7 @@ public class SqlSheetParser {
     try {
       statement = parser.parse(new StringReader(sql));
     } catch (Exception e) {
-      SQLException sq = new SQLException(e.getMessage());
-      sq.initCause(e);
-      throw sq;
+      throw new SQLException(e);
     }
     //
     // SELECT
