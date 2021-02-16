@@ -37,8 +37,8 @@ import java.util.logging.Logger;
 public class XlsStreamPreparedStatement extends XlsStreamStatement implements PreparedStatement {
 
   private static final Logger logger = Logger.getLogger(XlsStreamPreparedStatement.class.getName());
-  private ParsedStatement statement;
-  private List<Object> parameters = new ArrayList<>();
+  private final ParsedStatement statement;
+  private final List<Object> parameters = new ArrayList<>();
 
   public XlsStreamPreparedStatement(XlsStreamConnection conn, String sql) throws SQLException {
     super(conn);

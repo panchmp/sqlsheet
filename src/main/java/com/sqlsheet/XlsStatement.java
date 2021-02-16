@@ -35,7 +35,7 @@ public class XlsStatement implements Statement {
   public static final int DEFAULT_HEADLINE = 1;
   public static final int DEFAULT_FIRST_COL = 0;
 
-  private XlsConnection connection;
+  private final XlsConnection connection;
   private final Map<String, XlsResultSet> sheet2rs = new HashMap<>();
   private SqlSheetParser parser;
   private boolean isClosed;

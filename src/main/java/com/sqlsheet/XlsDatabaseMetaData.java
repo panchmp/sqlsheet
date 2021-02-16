@@ -722,8 +722,7 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public ResultSet getCatalogs() throws SQLException {
-    ResultSetImpl resultSet = new ResultSetImpl(new Object[] {"TABLE_CAT", String.class});
-    return resultSet;
+    return new ResultSetImpl(new Object[] {"TABLE_CAT", String.class});
   }
 
   @Override
@@ -974,59 +973,53 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
 
   @Override
   public ResultSet getPrimaryKeys(String catalog, String schema, String table) throws SQLException {
-    ResultSetImpl resultSet =
-        new ResultSetImpl(
-            new Object[] {"TABLE_CAT", String.class},
-            new Object[] {"TABLE_SCHEM", String.class},
-            new Object[] {"TABLE_NAME", String.class},
-            new Object[] {"COLUMN_NAME", String.class},
-            new Object[] {"KEY_SEQ", Short.class},
-            new Object[] {"PK_NAME", String.class});
-    return resultSet;
+    return new ResultSetImpl(
+        new Object[] {"TABLE_CAT", String.class},
+        new Object[] {"TABLE_SCHEM", String.class},
+        new Object[] {"TABLE_NAME", String.class},
+        new Object[] {"COLUMN_NAME", String.class},
+        new Object[] {"KEY_SEQ", Short.class},
+        new Object[] {"PK_NAME", String.class});
   }
 
   @Override
   public ResultSet getImportedKeys(String catalog, String schema, String table)
       throws SQLException {
-    ResultSetImpl resultSet =
-        new ResultSetImpl(
-            new Object[] {"PKTABLE_CAT", String.class},
-            new Object[] {"PKTABLE_SCHEM", String.class},
-            new Object[] {"PKTABLE_NAME", String.class},
-            new Object[] {"PKCOLUMN_NAME", String.class},
-            new Object[] {"FKTABLE_CAT", String.class},
-            new Object[] {"FKTABLE_SCHEM", String.class},
-            new Object[] {"FKTABLE_NAME", String.class},
-            new Object[] {"FKCOLUMN_NAME", String.class},
-            new Object[] {"KEY_SEQ", Short.class},
-            new Object[] {"UPDATE_RULE", Short.class},
-            new Object[] {"DELETE_RULE", Short.class},
-            new Object[] {"FK_NAME", String.class},
-            new Object[] {"PK_NAME", String.class},
-            new Object[] {"DEFERRABILITY", Short.class});
-    return resultSet;
+    return new ResultSetImpl(
+        new Object[] {"PKTABLE_CAT", String.class},
+        new Object[] {"PKTABLE_SCHEM", String.class},
+        new Object[] {"PKTABLE_NAME", String.class},
+        new Object[] {"PKCOLUMN_NAME", String.class},
+        new Object[] {"FKTABLE_CAT", String.class},
+        new Object[] {"FKTABLE_SCHEM", String.class},
+        new Object[] {"FKTABLE_NAME", String.class},
+        new Object[] {"FKCOLUMN_NAME", String.class},
+        new Object[] {"KEY_SEQ", Short.class},
+        new Object[] {"UPDATE_RULE", Short.class},
+        new Object[] {"DELETE_RULE", Short.class},
+        new Object[] {"FK_NAME", String.class},
+        new Object[] {"PK_NAME", String.class},
+        new Object[] {"DEFERRABILITY", Short.class});
   }
 
   @Override
   public ResultSet getExportedKeys(String catalog, String schema, String table)
       throws SQLException {
-    ResultSetImpl resultSet =
-        new ResultSetImpl(
-            new Object[] {"PKTABLE_CAT", String.class},
-            new Object[] {"PKTABLE_SCHEM", String.class},
-            new Object[] {"PKTABLE_NAME", String.class},
-            new Object[] {"PKCOLUMN_NAME", String.class},
-            new Object[] {"FKTABLE_CAT", String.class},
-            new Object[] {"FKTABLE_SCHEM", String.class},
-            new Object[] {"FKTABLE_NAME", String.class},
-            new Object[] {"FKCOLUMN_NAME", String.class},
-            new Object[] {"KEY_SEQ", Short.class},
-            new Object[] {"UPDATE_RULE", Short.class},
-            new Object[] {"DELETE_RULE", Short.class},
-            new Object[] {"FK_NAME", String.class},
-            new Object[] {"PK_NAME", String.class},
-            new Object[] {"DEFERRABILITY", Short.class});
-    return resultSet;
+    return new ResultSetImpl(
+        new Object[] {"PKTABLE_CAT", String.class},
+        new Object[] {"PKTABLE_SCHEM", String.class},
+        new Object[] {"PKTABLE_NAME", String.class},
+        new Object[] {"PKCOLUMN_NAME", String.class},
+        new Object[] {"FKTABLE_CAT", String.class},
+        new Object[] {"FKTABLE_SCHEM", String.class},
+        new Object[] {"FKTABLE_NAME", String.class},
+        new Object[] {"FKCOLUMN_NAME", String.class},
+        new Object[] {"KEY_SEQ", Short.class},
+        new Object[] {"UPDATE_RULE", Short.class},
+        new Object[] {"DELETE_RULE", Short.class},
+        new Object[] {"FK_NAME", String.class},
+        new Object[] {"PK_NAME", String.class},
+        new Object[] {"DEFERRABILITY", Short.class});
   }
 
   @Override
@@ -1038,23 +1031,21 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
       String foreignSchema,
       String foreignTable)
       throws SQLException {
-    ResultSetImpl resultSet =
-        new ResultSetImpl(
-            new Object[] {"PKTABLE_CAT", String.class},
-            new Object[] {"PKTABLE_SCHEM", String.class},
-            new Object[] {"PKTABLE_NAME", String.class},
-            new Object[] {"PKCOLUMN_NAME", String.class},
-            new Object[] {"FKTABLE_CAT", String.class},
-            new Object[] {"FKTABLE_SCHEM", String.class},
-            new Object[] {"FKTABLE_NAME", String.class},
-            new Object[] {"FKCOLUMN_NAME", String.class},
-            new Object[] {"KEY_SEQ", Short.class},
-            new Object[] {"UPDATE_RULE", Short.class},
-            new Object[] {"DELETE_RULE", Short.class},
-            new Object[] {"FK_NAME", String.class},
-            new Object[] {"PK_NAME", String.class},
-            new Object[] {"DEFERRABILITY", Short.class});
-    return resultSet;
+    return new ResultSetImpl(
+        new Object[] {"PKTABLE_CAT", String.class},
+        new Object[] {"PKTABLE_SCHEM", String.class},
+        new Object[] {"PKTABLE_NAME", String.class},
+        new Object[] {"PKCOLUMN_NAME", String.class},
+        new Object[] {"FKTABLE_CAT", String.class},
+        new Object[] {"FKTABLE_SCHEM", String.class},
+        new Object[] {"FKTABLE_NAME", String.class},
+        new Object[] {"FKCOLUMN_NAME", String.class},
+        new Object[] {"KEY_SEQ", Short.class},
+        new Object[] {"UPDATE_RULE", Short.class},
+        new Object[] {"DELETE_RULE", Short.class},
+        new Object[] {"FK_NAME", String.class},
+        new Object[] {"PK_NAME", String.class},
+        new Object[] {"DEFERRABILITY", Short.class});
   }
 
   @Override
@@ -1176,22 +1167,20 @@ public class XlsDatabaseMetaData implements DatabaseMetaData {
       String catalog, String schema, String table, boolean unique, boolean approximate)
       throws SQLException {
 
-    ResultSetImpl resultSet =
-        new ResultSetImpl(
-            new Object[] {"TABLE_CAT", String.class},
-            new Object[] {"TABLE_SCHEM", String.class},
-            new Object[] {"TABLE_NAME", String.class},
-            new Object[] {"NON_UNIQUE", Boolean.class},
-            new Object[] {"INDEX_QUALIFIER", String.class},
-            new Object[] {"INDEX_NAME", String.class},
-            new Object[] {"TYPE", Short.class},
-            new Object[] {"ORDINAL_POSITION", Short.class},
-            new Object[] {"COLUMN_NAME", String.class},
-            new Object[] {"ASC_OR_DESC", String.class},
-            new Object[] {"CARDINALITY", String.class},
-            new Object[] {"PAGES", Integer.class},
-            new Object[] {"FILTER_CONDITION", String.class});
-    return resultSet;
+    return new ResultSetImpl(
+        new Object[] {"TABLE_CAT", String.class},
+        new Object[] {"TABLE_SCHEM", String.class},
+        new Object[] {"TABLE_NAME", String.class},
+        new Object[] {"NON_UNIQUE", Boolean.class},
+        new Object[] {"INDEX_QUALIFIER", String.class},
+        new Object[] {"INDEX_NAME", String.class},
+        new Object[] {"TYPE", Short.class},
+        new Object[] {"ORDINAL_POSITION", Short.class},
+        new Object[] {"COLUMN_NAME", String.class},
+        new Object[] {"ASC_OR_DESC", String.class},
+        new Object[] {"CARDINALITY", String.class},
+        new Object[] {"PAGES", Integer.class},
+        new Object[] {"FILTER_CONDITION", String.class});
   }
 
   @Override

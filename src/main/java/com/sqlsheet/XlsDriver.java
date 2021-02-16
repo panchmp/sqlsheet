@@ -153,9 +153,9 @@ public class XlsDriver implements java.sql.Driver {
       try {
         URI workbookUri = new URI(workbookUriStr);
         String scheme = workbookUri.getScheme();
-        if (scheme.equalsIgnoreCase("file")) {
+        if ("file".equalsIgnoreCase(scheme)) {
           workbookUrl = new URL(workbookUriStr);
-        } else if (scheme.equalsIgnoreCase("classpath")) {
+        } else if ("classpath".equalsIgnoreCase(scheme)) {
           workbookUrl = XlsDriver.class.getResource(workbookUri.getPath());
         }
       } catch (Exception ex) {
@@ -165,7 +165,7 @@ public class XlsDriver implements java.sql.Driver {
       // If streaming requested for read
       if (has(info, READ_STREAMING)) {
         return new XlsStreamConnection(workbookUrl);
-      } else if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
+      } else if ("file".equalsIgnoreCase(workbookUrl.getProtocol())) {
         // If streaming requested for write
         if (has(info, WRITE_STREAMING)) {
           return new XlsConnection(
@@ -183,7 +183,7 @@ public class XlsDriver implements java.sql.Driver {
   }
 
   boolean has(Properties info, String key) {
-    Object value = info.get(key);
+    Object value = info.getProperty(key);
     if (value == null) {
       return false;
     }
@@ -192,7 +192,7 @@ public class XlsDriver implements java.sql.Driver {
 
   private SXSSFWorkbook getOrCreateXlsxStream(URL workbookUrl)
       throws IOException {
-    if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
+    if ("file".equalsIgnoreCase(workbookUrl.getProtocol())) {
       File source = new File(workbookUrl.getPath());
       if (source.exists() || (source.length() != 0)) {
         logger.warn("File {} is not empty, and will parsed to memory!", source.getPath());
@@ -205,7 +205,7 @@ public class XlsDriver implements java.sql.Driver {
   }
 
   private Workbook getOrCreateWorkbook(URL workbookUrl) throws IOException {
-    if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
+    if ("file".equalsIgnoreCase(workbookUrl.getProtocol())) {
       File file = new File(workbookUrl.getPath());
       if (!file.exists() || (file.length() == 0)) {
         Workbook workbook;

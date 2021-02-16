@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
  * @author Klaus Hauschild
  * @since 6.6
  */
-public class dataTypeTest {
+public class DataTypeTest {
 
   @BeforeClass
   public static void loadDriverClass() throws ClassNotFoundException {

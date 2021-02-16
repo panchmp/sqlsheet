@@ -158,7 +158,7 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
     this.currentIteratorRowIndex = currentIteratorRowIndex;
   }
 
-  class CellValueHolder {
+  static class CellValueHolder {
     String stringValue;
     Double doubleValue;
     Date dateValue;

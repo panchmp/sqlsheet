@@ -37,8 +37,8 @@ import java.util.Map;
  */
 public class XlsStreamResultSet implements ResultSet {
 
-  AbstractXlsSheetIterator iterator;
-  private XlsStreamingResultSetMetaData metadata;
+  private final AbstractXlsSheetIterator iterator;
+  private final XlsStreamingResultSetMetaData metadata;
 
   public XlsStreamResultSet(String tableName, XlsStreamConnection connection) throws SQLException {
     try {

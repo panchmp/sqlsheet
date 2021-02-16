@@ -28,9 +28,9 @@ public class ResultSetImpl implements ResultSet {
   private boolean isClosed;
   private Object value = null;
   private int r = -1;
-  private final ArrayList<Object[]> rowData = new ArrayList<>();
-  private final LinkedList<String> columnNames = new LinkedList<>();
-  private final LinkedList<Class<?>> columnClasses = new LinkedList<>();
+  private final List<Object[]> rowData = new ArrayList<>();
+  private final List<String> columnNames = new LinkedList<>();
+  private final List<Class<?>> columnClasses = new LinkedList<>();
 
   public ResultSetImpl(Object[]... columns) throws SQLException {
     for (Object[] columnDefinition : columns)
@@ -177,8 +177,8 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
-    return getBigDecimal(columnIndex).setScale(scale);
+  public BigDecimal getBigDecimal(int columnIndex, int scale) {
+    return getBigDecimal(columnIndex, scale);
   }
 
   @Override
@@ -295,8 +295,8 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
-    return getBigDecimal(columnLabel).setScale(scale);
+  public BigDecimal getBigDecimal(String columnLabel, int scale) {
+    return getBigDecimal(columnLabel, scale);
   }
 
   @Override
