@@ -197,7 +197,7 @@ public class XlsxSheetIterator extends AbstractXlsSheetIterator {
 
     public void startElement(StartElement startElement) {
       Map<String, String> attributes = new HashMap<>();
-      Iterator attributesIterator = startElement.getAttributes();
+      Iterator<?> attributesIterator = startElement.getAttributes();
       while (attributesIterator.hasNext()) {
         Attribute attr = (Attribute) attributesIterator.next();
         attributes.put(attr.getName().getLocalPart(), attr.getValue());
