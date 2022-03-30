@@ -32,6 +32,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.sql.*;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Matcher;
 
@@ -66,15 +67,26 @@ public class XlsDriver implements java.sql.Driver {
   public static File getHomeFolder() {
     return new File(System.getProperty("user.home"));
   }
+  
+  /** @return are we running on Windows */
+  public static boolean isWindows() {
+      return System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win");
+  }
 
   /**
    * @param uriStr the String representation of an URI containing "~" or "${user.home}"
+   * @param replaceTilde whether or not to replace a ~ in the URI (can have side-effects on Windows)
    * @return the expanded URI (resolving "~" and "${user.home}" to the actual $HOME folder
    */
   public static String resolveHomeUriStr(String uriStr) {
     String homePathStr = getHomeFolder().toURI().getPath();
 
-    String expandedURIStr = uriStr.replaceFirst("~", Matcher.quoteReplacement(homePathStr));
+    String expandedURIStr;
+    if (!isWindows())
+    	expandedURIStr = uriStr.replaceFirst("~", Matcher.quoteReplacement(homePathStr));
+    else
+    	expandedURIStr = uriStr;
+    	
     expandedURIStr =
         expandedURIStr.replaceFirst("\\$\\{user.home\\}", Matcher.quoteReplacement(homePathStr));
 

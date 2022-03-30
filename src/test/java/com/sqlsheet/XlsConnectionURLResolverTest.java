@@ -116,6 +116,8 @@ public class XlsConnectionURLResolverTest {
 
   @Test
   public void connectionFromTildeHome() throws Exception {
+	    if (XlsDriver.isWindows()) return;
+	  
 		conn =
         DriverManager.getConnection(
             "jdbc:xls:file://~/"
