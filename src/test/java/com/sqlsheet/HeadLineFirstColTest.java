@@ -1,10 +1,10 @@
 package com.sqlsheet;
 
-import java.sql.DriverManager;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import java.sql.DriverManager;
 
 /**
  * @since 6.6
@@ -12,7 +12,7 @@ import org.junit.Test;
  */
 public class HeadLineFirstColTest {
 
-  @BeforeClass
+  @BeforeAll
   public static void loadDriverClass() throws ClassNotFoundException {
     Class.forName("com.sqlsheet.XlsDriver");
   }
@@ -25,28 +25,28 @@ public class HeadLineFirstColTest {
     final XlsStatement statement = (XlsStatement) connection.createStatement();
     final XlsResultSet resultSet = (XlsResultSet) statement.executeQuery("SELECT * FROM data");
     if (resultSet.next()) {
-      Assert.assertEquals("loan_1", resultSet.getString("id_instrument"));
-      Assert.assertEquals("loan", resultSet.getString("id_instrument_type"));
+      Assertions.assertEquals("loan_1", resultSet.getString("id_instrument"));
+      Assertions.assertEquals("loan", resultSet.getString("id_instrument_type"));
     }
 
     if (resultSet.next()) {
-      Assert.assertEquals("loan_2", resultSet.getString("id_instrument"));
-      Assert.assertEquals("loan", resultSet.getString("id_instrument_type"));
+      Assertions.assertEquals("loan_2", resultSet.getString("id_instrument"));
+      Assertions.assertEquals("loan", resultSet.getString("id_instrument_type"));
     }
 
     if (resultSet.next()) {
-      Assert.assertEquals("loan_3", resultSet.getString("id_instrument"));
-      Assert.assertEquals("loan", resultSet.getString("id_instrument_type"));
+      Assertions.assertEquals("loan_3", resultSet.getString("id_instrument"));
+      Assertions.assertEquals("loan", resultSet.getString("id_instrument_type"));
     }
 
     if (resultSet.next()) {
-      Assert.assertEquals("loan_4", resultSet.getString("id_instrument"));
-      Assert.assertEquals("loan", resultSet.getString("id_instrument_type"));
+      Assertions.assertEquals("loan_4", resultSet.getString("id_instrument"));
+      Assertions.assertEquals("loan", resultSet.getString("id_instrument_type"));
     }
 
     if (resultSet.next()) {
-      Assert.assertEquals("loan_5", resultSet.getString("id_instrument"));
-      Assert.assertEquals("loan", resultSet.getString("id_instrument_type"));
+      Assertions.assertEquals("loan_5", resultSet.getString("id_instrument"));
+      Assertions.assertEquals("loan", resultSet.getString("id_instrument_type"));
     }
 
     connection.close();

@@ -27,7 +27,9 @@ import java.util.Arrays;
 import java.util.Locale;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.DateFormatConverter;
-import org.junit.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -144,7 +146,7 @@ public class Issue13_NPEOnEmptyCells {
           }
           
           if (!rs.wasNull())
-            Assert.assertEquals("Column " + (c+1) + " "  + columnNames[c+1] + " fails.", valueByColumnIndex, valueByColumnLabel);
+            Assertions.assertEquals( valueByColumnIndex, valueByColumnLabel, "Column " + (c+1) + " "  + columnNames[c+1] + " fails.");
           
         }
         r++;
@@ -167,7 +169,7 @@ public class Issue13_NPEOnEmptyCells {
     }
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void loadDriverClass() throws ClassNotFoundException {
     Class.forName("com.sqlsheet.XlsDriver");
   }
@@ -209,7 +211,7 @@ public class Issue13_NPEOnEmptyCells {
           values.add(rs.wasNull() ? "" : value);
 
           if (r % 2 == 0)
-            Assert.assertTrue("Column " + columnNames[c] + " in row " + r + " should be NULL.", rs.wasNull());
+            Assertions.assertTrue( rs.wasNull(), "Column " + columnNames[c] + " in row " + r + " should be NULL.");
         }
         at.addRule();
         at.addRow(values);

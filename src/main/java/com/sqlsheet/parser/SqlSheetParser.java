@@ -29,7 +29,6 @@ import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.TimeValue;
 import net.sf.jsqlparser.expression.TimestampValue;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.ItemsList;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
@@ -40,11 +39,11 @@ import net.sf.jsqlparser.statement.select.AllColumns;
 import net.sf.jsqlparser.statement.select.FromItem;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectBody;
 import net.sf.jsqlparser.statement.select.SelectItem;
+import net.sf.jsqlparser.statement.select.Values;
 
 /**
- * Wrapper around the JSQLParser which does all of the real work. This class and the rest of the
+ * Wrapper around the JSQLParser which does all the real work. This class and the rest of the
  * interface in the package are here just to insulate the parent package from the particulars of a
  * particular parser.
  *
@@ -80,33 +79,29 @@ public class SqlSheetParser {
     //
     // SELECT
     //
-    if (statement instanceof Select) {
-      SelectBody body = ((Select) statement).getSelectBody();
-      if (!(body instanceof PlainSelect)) {
-        throw new SQLException("ORDER BY and UNION not supported on Excel sheets.");
-      }
-      final FromItem from = ((PlainSelect) body).getFromItem();
+    if (statement instanceof PlainSelect) {
+      PlainSelect select = (PlainSelect) statement;
+      final FromItem from = select.getFromItem();
 
       if (!(from instanceof Table)) {
         throw new SQLException("Subselects not supported on Excel sheets.");
       }
-      if (((PlainSelect) body).getDistinct() != null) {
+      if (select.getDistinct() != null) {
         throw new SQLException("DISTINCT not supported on Excel sheets.");
       }
-      if (((PlainSelect) body).getIntoTables() != null) {
+      if (select.getIntoTables() != null) {
         throw new SQLException("SELECT INTO not supported on Excel sheets.");
       }
-      if (((PlainSelect) body).getHaving() != null) {
+      if (select.getHaving() != null) {
         throw new SQLException("HAVING not supported on Excel sheets.");
       }
-      if (((PlainSelect) body).getGroupBy() != null) {
+      if (select.getGroupBy() != null) {
         throw new SQLException("GROUP BY not supported on Excel sheets.");
       }
-      List<SelectItem> selectItems = ((PlainSelect) body).getSelectItems();
-      if (selectItems == null
-          || selectItems.isEmpty()
-          || selectItems.size() > 1
-          || !(selectItems.get(0) instanceof AllColumns)) {
+      List<SelectItem<?>> selectItems = select.getSelectItems();
+      if (selectItems==null
+              || selectItems.size()!=1
+              || !(selectItems.get(0).getExpression() instanceof AllColumns)) {
         throw new SQLException("Only 'SELECT *' is supported on Excel sheets");
       }
       return new SelectStarStatement() {
@@ -147,19 +142,19 @@ public class SqlSheetParser {
     // INSERT INTO
     //
     if (statement instanceof Insert) {
-      final String table = prepareTableIdentifier(((Insert) statement).getTable().getName());
-      List<net.sf.jsqlparser.schema.Column> cols = ((Insert) statement).getColumns();
-      final List<String> names = new ArrayList<String>();
+      Insert insert = (Insert) statement;
+      final String table = prepareTableIdentifier(insert.getTable().getName());
+      List<net.sf.jsqlparser.schema.Column> cols = insert.getColumns();
+      final List<String> names = new ArrayList<>();
       final List<Object> values = new ArrayList<Object>();
       for (net.sf.jsqlparser.schema.Column cd : cols) {
         names.add(prepareColumnIdentifier(stripUnderscores(cd.getColumnName())));
       }
-      ItemsList ilist = ((Insert) statement).getItemsList();
-      if (!(ilist instanceof ExpressionList)) {
-        throw new SQLException("INSERT from subselect not supported with excel sheets");
+      if (!(insert.getSelect() instanceof Values)) {
+        throw new SQLException("INSERT must have a VALUES clause and sub-selects are not supported with excel sheets");
       }
-      List<Expression> exps = ((ExpressionList) ilist).getExpressions();
-      for (Expression exp : exps) {
+      Values valuesClause = insert.getValues();
+      for (Expression exp : valuesClause.getExpressions()) {
         // java.lang.String
         if (exp instanceof StringValue) {
           values.add(((StringValue) exp).getValue());

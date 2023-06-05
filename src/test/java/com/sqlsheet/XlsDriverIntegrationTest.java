@@ -1,8 +1,5 @@
 package com.sqlsheet;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -14,10 +11,9 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import scriptella.configuration.ConfigurationFactory;
 import scriptella.execution.EtlExecutor;
 import scriptella.execution.EtlExecutorException;
@@ -29,25 +25,6 @@ public class XlsDriverIntegrationTest {
     private static final String testExtractXlsFile   = "extracttest.xls";
     private static final String testExtractXlsxFile  = "extracttest.xlsx";
 
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
-    @Test
-    public void testGetMinorVersion() throws Exception {
-
-    }
-
-    @Before
-    public void init() throws Exception {
-    }
-
     @Test
     public void testExctractFromXls() throws Exception {
         Map<String, Object> params = new HashMap<String, Object>();
@@ -56,14 +33,14 @@ public class XlsDriverIntegrationTest {
 
         Map<String, Object> results = executeEtlScriptWithResult(ClassLoader.getSystemResource(extractXlsScriptFile), params);
 
-        assertNotNull(results.get("results"));
+        Assertions.assertNotNull(results.get("results"));
         List<ResultMock> results1 = (List<ResultMock>) results.get("results");
-        assertNotNull(results1);
-        assertEquals(3, results1.size());
+        Assertions.assertNotNull(results1);
+        Assertions.assertEquals(3, results1.size());
         for (ResultMock customBean : results1) {
-            assertNotNull(customBean.getDate());
-            assertNotNull(customBean.getID());
-            assertNotNull(customBean.getName());
+            Assertions.assertNotNull(customBean.getDate());
+            Assertions.assertNotNull(customBean.getID());
+            Assertions. assertNotNull(customBean.getName());
         }
     }
 
@@ -89,10 +66,10 @@ public class XlsDriverIntegrationTest {
 
         // script must fill results parameter
         results = executeEtlScriptWithResult(ClassLoader.getSystemResource(extractXlsScriptFile), params);
-        assertNotNull(results.get("results"));
+        Assertions.assertNotNull(results.get("results"));
         List<ResultMock> results1 = (List<ResultMock>) results.get("results");
-        assertNotNull(results1);
-        assertEquals(3, results1.size());
+        Assertions.assertNotNull(results1);
+        Assertions.assertEquals(3, results1.size());
     }
 
     @Test
@@ -101,10 +78,10 @@ public class XlsDriverIntegrationTest {
         params.put("filePath", dumpExcelToTempFile(testExtractXlsxFile, ".xlsx").toString());
         params.put("params", params);
         Map<String, Object> results = executeEtlScriptWithResult(ClassLoader.getSystemResource(extractXlsScriptFile), params);
-        assertNotNull(results.get("results"));
+        Assertions.assertNotNull(results.get("results"));
         List<ResultMock> results1 = (List<ResultMock>) results.get("results");
-        assertNotNull(results1);
-        assertEquals(3, results1.size());
+        Assertions.assertNotNull(results1);
+        Assertions.assertEquals(3, results1.size());
     }
 
     @Test
@@ -130,10 +107,10 @@ public class XlsDriverIntegrationTest {
         params.put("params", params);
         // script must fill results parameter
         Map<String, Object> results1 = executeEtlScriptWithResult(ClassLoader.getSystemResource(extractXlsScriptFile), params);
-        assertNotNull(results1.get("results"));
+        Assertions.assertNotNull(results1.get("results"));
         List<ResultMock> results2 = (List<ResultMock>) results1.get("results");
-        assertNotNull(results2);
-        assertEquals(3, results2.size());
+        Assertions.assertNotNull(results2);
+        Assertions.assertEquals(3, results2.size());
     }
 
     private URL dumpExcelToTempFile(String resource, String format) {

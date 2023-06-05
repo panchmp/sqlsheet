@@ -24,6 +24,12 @@ import java.util.Locale;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.DateFormatConverter;
 import org.junit.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /** @author Andreas Reichel <andreas@manticore-projects.com> */
 public class XlsConnectionURLResolverTest {
@@ -89,15 +95,12 @@ public class XlsConnectionURLResolverTest {
     
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void loadDriverClass() throws ClassNotFoundException {
     Class.forName("com.sqlsheet.XlsDriver");
   }
 
-  @Before
-  public void setUp() {}
-
-  @After
+  @AfterEach
   public void tearDown() {
     try {
       if (conn != null && !conn.isClosed()) {
@@ -124,7 +127,7 @@ public class XlsConnectionURLResolverTest {
     try {
       statement = conn.createStatement();
       resultSet = statement.executeQuery("SELECT * FROM TestSheet1");
-      Assert.assertTrue("Recordset should have records", resultSet.next());
+      Assertions.assertTrue(resultSet.next(), "Recordset should have records");
 
     } finally {
       if (resultSet != null && !resultSet.isClosed())
@@ -168,7 +171,7 @@ public class XlsConnectionURLResolverTest {
     try {
       statement = conn.createStatement();
       resultSet = statement.executeQuery("SELECT * FROM TestSheet1");
-      Assert.assertTrue("Recordset should have records", resultSet.next());
+      Assertions.assertTrue(resultSet.next(), "Recordset should have records");
 
     } finally {
       if (resultSet != null && !resultSet.isClosed())
@@ -207,7 +210,7 @@ public class XlsConnectionURLResolverTest {
     try {
       statement = conn.createStatement();
       resultSet = statement.executeQuery("SELECT * FROM headline");
-      Assert.assertTrue("Recordset should have records", resultSet.next());
+      Assertions.assertTrue(resultSet.next(), "Recordset should have records");
 
     } finally {
       if (resultSet != null && !resultSet.isClosed())

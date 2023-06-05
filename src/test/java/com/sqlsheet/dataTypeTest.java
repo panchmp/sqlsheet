@@ -1,14 +1,14 @@
 package com.sqlsheet;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
-
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * @author Klaus Hauschild
@@ -16,7 +16,7 @@ import org.junit.Test;
  */
 public class dataTypeTest {
 
-  @BeforeClass
+  @BeforeAll
   public static void loadDriverClass() throws ClassNotFoundException {
     Class.forName("com.sqlsheet.XlsDriver");
   }
@@ -28,22 +28,22 @@ public class dataTypeTest {
                              "jdbc:xls:file:" + ClassLoader.getSystemResource("dataType.xlsx").getFile() + "?readStreaming=no");
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM datatype");
-    Assert.assertEquals("We expect 7 columns", 7, results.getMetaData().getColumnCount());
+    Assertions.assertEquals( 7, results.getMetaData().getColumnCount(), "We expect 7 columns");
 
     ResultSetMetaData resultSetMetaData = results.getMetaData();
 
     // Data Type
-    Assert.assertEquals("We expect for the first VARCHAR", "VARCHAR", resultSetMetaData.getColumnTypeName(1));
-    Assert.assertEquals("We expect for the second DATE", "DATE", resultSetMetaData.getColumnTypeName(2));
-    Assert.assertEquals("We expect for the third DOUBLE", "DOUBLE", resultSetMetaData.getColumnTypeName(3));
+    Assertions.assertEquals("VARCHAR", resultSetMetaData.getColumnTypeName(1), "We expect for the first VARCHAR");
+    Assertions.assertEquals("DATE", resultSetMetaData.getColumnTypeName(2), "We expect for the second DATE");
+    Assertions.assertEquals("DOUBLE", resultSetMetaData.getColumnTypeName(3), "We expect for the third DOUBLE");
 
     // Mixed data type
-    Assert.assertEquals("We expect for the fourth VARCHAR", "VARCHAR", resultSetMetaData.getColumnTypeName(4));
+    Assertions.assertEquals("VARCHAR", resultSetMetaData.getColumnTypeName(4), "We expect for the fourth VARCHAR");
 
     // Null first
-    Assert.assertEquals("We expect for the fifth  DATE", "DATE", resultSetMetaData.getColumnTypeName(5));
-    Assert.assertEquals("We expect for the sixth DOUBLE", "DOUBLE", resultSetMetaData.getColumnTypeName(6));
-    Assert.assertEquals("We expect for the seventh VARCHAR", "VARCHAR", resultSetMetaData.getColumnTypeName(7));
+    Assertions.assertEquals("DATE", resultSetMetaData.getColumnTypeName(5), "We expect for the fifth  DATE");
+    Assertions.assertEquals("DOUBLE", resultSetMetaData.getColumnTypeName(6), "We expect for the sixth DOUBLE");
+    Assertions.assertEquals("VARCHAR", resultSetMetaData.getColumnTypeName(7), "We expect for the seventh VARCHAR");
 
     conn.close();
   }

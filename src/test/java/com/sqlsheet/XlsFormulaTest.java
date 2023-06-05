@@ -24,6 +24,11 @@ import java.util.Locale;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.DateFormatConverter;
 import org.junit.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /** @author Andreas Reichel <andreas@manticore-projects.com> */
 public class XlsFormulaTest {
@@ -94,15 +99,15 @@ public class XlsFormulaTest {
                 + DEFAULT_FIRST_COL);
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void loadDriverClass() throws ClassNotFoundException {
     Class.forName("com.sqlsheet.XlsDriver");
   }
 
-  @Before
+  @BeforeEach
   public void setUp() {}
 
-  @After
+  @AfterEach
   public void tearDown() {
     try {
       if (conn != null && !conn.isClosed()) {
@@ -122,13 +127,13 @@ public class XlsFormulaTest {
       resultSet = statement.executeQuery("SELECT * FROM TestSheet1");
       int r = 0;
       while (resultSet.next()) {
-        Assert.assertEquals(
+        Assertions.assertEquals(
             resultSet.getDouble(columnNames[0]) + resultSet.getDouble(columnNames[1]),
             resultSet.getDouble(columnNames[2]),
             1E-12);
         r++;
       }
-      Assert.assertEquals(cellValues.length, r);
+      Assertions.assertEquals(cellValues.length, r);
 
     } finally {
       if (resultSet != null && !resultSet.isClosed())

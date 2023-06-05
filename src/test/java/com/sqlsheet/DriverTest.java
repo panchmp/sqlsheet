@@ -1,5 +1,9 @@
 package com.sqlsheet;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,13 +13,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class DriverTest {
 
-  @BeforeClass
+  @BeforeAll
   public static void loadDriverClass() throws ClassNotFoundException {
     Class.forName("com.sqlsheet.XlsDriver");
   }
@@ -112,19 +113,19 @@ public class DriverTest {
                        "jdbc:xls:file:" + ClassLoader.getSystemResource("bug7.xlsx").getFile() + "?readStreaming=true");
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM bug7");
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 13L);
-    Assert.assertEquals(results.next(), true);
-    Assert.assertEquals(results.next(), true);
-    Assert.assertEquals(results.getString("Zone ID"), results.getString(1));
+    Assertions.assertEquals(results.getMetaData().getColumnCount(), 13L);
+    Assertions.assertTrue(results.next());
+    Assertions.assertTrue(results.next());
+    Assertions.assertEquals(results.getString("Zone ID"), results.getString(1));
 
     conn = DriverManager
     .getConnection("jdbc:xls:file:" + ClassLoader.getSystemResource("bug7.xlsx").getFile() + "?readStreaming=no");
     stmt = conn.createStatement();
     results = stmt.executeQuery("SELECT * FROM bug7");
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 13L);
-    Assert.assertEquals(results.next(), true);
-    Assert.assertEquals(results.next(), true);
-    Assert.assertEquals(results.getLong("Zone ID"), results.getLong(1));
+    Assertions.assertEquals(results.getMetaData().getColumnCount(), 13L);
+    Assertions.assertTrue(results.next());
+    Assertions.assertTrue(results.next());
+    Assertions.assertEquals(results.getLong("Zone ID"), results.getLong(1));
   }
 
   @Test
@@ -134,27 +135,27 @@ public class DriverTest {
                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile() + "?readStreaming=true");
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery("SELECT * FROM SHEET1");
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
+    Assertions.assertEquals(results.getMetaData().getColumnCount(), 3L);
 
     ResultSetMetaData resultSetMetaData = results.getMetaData();
-    Assert.assertEquals("java.lang.Double", resultSetMetaData.getColumnTypeName(1));
-    Assert.assertEquals("java.lang.String", resultSetMetaData.getColumnTypeName(2));
-    Assert.assertEquals("java.util.Date", resultSetMetaData.getColumnTypeName(3));
+    Assertions.assertEquals("java.lang.Double", resultSetMetaData.getColumnTypeName(1));
+    Assertions.assertEquals("java.lang.String", resultSetMetaData.getColumnTypeName(2));
+    Assertions.assertEquals("java.util.Date", resultSetMetaData.getColumnTypeName(3));
 
   }
 
   private void processBaseResultset(Connection conn, String sql) throws SQLException {
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery(sql);
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
-    Long count = 0L;
+    Assertions.assertEquals(results.getMetaData().getColumnCount(), 3L);
+    long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(Double.class, results.getObject(1).getClass());
-      Assert.assertEquals(String.class, results.getObject(2).getClass());
-      Assert.assertEquals(java.sql.Date.class, results.getObject(3).getClass());
+      Assertions.assertEquals(Double.class, results.getObject(1).getClass());
+      Assertions.assertEquals(String.class, results.getObject(2).getClass());
+      Assertions.assertEquals(java.sql.Date.class, results.getObject(3).getClass());
       count++;
     }
-    Assert.assertEquals(count.longValue(), 3L);
+    Assertions.assertEquals(count, 3L);
     results.close();
     stmt.close();
     conn.close();
@@ -163,15 +164,15 @@ public class DriverTest {
   private void processBaseStreamingResultset(Connection conn, String sql) throws SQLException {
     Statement stmt = conn.createStatement();
     ResultSet results = stmt.executeQuery(sql);
-    Assert.assertEquals(results.getMetaData().getColumnCount(), 3L);
-    Long count = 0L;
+    Assertions.assertEquals(results.getMetaData().getColumnCount(), 3L);
+    long count = 0L;
     while (results.next()) {
-      Assert.assertEquals(Double.class, results.getObject(1).getClass());
-      Assert.assertEquals(String.class, results.getObject(2).getClass());
-      Assert.assertEquals(java.util.Date.class, results.getObject(3).getClass());
+      Assertions.assertEquals(Double.class, results.getObject(1).getClass());
+      Assertions.assertEquals(String.class, results.getObject(2).getClass());
+      Assertions.assertEquals(java.util.Date.class, results.getObject(3).getClass());
       count++;
     }
-    Assert.assertEquals(count.longValue(), 3L);
+    Assertions.assertEquals(count, 3L);
     results.close();
     stmt.close();
     conn.close();

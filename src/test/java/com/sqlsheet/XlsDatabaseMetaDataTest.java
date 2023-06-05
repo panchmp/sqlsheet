@@ -26,6 +26,11 @@ import java.util.Locale;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.DateFormatConverter;
 import org.junit.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -98,16 +103,16 @@ public class XlsDatabaseMetaDataTest {
     metaData = conn.getMetaData();
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void loadDriverClass() throws ClassNotFoundException {
     Class.forName("com.sqlsheet.XlsDriver");
   }
 
-  @Before
+  @BeforeEach
   public void setUp() {
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
   }
 
@@ -636,7 +641,7 @@ public class XlsDatabaseMetaDataTest {
       r++;
     }
     rs.close();
-    Assert.assertEquals("Number of found Catalogues", 0, r);
+    Assertions.assertEquals( 0, r, "Number of found Catalogues");
     assert (catalogName == null);
   }
 
@@ -689,7 +694,7 @@ public class XlsDatabaseMetaDataTest {
 
     System.out.println(at.render());
 
-    Assert.assertEquals("Numbers of Columns in Table", columnNames.length, r);
+    Assertions.assertEquals( columnNames.length, r, "Numbers of Columns in Table");
   }
 
   @Test
