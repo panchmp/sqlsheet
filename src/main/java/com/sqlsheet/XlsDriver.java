@@ -64,71 +64,63 @@ public class XlsDriver implements java.sql.Driver {
     }
   }
 
-	@Override
+  @Override
   public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) {
     return new DriverPropertyInfo[0];
   }
-	
-	/**
-	 *
-	 * @return the actual $HOME folder of the user
-	 */
-	public static File getHomeFolder() {
-		return new File( System.getProperty("user.home"));
-	}
 
-	/**
-	 *
-	 * @param uriStr the String representation of an URI containing "~" or "${user.home}" 
-	 * @return the expanded URI (resolving "~" and "${user.home}" to the actual $HOME folder
-	 */
-	public static String resolveHomeUriStr(String uriStr) {
+  /** @return the actual $HOME folder of the user */
+  public static File getHomeFolder() {
+    return new File(System.getProperty("user.home"));
+  }
+
+  /**
+   * @param uriStr the String representation of an URI containing "~" or "${user.home}"
+   * @return the expanded URI (resolving "~" and "${user.home}" to the actual $HOME folder
+   */
+  public static String resolveHomeUriStr(String uriStr) {
     String homePathStr = getHomeFolder().toURI().getPath();
 
     String expandedURIStr = uriStr.replaceFirst("~", Matcher.quoteReplacement(homePathStr));
-    expandedURIStr = expandedURIStr.replaceFirst("\\$\\{user.home\\}", Matcher.quoteReplacement(homePathStr));
+    expandedURIStr =
+        expandedURIStr.replaceFirst("\\$\\{user.home\\}", Matcher.quoteReplacement(homePathStr));
 
     return expandedURIStr;
   }
 
-	/**
-     * Attempts to make a database connection to the given URL.
-     * The driver should return "null" if it realizes it is the wrong kind
-     * of driver to connect to the given URL.  This will be common, as when
-     * the JDBC driver manager is asked to connect to a given URL it passes
-     * the URL to each loaded driver in turn.
-     *
-     * <P>The driver should throw an <code>SQLException</code> if it is the right
-     * driver to connect to the given URL but has trouble connecting to
-     * the database.
-		 * 
-		 * <p>The {@code url} should point to a file or a resource in the class path.</p>
-		 * <p>Valid samples are:</p>
-		 * <ul>
-		 * <li>jdbc:xls:file://${user.home}/dataSource.xlsx</li>
-		 * <li>jdbc:xls:file://~/dataSource.xlsx</li>
-		 * <li>jdbc:xls:resource:/com/sqlsheet/dataSource.xlsx</li>
-		 * </ul>
-     *
-     * <P>The {@code Properties} argument can be used to pass
-     * arbitrary string tag/value pairs as connection arguments.
-     * Normally at least "user" and "password" properties should be
-     * included in the {@code Properties} object.
-     * <p>
-     * <B>Note:</B> If a property is specified as part of the {@code url} and
-     * is also specified in the {@code Properties} object, it is
-     * implementation-defined as to which value will take precedence. For
-     * maximum portability, an application should only specify a property once.
-     *
-     * @param url the URL of the database to which to connect
-     * @param info a list of arbitrary string tag/value pairs as
-     * connection arguments. Normally at least a "user" and
-     * "password" property should be included.
-     * @return a <code>Connection</code> object that represents a
-     *         connection to the URL
-     * @exception SQLException if a database access error occurs or the url is
-     * {@code null}
-     */
+  /**
+   * Attempts to make a database connection to the given URL. The driver should return "null" if it
+   * realizes it is the wrong kind of driver to connect to the given URL. This will be common, as
+   * when the JDBC driver manager is asked to connect to a given URL it passes the URL to each
+   * loaded driver in turn.
+   *
+   * <p>The driver should throw an <code>SQLException</code> if it is the right driver to connect to
+   * the given URL but has trouble connecting to the database.
+   *
+   * <p>The {@code url} should point to a file or a resource in the class path.
+   *
+   * <p>Valid samples are:
+   *
+   * <ul>
+   *   <li>jdbc:xls:file://${user.home}/dataSource.xlsx
+   *   <li>jdbc:xls:file://~/dataSource.xlsx
+   *   <li>jdbc:xls:resource:/com/sqlsheet/dataSource.xlsx
+   * </ul>
+   *
+   * <p>The {@code Properties} argument can be used to pass arbitrary string tag/value pairs as
+   * connection arguments. Normally at least "user" and "password" properties should be included in
+   * the {@code Properties} object.
+   *
+   * <p><B>Note:</B> If a property is specified as part of the {@code url} and is also specified in
+   * the {@code Properties} object, it is implementation-defined as to which value will take
+   * precedence. For maximum portability, an application should only specify a property once.
+   *
+   * @param url the URL of the database to which to connect
+   * @param info a list of arbitrary string tag/value pairs as connection arguments. Normally at
+   *     least a "user" and "password" property should be included.
+   * @return a <code>Connection</code> object that represents a connection to the URL
+   * @exception SQLException if a database access error occurs or the url is {@code null}
+   */
   public Connection connect(String url, Properties info) throws SQLException {
     if (url == null) throw new IllegalArgumentException("Null url");
     if (!acceptsURL(url)) return null; // why is this necessary?
@@ -162,21 +154,21 @@ public class XlsDriver implements java.sql.Driver {
       url = url.substring(0, questionIndex);
     }
     try {
-			String workbookUriStr = url.substring(URL_SCHEME.length());
-			workbookUriStr = resolveHomeUriStr(workbookUriStr);
-			URL workbookUrl=null;
-			try {
-				URI workbookUri = new URI(workbookUriStr);
-				String scheme = workbookUri.getScheme();
-				if (scheme.equalsIgnoreCase("file")) {
-					workbookUrl = new URL(workbookUriStr);
-				} else if (scheme.equalsIgnoreCase("classpath")) {
-					workbookUrl = XlsDriver.class.getResource(workbookUri.getPath());
-				}
-			} catch (Exception ex) {
-				workbookUrl = new URL(workbookUriStr);
-			}
-			
+      String workbookUriStr = url.substring(URL_SCHEME.length());
+      workbookUriStr = resolveHomeUriStr(workbookUriStr);
+      URL workbookUrl = null;
+      try {
+        URI workbookUri = new URI(workbookUriStr);
+        String scheme = workbookUri.getScheme();
+        if (scheme.equalsIgnoreCase("file")) {
+          workbookUrl = new URL(workbookUriStr);
+        } else if (scheme.equalsIgnoreCase("classpath")) {
+          workbookUrl = XlsDriver.class.getResource(workbookUri.getPath());
+        }
+      } catch (Exception ex) {
+        workbookUrl = new URL(workbookUriStr);
+      }
+
       // If streaming requested for read
       if (has(info, READ_STREAMING)) {
         return new XlsStreamConnection(workbookUrl);
@@ -259,7 +251,7 @@ public class XlsDriver implements java.sql.Driver {
   }
 
   public boolean jdbcCompliant() { // LOLZ!
-    return false;
+    return true;
   }
 
   public int getMajorVersion() {
