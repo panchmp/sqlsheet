@@ -236,64 +236,17 @@ jacocoTestCoverageVerification {
         rule {
             //element = 'CLASS'
             limit {
-                //@todo: temporarily reduced it 80%, we need to bring that back to 84% accepting the Keywords PR
                 minimum = 0.80
             }
-            excludes = [
-                    'net.sf.jsqlparser.util.validation.*',
-                    'net.sf.jsqlparser.**.*Adapter',
-                    'net.sf.jsqlparser.parser.JJTCCJSqlParserState',
-                    'net.sf.jsqlparser.parser.TokenMgrError',
-                    'net.sf.jsqlparser.parser.StreamProvider',
-                    'net.sf.jsqlparser.parser.CCJSqlParserTokenManager',
-                    'net.sf.jsqlparser.parser.ParseException',
-                    'net.sf.jsqlparser.parser.SimpleNode',
-                    'net.sf.jsqlparser.parser.SimpleCharStream',
-                    'net.sf.jsqlparser.parser.StringProvider',
-            ]
         }
         rule {
             //element = 'CLASS'
             limit {
                 counter = 'LINE'
                 value = 'MISSEDCOUNT'
-
-                //@todo: temporarily increased to 7000, we need to bring that down to 5500 after accepting the Keywords PR
                 maximum = 7000
             }
-            excludes = [
-                    'net.sf.jsqlparser.util.validation.*',
-                    'net.sf.jsqlparser.**.*Adapter',
-                    'net.sf.jsqlparser.parser.JJTCCJSqlParserState',
-                    'net.sf.jsqlparser.parser.TokenMgrError',
-                    'net.sf.jsqlparser.parser.StreamProvider',
-                    'net.sf.jsqlparser.parser.CCJSqlParserTokenManager',
-                    'net.sf.jsqlparser.parser.ParseException',
-                    'net.sf.jsqlparser.parser.SimpleNode',
-                    'net.sf.jsqlparser.parser.SimpleCharStream',
-                    'net.sf.jsqlparser.parser.StringProvider',
-            ]
         }
-//        rule {
-//            element = 'CLASS'
-//            limit {
-//                counter = 'LINE'
-//                value = 'MISSEDRATIO'
-//                maximum = 0.3
-//            }
-//            excludes = [
-//                    'net.sf.jsqlparser.util.validation.*',
-//                    'net.sf.jsqlparser.**.*Adapter',
-//                    'net.sf.jsqlparser.parser.JJTCCJSqlParserState',
-//                    'net.sf.jsqlparser.parser.TokenMgrError',
-//                    'net.sf.jsqlparser.parser.StreamProvider',
-//                    'net.sf.jsqlparser.parser.CCJSqlParserTokenManager',
-//                    'net.sf.jsqlparser.parser.ParseException',
-//                    'net.sf.jsqlparser.parser.SimpleNode',
-//                    'net.sf.jsqlparser.parser.SimpleCharStream',
-//                    'net.sf.jsqlparser.parser.StringProvider',
-//            ]
-//        }
     }
 }
 
@@ -308,7 +261,7 @@ spotbugsMain {
 }
 
 spotbugs {
-    // fail only on P1 and without the net.sf.jsqlparser.parser.*
+    // fail only on P1
     excludeFilter = file("config/spotbugs/spotBugsExcludeFilter.xml")
 
     // do not run over the test, although we should do that eventually
@@ -316,9 +269,7 @@ spotbugs {
 }
 
 pmd {
-    consoleOutput = false
-    //toolVersion = "6.46.0"
-
+    consoleOutput = true
     sourceSets = [sourceSets.main]
 
     // clear the ruleset in order to use configured rules only

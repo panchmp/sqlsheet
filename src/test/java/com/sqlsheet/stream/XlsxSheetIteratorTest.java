@@ -10,11 +10,13 @@ public class XlsxSheetIteratorTest {
 
     @Test
     public void testMain() throws Exception {
-        XlsxSheetIterator xlsSheet = new XlsxSheetIterator(ClassLoader.getSystemResource("test.xlsx"), "2009");
+        XlsxSheetIterator xlsSheet =
+                new XlsxSheetIterator(ClassLoader.getSystemResource("test.xlsx"), "2009");
         Assertions.assertEquals(3, xlsSheet.getColumns().size());
         long counter = 0L;
         for (Object o : xlsSheet) {
-            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>) o;
+            List<XlsSheetIterator.CellValueHolder> rowValues =
+                    (List<XlsSheetIterator.CellValueHolder>) o;
             Assertions.assertEquals(3, rowValues.size());
             for (XlsSheetIterator.CellValueHolder value : rowValues) {
                 Assertions.assertNotNull(value.stringValue);
@@ -28,11 +30,13 @@ public class XlsxSheetIteratorTest {
 
     @Test
     public void testBigGrid() throws Exception {
-        XlsxSheetIterator xlsSheet = new XlsxSheetIterator(ClassLoader.getSystemResource("big-grid.xlsx"), "Big Grid");
+        XlsxSheetIterator xlsSheet =
+                new XlsxSheetIterator(ClassLoader.getSystemResource("big-grid.xlsx"), "Big Grid");
         Assertions.assertEquals(20, xlsSheet.getColumns().size());
         long counter = 0L;
         for (Object o : xlsSheet) {
-            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>) o;
+            List<XlsSheetIterator.CellValueHolder> rowValues =
+                    (List<XlsSheetIterator.CellValueHolder>) o;
             Assertions.assertEquals(20, rowValues.size());
             for (XlsSheetIterator.CellValueHolder value : rowValues) {
                 Assertions.assertNotNull(value.stringValue);
@@ -48,11 +52,13 @@ public class XlsxSheetIteratorTest {
 
     @Test
     public void testBugNo3() throws Exception {
-        XlsxSheetIterator xlsSheet = new XlsxSheetIterator(ClassLoader.getSystemResource("bug3.xlsx"), "bug3");
+        XlsxSheetIterator xlsSheet =
+                new XlsxSheetIterator(ClassLoader.getSystemResource("bug3.xlsx"), "bug3");
         Assertions.assertEquals(13, xlsSheet.getColumns().size());
         long counter = 0L;
         for (Object o : xlsSheet) {
-            List<XlsSheetIterator.CellValueHolder> rowValues = (List<XlsSheetIterator.CellValueHolder>) o;
+            List<XlsSheetIterator.CellValueHolder> rowValues =
+                    (List<XlsSheetIterator.CellValueHolder>) o;
             Assertions.assertEquals(13, rowValues.size());
             // for(XlsSheetIterator.CellValueHolder value : rowValues){
             // Assert.assertNotNull(value.stringValue);

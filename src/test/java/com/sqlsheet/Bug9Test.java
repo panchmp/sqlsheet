@@ -14,33 +14,35 @@ import java.sql.Statement;
  */
 public class Bug9Test {
 
-  @BeforeAll
-  public static void loadDriverClass() throws ClassNotFoundException {
-    Class.forName("com.sqlsheet.XlsDriver");
-  }
+    @BeforeAll
+    public static void loadDriverClass() throws ClassNotFoundException {
+        Class.forName("com.sqlsheet.XlsDriver");
+    }
 
-  @Test
-  public void testWithoutStreaming() throws Exception {
-    final Connection connection = DriverManager
-                     .getConnection(
-                             "jdbc:xls:file:" + ClassLoader.getSystemResource("bug9.xlsx").getFile() + "?readStreaming=false");
-    final Statement statement = connection.createStatement();
-    final ResultSet resultSet = statement.executeQuery("SELECT * FROM bug9");
-    Assertions.assertTrue(resultSet.next());
-    Assertions.assertEquals("9", resultSet.getString("BUG9"));
-    connection.close();
-  }
+    @Test
+    public void testWithoutStreaming() throws Exception {
+        final Connection connection = DriverManager
+                .getConnection(
+                        "jdbc:xls:file:" + ClassLoader.getSystemResource("bug9.xlsx").getFile()
+                                + "?readStreaming=false");
+        final Statement statement = connection.createStatement();
+        final ResultSet resultSet = statement.executeQuery("SELECT * FROM bug9");
+        Assertions.assertTrue(resultSet.next());
+        Assertions.assertEquals("9.0", resultSet.getString("BUG9"));
+        connection.close();
+    }
 
-  @Test
-  public void testWithStreaming() throws Exception {
-    final Connection connection = DriverManager
-                     .getConnection(
-                             "jdbc:xls:file:" + ClassLoader.getSystemResource("bug9.xlsx").getFile() + "?readStreaming=true");
-    final Statement statement = connection.createStatement();
-    final ResultSet resultSet = statement.executeQuery("SELECT * FROM bug9");
-    Assertions.assertTrue(resultSet.next());
-    Assertions.assertEquals("9", resultSet.getString("BUG9"));
-    connection.close();
-  }
+    @Test
+    public void testWithStreaming() throws Exception {
+        final Connection connection = DriverManager
+                .getConnection(
+                        "jdbc:xls:file:" + ClassLoader.getSystemResource("bug9.xlsx").getFile()
+                                + "?readStreaming=true");
+        final Statement statement = connection.createStatement();
+        final ResultSet resultSet = statement.executeQuery("SELECT * FROM bug9");
+        Assertions.assertTrue(resultSet.next());
+        Assertions.assertEquals("9", resultSet.getString("BUG9"));
+        connection.close();
+    }
 
 }

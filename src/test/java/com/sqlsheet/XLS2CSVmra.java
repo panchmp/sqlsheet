@@ -1,26 +1,18 @@
-/* ====================================================================
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-==================================================================== */
+/*
+ * ==================================================================== Licensed to the Apache
+ * Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership. The ASF
+ * licenses this file to You under the Apache License, Version 2.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License. ====================================================================
+ */
 package com.sqlsheet;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
 
 import org.apache.poi.hssf.eventusermodel.EventWorkbookBuilder.SheetRecordCollectingListener;
 import org.apache.poi.hssf.eventusermodel.FormatTrackingHSSFListener;
@@ -47,43 +39,51 @@ import org.apache.poi.hssf.record.StringRecord;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+
 /**
- * A XLS -> CSV processor, that uses the MissingRecordAware EventModel code to ensure it outputs all columns and rows.
- * 
+ * A XLS -> CSV processor, that uses the MissingRecordAware EventModel code to ensure it outputs all
+ * columns and rows.
+ *
  * @author Nick Burch
  */
 public class XLS2CSVmra implements HSSFListener {
-    String                                currentSheetName;
-    private int                           minColumns;
-    private POIFSFileSystem               fs;
-    private PrintStream                   output;
-    private int                           lastRowNumber;
-    private int                           lastColumnNumber;
-
-    /** Should we output the formula, or the value it has? */
-    private boolean                       outputFormulaValues = true;
-
-    /** For parsing Formulas */
+    private final int minColumns;
+    private final POIFSFileSystem fs;
+    private final PrintStream output;
+    /**
+     * Should we output the formula, or the value it has?
+     */
+    private final boolean outputFormulaValues = true;
+    private final ArrayList boundSheetRecords = new ArrayList();
+    String currentSheetName;
+    private int lastRowNumber;
+    private int lastColumnNumber;
+    /**
+     * For parsing Formulas
+     */
     private SheetRecordCollectingListener workbookBuildingListener;
-    private HSSFWorkbook                  stubWorkbook;
-
+    private HSSFWorkbook stubWorkbook;
     // Records we pick up as we process
-    private SSTRecord                     sstRecord;
-    private FormatTrackingHSSFListener    formatListener;
-
-    /** So we known which sheet we're on */
-    private int                           sheetIndex          = -1;
-    private BoundSheetRecord[]            orderedBSRs;
-    private ArrayList                     boundSheetRecords   = new ArrayList();
-
+    private SSTRecord sstRecord;
+    private FormatTrackingHSSFListener formatListener;
+    /**
+     * So we known which sheet we're on
+     */
+    private int sheetIndex = -1;
+    private BoundSheetRecord[] orderedBSRs;
     // For handling formulas with string results
-    private int                           nextRow;
-    private int                           nextColumn;
-    private boolean                       outputNextStringRecord;
+    private int nextRow;
+    private int nextColumn;
+    private boolean outputNextStringRecord;
 
     /**
      * Creates a new XLS -> CSV converter
-     * 
+     *
      * @param fs The POIFSFileSystem to process
      * @param output The PrintStream to output the CSV to
      * @param minColumns The minimum number of columns to output, or -1 for no minimum
@@ -96,7 +96,7 @@ public class XLS2CSVmra implements HSSFListener {
 
     /**
      * Creates a new XLS -> CSV converter
-     * 
+     *
      * @param filename The file to process
      * @param minColumns The minimum number of columns to output, or -1 for no minimum
      * @throws IOException
@@ -108,7 +108,8 @@ public class XLS2CSVmra implements HSSFListener {
 
     public static void main(String[] args) throws Exception {
         int minColumns = -1;
-        XLS2CSVmra xls2csv = new XLS2CSVmra(ClassLoader.getSystemResource("test.xls").getFile(), minColumns);
+        XLS2CSVmra xls2csv =
+                new XLS2CSVmra(ClassLoader.getSystemResource("test.xls").getFile(), minColumns);
         xls2csv.process();
     }
 
@@ -162,7 +163,8 @@ public class XLS2CSVmra implements HSSFListener {
                     }
                     currentSheetName = orderedBSRs[sheetIndex].getSheetname();
                     output.println();
-                    output.println(orderedBSRs[sheetIndex].getSheetname() + " [" + (sheetIndex + 1) + "]:");
+                    output.println(orderedBSRs[sheetIndex].getSheetname() + " [" + (sheetIndex + 1)
+                            + "]:");
                 }
                 break;
 
@@ -202,7 +204,8 @@ public class XLS2CSVmra implements HSSFListener {
                         thisStr = formatListener.formatNumberDateCell(frec);
                     }
                 } else {
-                    thisStr = '"' + HSSFFormulaParser.toFormulaString(stubWorkbook, frec.getParsedExpression()) + '"';
+                    thisStr = '"' + HSSFFormulaParser.toFormulaString(stubWorkbook,
+                            frec.getParsedExpression()) + '"';
                 }
                 break;
             case StringRecord.sid:
@@ -284,10 +287,12 @@ public class XLS2CSVmra implements HSSFListener {
         }
 
         // Update column and row count
-        if (thisRow > -1)
+        if (thisRow > -1) {
             lastRowNumber = thisRow;
-        if (thisColumn > -1)
+        }
+        if (thisColumn > -1) {
             lastColumnNumber = thisColumn;
+        }
 
         // Handle end of row
         if (record instanceof LastCellOfRowDummyRecord) {
@@ -297,7 +302,7 @@ public class XLS2CSVmra implements HSSFListener {
                 if (lastColumnNumber == -1) {
                     lastColumnNumber = 0;
                 }
-                for (int i = lastColumnNumber; i < (minColumns); i++) {
+                for (int i = lastColumnNumber; i < minColumns; i++) {
                     output.print(',');
                 }
             }

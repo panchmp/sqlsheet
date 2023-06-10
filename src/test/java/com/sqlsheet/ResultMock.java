@@ -7,9 +7,9 @@ public class ResultMock implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer           id;
-    private String            name;
-    private Date              date;
+    private Integer id;
+    private String name;
+    private Date date;
 
     public ResultMock() {
         id = 0;
