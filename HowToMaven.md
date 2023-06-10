@@ -1,5 +1,5 @@
 # How to setup maven dependencies
-## Introduction 
+## Introduction
 This page describes maven configuration required to get dependecies
 
 ## Details =

@@ -55,7 +55,8 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
 
     private static final Logger LOGGER = Logger.getLogger(XlsPreparedStatement.class.getName());
     private final ParsedStatement statement;
-    private final List<Object> parameters = new ArrayList<Object>();
+    private final List<Object> parameters = new ArrayList<>();
+    private boolean closeOnCompletion;
 
     public XlsPreparedStatement(XlsConnection conn, String sql) throws SQLException {
         super(conn);
@@ -71,12 +72,18 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     }
 
     public boolean execute() throws SQLException {
-        executeQuery();
+        ResultSet resultSet = executeQuery();
+        if (closeOnCompletion) {
+            resultSet.close();
+        }
         return true;
     }
 
     public int executeUpdate() throws SQLException {
-        executeQuery();
+        ResultSet resultSet = executeQuery();
+        if (closeOnCompletion) {
+            resultSet.close();
+        }
         return -1;
     }
 
@@ -191,8 +198,12 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
             throws SQLException {
         char[] buff = new char[length];
         try {
-            reader.read(buff, 0, length);
-            setString(parameterIndex, new String(buff));
+            int read = reader.read(buff, 0, length);
+            if (read == length) {
+                setString(parameterIndex, new String(buff));
+            } else {
+                throw new IOException("Could not read all bytes.");
+            }
         } catch (IOException e) {
             SQLException sqe = new SQLException(e.getMessage(), e);
             throw sqe;
@@ -348,10 +359,10 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     }
 
     public void closeOnCompletion() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.closeOnCompletion = true;
     }
 
     public boolean isCloseOnCompletion() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return closeOnCompletion;
     }
 }

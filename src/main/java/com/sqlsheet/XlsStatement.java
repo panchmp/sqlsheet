@@ -107,7 +107,10 @@ public class XlsStatement implements Statement {
         if (parsed instanceof DropTableStatement) {
             doDropTable((DropTableStatement) parsed);
         } else {
-            executeQuery(parsed);
+            ResultSet resultSet = executeQuery(parsed);
+            if (isCloseOnCompletion) {
+                resultSet.close();
+            }
         }
         return true;
     }
@@ -126,7 +129,10 @@ public class XlsStatement implements Statement {
 
     @Override
     public int executeUpdate(String sql) throws SQLException {
-        executeQuery(sql);
+        ResultSet rs = executeQuery(sql);
+        if (isCloseOnCompletion) {
+            rs.close();
+        }
         return 1;
     }
 

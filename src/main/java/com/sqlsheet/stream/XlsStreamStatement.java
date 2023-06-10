@@ -30,8 +30,9 @@ import java.sql.Statement;
  */
 public class XlsStreamStatement implements Statement {
 
-    XlsStreamConnection connection;
-    SqlSheetParser parser;
+    private final XlsStreamConnection connection;
+    private SqlSheetParser parser;
+    private boolean closeOneCompletion = false;
 
     public XlsStreamStatement(XlsStreamConnection c) {
         if (c == null) {
@@ -49,13 +50,19 @@ public class XlsStreamStatement implements Statement {
     }
 
     public boolean execute(String sql) throws SQLException {
-        executeQuery(sql);
+        ResultSet rs = executeQuery(sql);
+        if (closeOneCompletion) {
+            rs.close();
+        }
         return false;
     }
 
     public int executeUpdate(String sql) throws SQLException {
-        executeQuery(sql);
-        return 1;
+        ResultSet rs = executeQuery(sql);
+        if (closeOneCompletion) {
+            rs.close();
+        }
+        return -1;
     }
 
     public ResultSet executeQuery(String query) throws SQLException {
@@ -262,10 +269,10 @@ public class XlsStreamStatement implements Statement {
     }
 
     public void closeOnCompletion() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        closeOneCompletion = true;
     }
 
     public boolean isCloseOnCompletion() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return closeOneCompletion;
     }
 }

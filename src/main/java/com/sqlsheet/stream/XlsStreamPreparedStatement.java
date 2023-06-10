@@ -43,12 +43,13 @@ import java.util.List;
 /**
  * SqlSheet implementation of java.sql.PreparedStatement which uses steaming over XLS
  *
- * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
+ * @author <a href='<a href="http://code.google.com/p/sqlsheet">...</a>'>sqlsheet</a>
  */
 public class XlsStreamPreparedStatement extends XlsStreamStatement implements PreparedStatement {
 
     private final ParsedStatement statement;
     private final List<Object> parameters = new ArrayList<Object>();
+    private boolean closeOnCompletion;
 
     public XlsStreamPreparedStatement(XlsStreamConnection conn, String sql) throws SQLException {
         super(conn);
@@ -64,12 +65,18 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
     }
 
     public boolean execute() throws SQLException {
-        executeQuery();
+        ResultSet rs = executeQuery();
+        if (closeOnCompletion) {
+            rs.close();
+        }
         return true;
     }
 
     public int executeUpdate() throws SQLException {
-        executeQuery();
+        ResultSet rs = executeQuery();
+        if (closeOnCompletion) {
+            rs.close();
+        }
         return -1;
     }
 
@@ -152,8 +159,12 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
             throws SQLException {
         char[] buff = new char[length];
         try {
-            reader.read(buff, 0, length);
-            setString(parameterIndex, new String(buff));
+            int read = reader.read(buff, 0, length);
+            if (read == length) {
+                setString(parameterIndex, new String(buff));
+            } else {
+                throw new IOException("Not all bytes have been read.");
+            }
         } catch (IOException e) {
             SQLException sqe = new SQLException(e.getMessage(), e);
             throw sqe;
@@ -309,10 +320,10 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
     }
 
     public void closeOnCompletion() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        closeOnCompletion = true;
     }
 
     public boolean isCloseOnCompletion() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return closeOnCompletion;
     }
 }

@@ -175,8 +175,6 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.2</version>
         <configuration>
-        <verbose>true</verbose>
-        <fork>true</fork>
         <argLine>-Xmx4G -Xss256k</argLine>
     </configuration>
       </plugin>

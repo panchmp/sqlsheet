@@ -176,7 +176,7 @@ public class XlsDriver implements java.sql.Driver {
                 } else if (scheme.equalsIgnoreCase("classpath")) {
                     workbookUrl = XlsDriver.class.getResource(workbookUri.getPath());
                 }
-            } catch (Exception ex) {
+            } catch (RuntimeException ex) {
                 workbookUrl = new URL(workbookUriStr);
             }
 

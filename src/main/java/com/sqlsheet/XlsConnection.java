@@ -107,82 +107,6 @@ class XlsConnection implements Connection {
         }
     }
 
-    // public void _close() throws SQLException {
-    // if (saveFile != null && writeRequired) {
-    // FileOutputStream fileOut;
-    // try {
-    // File newFile = File.createTempFile("xlsdriver", "xlsx");
-    // fileOut = new FileOutputStream(newFile);
-    // workbook.write(fileOut);
-    // try {
-    // fileOut.close();
-    // } catch (IOException e) {
-    // LOGGER.log(Level.WARNING, e.getMessage(), e);
-    // }
-    // // Move already existing data to not corrupt on fail
-    // File backup = backupFile(saveFile);
-    // LOGGER.log(Level.INFO, "Created backup:" + backup.getAbsolutePath());
-    // // Try to override file with new content
-    // // backup should rename file or copy content into new one, handle second condition
-    // if (saveFile.exists() && !saveFile.delete()) {
-    // LOGGER.log(
-    // Level.WARNING,
-    // "Unable to delete file:"
-    // + saveFile.getAbsolutePath()
-    // + ", you may lose the results.");
-    // }
-    // moveFile(newFile, saveFile);
-    // } catch (IOException ioe) {
-    // SQLException sqe = new SQLException(ioe.getMessage(), ioe);
-    // throw sqe;
-    // }
-    // }
-    // }
-
-    // private File backupFile(File input) throws IOException {
-    //
-    // File output = null;
-    // if (input != null) {
-    // output = File.createTempFile(input.getName() + ".", ".bkp", null);
-    // moveFile(input, output);
-    // }
-    // return output;
-    // }
-
-    // private void moveFile(File sourceFile, File destFile) throws IOException {
-    // boolean moved;
-    // moved = sourceFile.renameTo(destFile);
-    // if (!moved) {
-    // LOGGER.log(
-    // Level.WARNING,
-    // "Unable to rename file during move:"
-    // + sourceFile.getAbsolutePath()
-    // + " to "
-    // + destFile.getAbsolutePath()
-    // + ", performing full copy of data.");
-    // FileChannel source = null;
-    // FileChannel destination = null;
-    // try {
-    // source = new FileInputStream(sourceFile).getChannel();
-    // destination = new FileOutputStream(destFile).getChannel();
-    // // previous code: destination.transferFrom(source, 0, source.size());
-    // // to avoid infinite loops, should be:
-    // long count = 0;
-    // long size = source.size();
-    // do {
-    // count += destination.transferFrom(source, 0, size - count);
-    // } while (count < size);
-    // } finally {
-    // if (source != null) {
-    // source.close();
-    // }
-    // if (destination != null) {
-    // destination.close();
-    // }
-    // }
-    // }
-    // }
-
     @Override
     public boolean getAutoCommit() {
         return false;
@@ -233,8 +157,7 @@ class XlsConnection implements Connection {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public Map getTypeMap() throws SQLException {
+    public Map<String, Class<?>> getTypeMap() throws SQLException {
         return null;
     }
 

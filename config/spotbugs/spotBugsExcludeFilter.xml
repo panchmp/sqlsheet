@@ -2,10 +2,48 @@
   <FindBugsFilter
               xmlns="https://github.com/spotbugs/filter/3.0.0"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/3.1.0/spotbugs/etc/findbugsfilter.xsd">
-<Match>
-		<Or>
-			<Package name="net.pcal.sqlsheet" />
-		</Or>
-  </Match>
+              xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/master/spotbugs/etc/findbugsfilter.xsd">
+
+    <!-- ignore old, deprecated class delegation -->
+    <Match>
+      <Or>
+          <Package name="net.pcal.sqlsheet" />
+          <Class name="XlsDriver" />
+      </Or>
+    </Match>
+
+    <!-- only Prio 1 and 2, ignore 3 as irrelevant -->
+    <Match>
+        <Priority value="3" />
+    </Match>
+
+    <!-- Closables will be closed from outside and only after the call -->
+    <Match>
+        <And>
+            <Bug pattern="OBL_UNSATISFIED_OBLIGATION"/>
+            <Or>
+                <Class name="com.sqlsheet.XlsPreparedStatement"/>
+                <Class name="com.sqlsheet.XlsStatement"/>
+                <Class name="com.sqlsheet.stream.XlsStreamPreparedStatement"/>
+                <Class name="com.sqlsheet.stream.XlsStreamStatement"/>
+            </Or>
+            <Or>
+                <Method name="execute"/>
+                <Method name="executeUpdate"/>
+            </Or>
+        </And>
+    </Match>
+
+    <!-- We don't want to clone immutable objects and consider this irrelevant -->
+    <Match>
+        <Or>
+            <Bug pattern="EI_EXPOSE_REP"/>
+            <Bug pattern="EI_EXPOSE_REP2"/>
+        </Or>
+    </Match>
+
+    <!-- We can afford String concatenation for the sake of readability -->
+    <Match>
+        <Bug pattern="SBSC_USE_STRINGBUFFER_CONCATENATION"/>
+    </Match>
 </FindBugsFilter>

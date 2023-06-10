@@ -167,13 +167,12 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
                 }
             }
             // Retrieve only one type
-            for (Integer columnId : columnTypeScan.keySet()) {
-
+            for (Map.Entry<Integer, Map<Integer, Integer>> columnIdEntry : columnTypeScan
+                    .entrySet()) {
                 Integer numberOfVarchar = 0;
                 Integer numberOfDouble = 0;
                 Integer numberOfDate = 0;
-
-                for (Map.Entry<Integer, Integer> columnIdTypeMap : columnTypeScan.get(columnId)
+                for (Map.Entry<Integer, Integer> columnIdTypeMap : columnIdEntry.getValue()
                         .entrySet()) {
                     if (columnIdTypeMap.getKey() == Types.VARCHAR) {
                         numberOfVarchar = columnIdTypeMap.getValue();
@@ -197,7 +196,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
                 if (finalColumnType == null) {
                     finalColumnType = Types.VARCHAR;
                 }
-                columnTypeMap.put(columnId, finalColumnType);
+                columnTypeMap.put(columnIdEntry.getKey(), finalColumnType);
             }
         }
 

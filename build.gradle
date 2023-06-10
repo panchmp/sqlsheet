@@ -89,7 +89,7 @@ def getVersion = { boolean considerSnapshot ->
 }
 version = getVersion(true)
 group = 'com.google.code.sqlsheet'
-description = 'sqlsheet'
+description = 'JDBC Driver for xls/xlsx files using POI'
 
 java {
     withSourcesJar()
@@ -115,9 +115,9 @@ publishing {
                 }
             }
             pom {
-                name = 'JSQLParser library'
-                description = 'Parse SQL Statements into Abstract Syntax Trees (AST)'
-                url = 'https://github.com/JSQLParser/JSqlParser'
+                name = 'sqlsheet'
+                description = 'JDBC Driver and API for xls/xlsx files using POI'
+                url = 'https://github.com/panchmp/sqlsheet'
                 licenses {
                     license {
                         name = 'GNU Library or Lesser General Public License (LGPL) V2.1'
@@ -130,9 +130,19 @@ publishing {
                 }
                 developers {
                     developer {
-                        id = 'twa'
-                        name = 'Tobias Warneke'
-                        email = 't.warneke@gmx.net'
+                        id = 'mpa'
+                        name = 'Michael Panchenko'
+                        email = 'panchmp@gmail.com'
+                    }
+                    developer {
+                        id = 'iva'
+                        name = 'Ivan Vasyliev'
+                        email = 'vasilievip@gmail.com'
+                    }
+                    developer {
+                        id = 'kha'
+                        name = 'Klaus Hauschild'
+                        email = 'klaus.hauschild.1984@gmail.com'
                     }
                     developer {
                         id = 'are'
@@ -141,9 +151,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection = 'scm:git:https://github.com/JSQLParser/JSqlParser.git'
-                    developerConnection = 'scm:git:ssh://git@github.com:JSQLParser/JSqlParser.git'
-                    url = 'https://github.com/JSQLParser/JSqlParser.git'
+                    connection = 'scm:git:https://github.com/panchmp/sqlsheet.git'
+                    developerConnection = 'scm:git:ssh://git@github.com:panchmp/sqlsheet.git'
+                    url = 'https://github.com/panchmp/sqlsheet'
                 }
             }
         }
@@ -261,7 +271,7 @@ spotbugsMain {
 }
 
 spotbugs {
-    // fail only on P1
+    // fail only on P1 and surprises certain exceptions
     excludeFilter = file("config/spotbugs/spotBugsExcludeFilter.xml")
 
     // do not run over the test, although we should do that eventually

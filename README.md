@@ -27,7 +27,7 @@ Statement writeStatement = writeConnection.createStatement();
 
 writeStatement.executeUpdate("CREATE TABLE TEST_INSERT(COL1 INT, COL2 VARCHAR(255), COL3 DATE)");
 
-PreparedStatement writeStatement2 = 
+PreparedStatement writeStatement2 =
 writeConnection.prepareStatement("INSERT INTO TEST_INSERT(COL1, COL2, COL3) VALUES(?,?,?)");
 
 for(int i = 0; i<3;i++){
@@ -49,7 +49,7 @@ writeConnection.close();
   <connection id="xls" url="jdbc:xls:file:extracttest.xls"/>
   <connection id="xlsx" url="jdbc:xls:file:extracttest.xlsx"/>
   <connection id="java" driver="janino"/>
-   
+
   <script connection-id="xls">
     CREATE TABLE "2009"(
       COL1 INT,
@@ -57,7 +57,7 @@ writeConnection.close();
       COL3 DATE
     );
   </script>
-      
+
   <script connection-id="xlsx">
     CREATE TABLE "2009"(
       COL1 INT,
@@ -65,20 +65,20 @@ writeConnection.close();
       COL3 DATE
     );
   </script>
-   
+
   <query connection-id="java">
-    set("COL1", 1);                     
+    set("COL1", 1);
     set("COL2", "Test");
     set("COL3", new java.util.Date());
     next();
     <script connection-id="xls">
       INSERT INTO "2009" (COL1, COL2, COL3) VALUES(?COL1, ?COL2, ?COL3);
-    </script>                                
+    </script>
     <script connection-id="xlsx">
       INSERT INTO "2009" (COL1, COL2, COL3) VALUES(?COL1, ?COL2, ?COL3);
-    </script>                                     
+    </script>
   </query>
-  
+
 </etl>
 ```
 
@@ -89,7 +89,7 @@ writeConnection.close();
   <connection id="xls" url="jdbc:xls:file:extracttest.xls"/>
   <connection id="xlsx" url="jdbc:xls:file:extracttest.xlsx"/>
   <connection id="java" driver="janino"/>
-   
+
   <query connection-id="xls">
     SELECT * FROM "2009";
     <script connection-id="java">
@@ -97,8 +97,8 @@ writeConnection.close();
       System.out.println((String)get("COL2"));
       System.out.println((java.util.Date) get("COL3"));
     </script>
-  </query>		
-  
+  </query>
+
   <query connection-id="xlsx">
     SELECT * FROM "2009";
     <script connection-id="java">
@@ -107,8 +107,7 @@ writeConnection.close();
       System.out.println((java.util.Date) get("COL3"));
     </script>
   </query>
-  
+
 </etl>
 ```
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/panchmp)
-
