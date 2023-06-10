@@ -17,5 +17,4 @@ package net.pcal.sqlsheet;
  * @author Klaus Hauschild
  * @deprecated
  */
-public class XlsDriver extends com.sqlsheet.XlsDriver {
-}
+public class XlsDriver extends com.sqlsheet.XlsDriver {}

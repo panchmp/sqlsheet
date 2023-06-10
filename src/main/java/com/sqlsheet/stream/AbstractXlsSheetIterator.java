@@ -35,45 +35,45 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
     private Long currentSheetRowIndex = 0L;
     private Long currentIteratorRowIndex = 0L;
 
-    /**
-     * @param filename The file to postConstruct
-     * @param sheetName The sheet name
-     * @throws SQLException if any problem
-     */
-    public AbstractXlsSheetIterator(URL filename, String sheetName) throws SQLException {
-        this.setFileName(filename);
-        this.setSheetName(sheetName);
-        postConstruct();
+  /**
+   * @param filename The file to postConstruct
+   * @param sheetName The sheet name
+   * @throws SQLException if any problem
+   */
+  public AbstractXlsSheetIterator(URL filename, String sheetName) throws SQLException {
+    this.setFileName(filename);
+    this.setSheetName(sheetName);
+    postConstruct();
+  }
+
+  protected abstract void postConstruct() throws SQLException;
+
+  protected abstract void processNextRecords() throws SQLException;
+
+  protected abstract void onClose() throws SQLException;
+
+  public Iterator<Object> iterator() {
+    return this;
+  }
+
+  public boolean hasNext() {
+    return getRowValues().get(getCurrentIteratorRowIndex() + 1) != null;
+  }
+
+  public Object next() {
+    try {
+      getRowValues().remove(getCurrentIteratorRowIndex());
+      setCurrentIteratorRowIndex(getCurrentIteratorRowIndex() + 1);
+      // Fill current row
+      processNextRecords();
+      if (getRowValues().get(getCurrentIteratorRowIndex() + 1L) == null) {
+        processNextRecords();
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e.getMessage(), e);
     }
-
-    protected abstract void postConstruct() throws SQLException;
-
-    protected abstract void processNextRecords() throws SQLException;
-
-    protected abstract void onClose() throws SQLException;
-
-    public Iterator<Object> iterator() {
-        return this;
-    }
-
-    public boolean hasNext() {
-        return getRowValues().get(getCurrentIteratorRowIndex() + 1) != null;
-    }
-
-    public Object next() {
-        try {
-            getRowValues().remove(getCurrentIteratorRowIndex());
-            setCurrentIteratorRowIndex(getCurrentIteratorRowIndex() + 1);
-            // Fill current row
-            processNextRecords();
-            if (getRowValues().get(getCurrentIteratorRowIndex() + 1L) == null) {
-                processNextRecords();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-        return getRowValues().get(getCurrentIteratorRowIndex());
-    }
+    return getRowValues().get(getCurrentIteratorRowIndex());
+  }
 
     void addCurrentRowValue(CellValueHolder cellValue) {
         getRowValues().computeIfAbsent(getCurrentSheetRowIndex(), k -> new ArrayList<>());
@@ -110,53 +110,53 @@ public abstract class AbstractXlsSheetIterator implements Iterable<Object>, Iter
         return null;
     }
 
-    protected URL getFileName() {
-        return fileName;
-    }
+  protected URL getFileName() {
+    return fileName;
+  }
 
-    protected void setFileName(URL fileName) {
-        this.fileName = fileName;
-    }
+  protected void setFileName(URL fileName) {
+    this.fileName = fileName;
+  }
 
-    protected String getSheetName() {
-        return sheetName;
-    }
+  protected String getSheetName() {
+    return sheetName;
+  }
 
-    protected void setSheetName(String sheetName) {
-        this.sheetName = sheetName;
-    }
+  protected void setSheetName(String sheetName) {
+    this.sheetName = sheetName;
+  }
 
-    protected List<CellValueHolder> getColumns() {
-        return columns;
-    }
+  protected List<CellValueHolder> getColumns() {
+    return columns;
+  }
 
-    protected void setColumns(List<CellValueHolder> columns) {
-        this.columns = columns;
-    }
+  protected void setColumns(List<CellValueHolder> columns) {
+    this.columns = columns;
+  }
 
-    protected Map<Long, List<CellValueHolder>> getRowValues() {
-        return rowValues;
-    }
+  protected Map<Long, List<CellValueHolder>> getRowValues() {
+    return rowValues;
+  }
 
-    protected void setRowValues(Map<Long, List<CellValueHolder>> rowValues) {
-        this.rowValues = rowValues;
-    }
+  protected void setRowValues(Map<Long, List<CellValueHolder>> rowValues) {
+    this.rowValues = rowValues;
+  }
 
-    protected Long getCurrentSheetRowIndex() {
-        return currentSheetRowIndex;
-    }
+  protected Long getCurrentSheetRowIndex() {
+    return currentSheetRowIndex;
+  }
 
-    protected void setCurrentSheetRowIndex(Long currentSheetRowIndex) {
-        this.currentSheetRowIndex = currentSheetRowIndex;
-    }
+  protected void setCurrentSheetRowIndex(Long currentSheetRowIndex) {
+    this.currentSheetRowIndex = currentSheetRowIndex;
+  }
 
-    protected Long getCurrentIteratorRowIndex() {
-        return currentIteratorRowIndex;
-    }
+  protected Long getCurrentIteratorRowIndex() {
+    return currentIteratorRowIndex;
+  }
 
-    protected void setCurrentIteratorRowIndex(Long currentIteratorRowIndex) {
-        this.currentIteratorRowIndex = currentIteratorRowIndex;
-    }
+  protected void setCurrentIteratorRowIndex(Long currentIteratorRowIndex) {
+    this.currentIteratorRowIndex = currentIteratorRowIndex;
+  }
 
     static class CellValueHolder {
         String stringValue;
