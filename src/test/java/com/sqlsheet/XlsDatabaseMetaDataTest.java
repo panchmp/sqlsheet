@@ -62,7 +62,7 @@ public class XlsDatabaseMetaDataTest {
                     Boolean.FALSE, 3 * Math.PI}
     };
 
-    public XlsDatabaseMetaDataTest() throws SQLException, IOException, ClassNotFoundException {
+    public XlsDatabaseMetaDataTest() throws SQLException, IOException {
         Workbook workBook = WorkbookFactory.create(true);
         Sheet sheet = workBook.createSheet("TestSheet1");
         int r = DEFAULT_HEADLINE - 1;

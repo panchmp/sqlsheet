@@ -15,7 +15,6 @@ package com.sqlsheet;
 
 import com.sqlsheet.stream.XlsStreamConnection;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -32,7 +31,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,17 +39,17 @@ import java.util.regex.Matcher;
 /**
  * SqlSheet implementation of java.sql.Driver.
  *
- * @author <a href='http://www.pcal.net'>pcal</a>
- * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
+ * @author <a href="http://www.pcal.net">pcal</a>
+ * @author <a href="http://code.google.com/p/sqlsheet">sqlsheet</a>
  */
 public class XlsDriver implements java.sql.Driver {
 
-    static final String READ_STREAMING = "readStreaming";
-    static final String WRITE_STREAMING = "writeStreaming";
-    static final String HEADLINE = "headLine";
-    static final String FIRST_COL = "firstColumn";
-    private static final String URL_SCHEME = "jdbc:xls:";
-    private static final Logger LOGGER = Logger.getLogger(XlsDriver.class.getName());
+    public static final String READ_STREAMING = "readStreaming";
+    public static final String WRITE_STREAMING = "writeStreaming";
+    public static final String HEADLINE = "headLine";
+    public static final String FIRST_COL = "firstColumn";
+    public static final String URL_SCHEME = "jdbc:xls:";
+    public static final Logger LOGGER = Logger.getLogger(XlsDriver.class.getName());
 
     static {
         try {
@@ -77,7 +75,7 @@ public class XlsDriver implements java.sql.Driver {
 
         String expandedURIStr = uriStr.replaceFirst("~", Matcher.quoteReplacement(homePathStr));
         expandedURIStr =
-                expandedURIStr.replaceFirst("\\$\\{user.home\\}",
+                expandedURIStr.replaceFirst("\\$\\{user.home}",
                         Matcher.quoteReplacement(homePathStr));
 
         return expandedURIStr;
@@ -182,23 +180,28 @@ public class XlsDriver implements java.sql.Driver {
 
             // If streaming requested for read
             if (has(info, READ_STREAMING)) {
-                return new XlsStreamConnection(workbookUrl);
-            } else if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
-                // If streaming requested for write
-                if (has(info, WRITE_STREAMING)) {
+                assert workbookUrl != null;
+                return new XlsStreamConnection(workbookUrl, info);
+            } else {
+                assert workbookUrl != null;
+                if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
+                    // If streaming requested for write
+                    if (has(info, WRITE_STREAMING)) {
+                        return new XlsConnection(
+                                getOrCreateXlsxStream(workbookUrl), new File(workbookUrl.getPath()),
+                                info);
+                    }
                     return new XlsConnection(
-                            getOrCreateXlsxStream(workbookUrl), new File(workbookUrl.getPath()),
+                            getOrCreateWorkbook(workbookUrl), new File(workbookUrl.getPath()),
+                            info);
+                } else {
+                    // If plain url provided
+                    return new XlsConnection(WorkbookFactory.create(workbookUrl.openStream()),
                             info);
                 }
-                return new XlsConnection(
-                        getOrCreateWorkbook(workbookUrl), new File(workbookUrl.getPath()), info);
-            } else {
-                // If plain url provided
-                return new XlsConnection(WorkbookFactory.create(workbookUrl.openStream()), info);
             }
         } catch (Exception e) {
-            SQLException sqe = new SQLException(e.getMessage(), e);
-            throw sqe;
+            throw new SQLException(e.getMessage(), e);
         }
     }
 
@@ -211,7 +214,7 @@ public class XlsDriver implements java.sql.Driver {
     }
 
     private SXSSFWorkbook getOrCreateXlsxStream(URL workbookUrl)
-            throws IOException, InvalidFormatException {
+            throws IOException {
         if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
             File source = new File(workbookUrl.getPath());
             if (source.exists() || source.length() != 0) {
@@ -226,7 +229,7 @@ public class XlsDriver implements java.sql.Driver {
     }
 
     private Workbook getOrCreateWorkbook(URL workbookUrl)
-            throws IOException, InvalidFormatException {
+            throws IOException {
         if (workbookUrl.getProtocol().equalsIgnoreCase("file")) {
             File file = new File(workbookUrl.getPath());
             if (!file.exists() || file.length() == 0) {
@@ -259,7 +262,7 @@ public class XlsDriver implements java.sql.Driver {
         }
     }
 
-    public boolean acceptsURL(String url) throws SQLException {
+    public boolean acceptsURL(String url) {
         return url != null && url.trim().toLowerCase().startsWith(URL_SCHEME);
     }
 
@@ -275,7 +278,7 @@ public class XlsDriver implements java.sql.Driver {
         return 0;
     }
 
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    public Logger getParentLogger() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

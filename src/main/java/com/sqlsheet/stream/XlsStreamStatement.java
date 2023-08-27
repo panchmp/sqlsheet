@@ -20,6 +20,7 @@ import com.sqlsheet.parser.SqlSheetParser;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 
@@ -245,7 +246,7 @@ public class XlsStreamStatement implements Statement {
     }
 
     protected void nyi() throws SQLException {
-        throw new SQLException("NYI");
+        throw new SQLFeatureNotSupportedException("Not implemented yet.");
     }
 
     public boolean isClosed() throws SQLException {

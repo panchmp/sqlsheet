@@ -13,12 +13,6 @@
  */
 package com.sqlsheet.stream;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -54,20 +48,9 @@ public class XlsStreamResultSet implements ResultSet {
 
     public XlsStreamResultSet(String tableName, XlsStreamConnection connection)
             throws SQLException {
-        try {
-            switch (getXlsType(connection.xlsFile)) {
-                case XLS:
-                    iterator = new XlsSheetIterator(connection.xlsFile, tableName);
-                    break;
-                case XLSX:
-                    iterator = new XlsxSheetIterator(connection.xlsFile, tableName);
-                    break;
-                default:
-                    throw new SQLException("Cannot detect type of XLS file");
-            }
-        } catch (IOException e) {
-            throw new SQLException(e.getMessage(), e);
-        }
+        iterator = connection.workbook != null
+                ? new XlsxSheetIterator(connection.xlsFile, tableName)
+                : new XlsSheetIterator(connection.xlsFile, tableName);
         metadata = new XlsStreamingResultSetMetaData(iterator);
     }
 
@@ -83,18 +66,6 @@ public class XlsStreamResultSet implements ResultSet {
         }
         if (cell.stringValue != null) {
             return cell.stringValue;
-        }
-        return null;
-    }
-
-    XlsType getXlsType(URL inputXls) throws IOException {
-        try (InputStream input = inputXls.openStream()) {
-            Workbook wb = WorkbookFactory.create(input);
-            if (wb instanceof HSSFWorkbook) {
-                return XlsType.XLS;
-            } else if (wb instanceof XSSFWorkbook) {
-                return XlsType.XLSX;
-            }
         }
         return null;
     }
@@ -957,9 +928,5 @@ public class XlsStreamResultSet implements ResultSet {
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         throw nyi();
-    }
-
-    private enum XlsType {
-        XLS, XLSX
     }
 }

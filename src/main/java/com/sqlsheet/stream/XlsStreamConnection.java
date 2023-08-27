@@ -13,6 +13,10 @@
  */
 package com.sqlsheet.stream;
 
+import com.github.pjfanning.xlsx.StreamingReader;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
@@ -32,6 +36,8 @@ import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * SqlSheet implementation of java.sql.Connection which uses steaming over XLS
@@ -39,11 +45,38 @@ import java.util.concurrent.Executor;
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsStreamConnection implements Connection {
+    private static final Logger LOGGER = Logger.getLogger(XlsStreamConnection.class.getName());
 
-    URL xlsFile;
+    public URL xlsFile;
+    public Workbook workbook = null;
+    public Properties info;
 
-    public XlsStreamConnection(URL xlsFile) throws SQLException {
+    public XlsStreamConnection(URL xlsFile, Properties info) throws SQLException, IOException {
         this.xlsFile = xlsFile;
+        this.info = info;
+
+        org.apache.poi.openxml4j.util.ZipInputStreamZipEntrySource
+                .setThresholdBytesForTempFiles(16384); // 16KB
+        org.apache.poi.openxml4j.opc.ZipPackage.setUseTempFilePackageParts(true);
+
+        try {
+            workbook = StreamingReader
+                    .builder()
+                    .rowCacheSize(100)
+                    .bufferSize(4096)
+                    .open(xlsFile.openStream());
+        } catch (org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException ex) {
+            LOGGER.log(Level.FINER, "Failed to open XLSX stream workbook", ex);
+        }
+    }
+
+    public int getInt(String key, int defaultValue) {
+        Object value = info.get(key);
+        if (value == null) {
+            LOGGER.fine(String.format("Key [%s] not present.", key));
+            return defaultValue;
+        }
+        return Integer.parseInt(value.toString());
     }
 
     public Statement createStatement() throws SQLException {
@@ -61,7 +94,13 @@ public class XlsStreamConnection implements Connection {
     }
 
     public void close() throws SQLException {
-        // nothing
+        if (workbook != null) {
+            try {
+                workbook.close();
+            } catch (IOException ignore) {
+                // not much we can do here
+            }
+        }
     }
 
     public boolean getAutoCommit() {
@@ -126,7 +165,11 @@ public class XlsStreamConnection implements Connection {
     }
 
     public DatabaseMetaData getMetaData() throws SQLException {
-        return new XlsStreamDatabaseMetaData();
+        try {
+            return new XlsStreamDatabaseMetaData(this);
+        } catch (IOException ex) {
+            throw new SQLException("IO Error", ex);
+        }
     }
 
     public CallableStatement prepareCall(String sql) throws SQLException {
