@@ -48,12 +48,27 @@ import java.util.List;
 public class XlsStreamPreparedStatement extends XlsStreamStatement implements PreparedStatement {
 
     private final ParsedStatement statement;
-    private final List<Object> parameters = new ArrayList<Object>();
+    private final List<Object> parameters = new ArrayList<>();
     private boolean closeOnCompletion;
+
+    private final XlsStreamingResultSetMetaData metadata;
+    AbstractXlsSheetIterator iterator;
 
     public XlsStreamPreparedStatement(XlsStreamConnection conn, String sql) throws SQLException {
         super(conn);
         this.statement = super.parse(sql);
+
+        if (this.statement instanceof SelectStarStatement) {
+            String tableName = ((SelectStarStatement) this.statement).getTable();
+
+            iterator = conn.workbook != null
+                       ? new XlsxSheetIterator(conn.xlsFile, tableName)
+                       : new XlsSheetIterator(conn.xlsFile, tableName);
+            metadata = new XlsStreamingResultSetMetaData(iterator);
+        } else {
+            iterator = null;
+            metadata = null;
+        }
     }
 
     public void addBatch() throws SQLException {
@@ -260,8 +275,7 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
     }
 
     public ResultSetMetaData getMetaData() throws SQLException {
-        nyi();
-        return null;
+        return metadata;
     }
 
     public ParameterMetaData getParameterMetaData() throws SQLException {
