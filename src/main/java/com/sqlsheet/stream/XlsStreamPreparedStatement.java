@@ -62,8 +62,8 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
             String tableName = ((SelectStarStatement) this.statement).getTable();
 
             iterator = conn.workbook != null
-                       ? new XlsxSheetIterator(conn.xlsFile, tableName)
-                       : new XlsSheetIterator(conn.xlsFile, tableName);
+                    ? new XlsxSheetIterator(conn.xlsFile, tableName)
+                    : new XlsSheetIterator(conn.xlsFile, tableName);
             metadata = new XlsStreamingResultSetMetaData(iterator);
         } else {
             iterator = null;
