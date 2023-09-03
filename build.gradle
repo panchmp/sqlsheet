@@ -29,7 +29,7 @@ configurations {
 }
 
 dependencies {
-    api 'com.github.jsqlparser:jsqlparser:4.7-SNAPSHOT'
+    api 'com.github.jsqlparser:jsqlparser:4.7'
     api 'com.hrakaroo:glob:0.9.0'
     api 'org.apache.poi:poi:+'
     api 'org.apache.poi:poi-ooxml:+'
