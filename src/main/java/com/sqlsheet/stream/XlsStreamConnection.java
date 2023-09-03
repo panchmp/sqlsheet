@@ -1,25 +1,42 @@
 /*
  * Copyright 2012 sqlsheet.googlecode.com
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 package com.sqlsheet.stream;
 
+import com.github.pjfanning.xlsx.StreamingReader;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.CallableStatement;
+import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Savepoint;
+import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -28,222 +45,300 @@ import java.util.logging.Logger;
  * @author <a href='http://code.google.com/p/sqlsheet'>sqlsheet</a>
  */
 public class XlsStreamConnection implements Connection {
+    private static final Logger LOGGER = Logger.getLogger(XlsStreamConnection.class.getName());
 
-  private static final Logger logger = Logger.getLogger(XlsStreamConnection.class.getName());
+    public URL xlsFile;
+    public Workbook workbook = null;
+    public Properties info;
 
-  protected final URL xlsFile;
+    public XlsStreamConnection(URL xlsFile, Properties info) throws SQLException, IOException {
+        this.xlsFile = xlsFile;
+        this.info = info;
 
-  public XlsStreamConnection(URL xlsFile) {
-    this.xlsFile = xlsFile;
-  }
+        org.apache.poi.openxml4j.util.ZipInputStreamZipEntrySource
+                .setThresholdBytesForTempFiles(16384); // 16KB
+        org.apache.poi.openxml4j.opc.ZipPackage.setUseTempFilePackageParts(true);
 
-  public Statement createStatement() {
-    return new XlsStreamStatement(this);
-  }
+        try {
+            workbook = StreamingReader
+                    .builder()
+                    .rowCacheSize(100)
+                    .bufferSize(4096)
+                    .open(xlsFile.openStream());
+        } catch (org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException ex) {
+            LOGGER.log(Level.FINER, "Failed to open XLSX stream workbook", ex);
+        }
+    }
 
-  public PreparedStatement prepareStatement(String sql) throws SQLException {
-    return new XlsStreamPreparedStatement(this, sql);
-  }
+    public int getInt(String key, int defaultValue) {
+        Object value = info.get(key);
+        if (value == null) {
+            LOGGER.fine(String.format("Key [%s] not present.", key));
+            return defaultValue;
+        }
+        return Integer.parseInt(value.toString());
+    }
 
-  public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
-      throws SQLException {
-    return prepareStatement(sql);
-  }
+    public Statement createStatement() throws SQLException {
+        return new XlsStreamStatement(this);
+    }
 
-  public void close() {}
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+        return new XlsStreamPreparedStatement(this, sql);
+    }
 
-  public boolean getAutoCommit() {
-    return false;
-  }
+    public PreparedStatement prepareStatement(String sql, int resultSetType,
+            int resultSetConcurrency)
+            throws SQLException {
+        return prepareStatement(sql);
+    }
 
-  public void setAutoCommit(boolean autoCommit) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void close() throws SQLException {
+        if (workbook != null) {
+            try {
+                workbook.close();
+            } catch (IOException ignore) {
+                // not much we can do here
+            }
+        }
+    }
 
-  public boolean isClosed() {
-    return false;
-  }
+    public boolean getAutoCommit() {
+        return false;
+    }
 
-  public boolean isReadOnly() {
-    return true;
-  }
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+        nyi();
+    }
 
-  public void setReadOnly(boolean readOnly) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public boolean isClosed() {
+        return false;
+    }
 
-  public String getCatalog() {
-    return null;
-  }
+    public boolean isReadOnly() {
+        return true;
+    }
 
-  public void setCatalog(String catalog) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void setReadOnly(boolean readOnly) throws SQLException {
+        nyi();
+    }
 
-  public int getTransactionIsolation() {
-    return Connection.TRANSACTION_NONE;
-  }
+    public String getCatalog() {
+        return null;
+    }
 
-  public void setTransactionIsolation(int level) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void setCatalog(String catalog) throws SQLException {
+        nyi();
+    }
 
-  public SQLWarning getWarnings() {
-    return null;
-  }
+    public int getTransactionIsolation() {
+        return Connection.TRANSACTION_NONE;
+    }
 
-  public Map<String,Class<?>> getTypeMap() {
-    return null;
-  }
+    public void setTransactionIsolation(int level) throws SQLException {
+        nyi();
+    }
 
-  public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public SQLWarning getWarnings() {
+        return null;
+    }
 
-  public void commit() {}
+    @SuppressWarnings("unchecked")
+    public Map getTypeMap() throws SQLException {
+        return null;
+    }
 
-  public void rollback() {}
+    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
+        nyi();
+    }
 
-  public void clearWarnings() {}
+    public void commit() throws SQLException {
+        // nothing
+    }
 
-  public DatabaseMetaData getMetaData() {
-    return new XlsStreamDatabaseMetaData(xlsFile);
-  }
+    public void rollback() throws SQLException {
+        // nothing
+    }
 
-  public CallableStatement prepareCall(String sql) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void clearWarnings() throws SQLException {
+        // nothing
+    }
 
-  public String nativeSQL(String sql) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public DatabaseMetaData getMetaData() throws SQLException {
+        try {
+            return new XlsStreamDatabaseMetaData(this);
+        } catch (IOException ex) {
+            throw new SQLException("IO Error", ex);
+        }
+    }
 
-  public Statement createStatement(int resultSetType, int resultSetConcurrency)
-      throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public CallableStatement prepareCall(String sql) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)
-      throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public String nativeSQL(String sql) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public int getHoldability() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public Statement createStatement(int resultSetType, int resultSetConcurrency)
+            throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public void setHoldability(int param) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)
+            throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public CallableStatement prepareCall(String str, int param, int param2, int param3)
-      throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public int getHoldability() throws SQLException {
+        nyi();
+        return -1;
+    }
 
-  public PreparedStatement prepareStatement(String str, int param) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void setHoldability(int param) throws SQLException {
+        nyi();
+    }
 
-  public PreparedStatement prepareStatement(String str, int[] values) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public CallableStatement prepareCall(String str, int param, int param2, int param3)
+            throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public PreparedStatement prepareStatement(String str, String[] str1) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public PreparedStatement prepareStatement(String str, int param) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public Clob createClob() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public PreparedStatement prepareStatement(String str, int[] values) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public Blob createBlob() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public PreparedStatement prepareStatement(String str, String[] str1) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public NClob createNClob() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public Clob createClob() throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public SQLXML createSQLXML() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public Blob createBlob() throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public boolean isValid(int timeout) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public NClob createNClob() throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public void setClientInfo(String name, String value) {}
+    public SQLXML createSQLXML() throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public String getClientInfo(String name) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public boolean isValid(int timeout) throws SQLException {
+        nyi();
+        return false;
+    }
 
-  public Properties getClientInfo() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void setClientInfo(String name, String value) throws SQLClientInfoException {
+        // nothing
+    }
 
-  public void setClientInfo(Properties properties) {}
+    public String getClientInfo(String name) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public Properties getClientInfo() throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
+        // nothing
+    }
 
-  public PreparedStatement prepareStatement(String str, int param, int param2, int param3)
-      throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public void rollback(Savepoint savepoint) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public PreparedStatement prepareStatement(String str, int param, int param2, int param3)
+            throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public Savepoint setSavepoint() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
+        nyi();
+    }
 
-  public Savepoint setSavepoint(String str) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void rollback(Savepoint savepoint) throws SQLException {
+        nyi();
+    }
 
-  public Statement createStatement(
-      int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public Savepoint setSavepoint() throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public <T> T unwrap(Class<T> iface) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public Savepoint setSavepoint(String str) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public Statement createStatement(
+            int resultSetType, int resultSetConcurrency, int resultSetHoldability)
+            throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public String getSchema() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    private void nyi() throws SQLException {
+        throw new SQLException("NYI");
+    }
 
-  public void setSchema(String string) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        nyi();
+        return null;
+    }
 
-  public void abort(Executor exctr) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        nyi();
+        return false;
+    }
 
-  public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public String getSchema() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-  public int getNetworkTimeout() throws SQLException {
-    throw new SQLException(new UnsupportedOperationException("Not supported yet"));
-  }
+    public void setSchema(String string) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void abort(Executor exctr) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setNetworkTimeout(Executor exctr, int i) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public int getNetworkTimeout() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

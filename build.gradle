@@ -1,0 +1,365 @@
+import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+
+    id 'jacoco'
+    id "com.github.spotbugs" version "latest.release"
+    id "com.diffplug.spotless" version "latest.release"
+    id 'pmd'
+    id 'checkstyle'
+
+    id "de.undercouch.download" version "latest.release"
+    id 'org.hidetake.ssh' version "latest.release"
+
+    id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "latest.release"
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+configurations {
+    xmlDoclet
+}
+
+dependencies {
+    api 'com.github.jsqlparser:jsqlparser:4.7'
+    api 'com.hrakaroo:glob:0.9.0'
+    api 'org.apache.poi:poi:+'
+    api 'org.apache.poi:poi-ooxml:+'
+    api 'com.github.pjfanning:excel-streaming-reader:+'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.+'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.+'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:+'
+
+    testImplementation 'com.javaforge.scriptella:scriptella-core:1.1'
+    testImplementation 'com.javaforge.scriptella:scriptella-drivers:1.1'
+    testImplementation 'commons-io:commons-io:+'
+    testImplementation 'org.codehaus.janino:janino:3.1.0'
+    testImplementation 'de.vandermeer:asciitable:0.3.2'
+
+    // Java Doc in XML Format
+    xmlDoclet 'com.manticore-projects.tools:xml-doclet:+'
+}
+
+def getVersion = { boolean considerSnapshot ->
+    Integer major = 0
+    Integer minor = 0
+    Integer patch = null
+    Integer build = null
+    def commit = null
+    def snapshot = ""
+    new ByteArrayOutputStream().withStream { os ->
+        exec {
+            args = [
+                    "--no-pager"
+                    , "describe"
+                    , "--tags"
+                    , "--always"
+                    , "--dirty=-SNAPSHOT"
+            ]
+            executable "git"
+            standardOutput = os
+        }
+        def versionStr = os.toString().trim()
+        def pattern = /(?<major>\d*)\.(?<minor>\d*)(\.(?<patch>\d*))?(-(?<build>\d*)-(?<commit>[a-zA-Z\d]*))?/
+        def matcher = versionStr =~ pattern
+        if (matcher.find()) {
+            major = matcher.group('major') as Integer
+            minor = matcher.group('minor') as Integer
+            patch = matcher.group('patch') as Integer
+            build = matcher.group('build') as Integer
+            commit = matcher.group('commit')
+        }
+
+        if (considerSnapshot && ( versionStr.endsWith('SNAPSHOT') || build!=null) ) {
+            minor++
+            if (patch!=null) patch = 0
+            snapshot = "-SNAPSHOT"
+        }
+    }
+    return patch!=null
+            ? "${major}.${minor}.${patch}${snapshot}"
+            :  "${major}.${minor}${snapshot}"
+}
+version = getVersion(true)
+group = 'com.google.code.sqlsheet'
+description = 'JDBC Driver for xls/xlsx files using POI'
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    // needed for XML-Doclet to work (since Doclet changed again with Java 13)
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'sqlsheet'
+                description = 'JDBC Driver and API for xls/xlsx files using POI'
+                url = 'https://github.com/panchmp/sqlsheet'
+                licenses {
+                    license {
+                        name = 'GNU Library or Lesser General Public License (LGPL) V2.1'
+                        url = 'http://www.gnu.org/licenses/lgpl-2.1.html'
+                    }
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'mpa'
+                        name = 'Michael Panchenko'
+                        email = 'panchmp@gmail.com'
+                    }
+                    developer {
+                        id = 'iva'
+                        name = 'Ivan Vasyliev'
+                        email = 'vasilievip@gmail.com'
+                    }
+                    developer {
+                        id = 'kha'
+                        name = 'Klaus Hauschild'
+                        email = 'klaus.hauschild.1984@gmail.com'
+                    }
+                    developer {
+                        id = 'are'
+                        name = 'Andreas Reichel'
+                        email = 'andreas@manticore-projects.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/panchmp/sqlsheet.git'
+                    developerConnection = 'scm:git:ssh://git@github.com:panchmp/sqlsheet.git'
+                    url = 'https://github.com/panchmp/sqlsheet'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name "ossrh"
+
+            def releasesRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            def snapshotsRepoUrl= "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials(PasswordCredentials)
+        }
+        maven {
+            name = "GitHubPackages"
+
+            url = uri("https://maven.pkg.github.com/manticore-projects/jsqlparser")
+            credentials(PasswordCredentials)
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+    options.addBooleanOption("Xdoclint:none", true)
+}
+
+tasks.register('xmldoc', Javadoc) {
+    def outFile =  reporting.file(
+            version.endsWith("-SNAPSHOT")
+                    ? "xmlDoclet/javadoc_snapshot.xml"
+                    : "xmlDoclet/javadoc_stable.xml"
+    )
+
+    def rstFile =  reporting.file(
+            version.endsWith("-SNAPSHOT")
+                    ? "xmlDoclet/javadoc_snapshot.rst"
+                    : "xmlDoclet/javadoc_stable.rst"
+    )
+
+    source = sourceSets.main.allJava
+    // beware: Gradle deletes this folder automatically and there is no switch-off
+    destinationDir = reporting.file("xmlDoclet")
+    options.docletpath = configurations.xmlDoclet.files as List
+    options.doclet = "com.github.markusbernhardt.xmldoclet.XmlDoclet"
+    title = "API $version"
+    options.addBooleanOption("rst", true)
+    options.addBooleanOption("withFloatingToc", true)
+    options.addStringOption("basePackage", "com.sqlsheet")
+    options.addStringOption("filename", outFile.getName())
+
+    dependsOn(compileJava)
+    doLast {
+        copy {
+            from rstFile
+            into "${projectDir}/src/site/sphinx/"
+        }
+    }
+}
+
+test {
+    environment = [ 'EXPORT_TEST_TO_FILE': 'True' ]
+    useJUnitPlatform()
+
+    // set heap size for the test JVM(s)
+    minHeapSize = "128m"
+    maxHeapSize = "1G"
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
+    }
+}
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            //element = 'CLASS'
+            limit {
+                minimum = 0.80
+            }
+        }
+        rule {
+            //element = 'CLASS'
+            limit {
+                counter = 'LINE'
+                value = 'MISSEDCOUNT'
+                maximum = 7000
+            }
+        }
+    }
+}
+
+spotbugsMain {
+    reports {
+        html {
+            enabled = true
+            destination = file("build/reports/spotbugs/main/spotbugs.html")
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+
+spotbugs {
+    // fail only on P1 and surprises certain exceptions
+    excludeFilter = file("config/spotbugs/spotBugsExcludeFilter.xml")
+
+    // do not run over the test, although we should do that eventually
+    spotbugsTest.enabled = false
+}
+
+pmd {
+    consoleOutput = true
+    sourceSets = [sourceSets.main]
+
+    // clear the ruleset in order to use configured rules only
+    ruleSets = []
+
+    //rulesMinimumPriority = 1
+    ruleSetFiles = files("config/pmd/ruleset.xml")
+
+    pmdMain {
+        excludes = [
+                "build/generated/*"
+        ]
+    }
+}
+
+checkstyle {
+    sourceSets = [sourceSets.main, sourceSets.test]
+    configFile =rootProject.file('config/checkstyle/checkstyle.xml')
+}
+
+spotless {
+    // optional: limit format enforcement to just the files changed by this feature branch
+    ratchetFrom 'origin/master'
+
+    format 'misc', {
+        // define the files to apply `misc` to
+        target '*.rst', '*.md', '.gitignore'
+
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        indentWithSpaces(4) // or spaces. Takes an integer argument if you don't like 4
+        endWithNewline()
+    }
+    java {
+        indentWithSpaces(4)
+        eclipse().configFile('config/formatter/eclipse-java-google-style.xml')
+    }
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = false
+        html.required = true
+    }
+}
+
+tasks.register('gitChangelogTask', GitChangelogTask) {
+    fromRepo = file("$projectDir")
+    file = new File("${projectDir}/src/site/sphinx/changelog.rst")
+}
+
+remotes {
+    webServer {
+        host = findProperty("${project.name}.host")
+        user = findProperty("${project.name}.username")
+        identity = new File("${System.properties['user.home']}/.ssh/id_rsa")
+    }
+}
+
+tasks.register('upload') {
+    doFirst {
+        if (findProperty("${project.name}.host") == null) {
+            println(
+                    """
+                Property \"${project.name}.host\' not found.
+                Please define \"${project.name}.host\" in the Gradle configuration (e. g. \$HOME/.gradle/gradle.properties.
+                """
+            )
+        }
+    }
+    doLast {
+        ssh.run {
+            session(remotes.webServer) {
+                def versionStable = getVersion(false)
+                execute "mkdir -p download/${project.name}-${versionStable}"
+                for (File file: fileTree(include:['*.jar'], dir:"${project.buildDir}/libs").collect()) {
+                    put from: file, into: "download/${project.name}-${versionStable}"
+                }
+            }
+        }
+    }
+}

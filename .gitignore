@@ -3,3 +3,7 @@ target/
 
 *.iml
 /nbproject/
+/build/
+/.gradle/
+/src/site/sphinx/changelog.rst
+/src/site/sphinx/javadoc_snapshot.rst

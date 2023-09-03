@@ -1,5 +1,4 @@
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/panchmp)
-
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/panchmp) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f40e9d9550494e53bdcb1523a6a074a9)](https://app.codacy.com/gh/manticore-projects/sqlsheet/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 Simple, POI based JDBC driver for XLS/XLSX files. Currently supports basic SELECT ( 'select `*`' only, w/o where clause), CREATE,  INSERT operations. The driver is pure Java - no native Windows components are required. From version 6.1 streaming implemented to process large files.
 
@@ -27,7 +26,7 @@ Statement writeStatement = writeConnection.createStatement();
 
 writeStatement.executeUpdate("CREATE TABLE TEST_INSERT(COL1 INT, COL2 VARCHAR(255), COL3 DATE)");
 
-PreparedStatement writeStatement2 = 
+PreparedStatement writeStatement2 =
 writeConnection.prepareStatement("INSERT INTO TEST_INSERT(COL1, COL2, COL3) VALUES(?,?,?)");
 
 for(int i = 0; i<3;i++){
@@ -49,7 +48,7 @@ writeConnection.close();
   <connection id="xls" url="jdbc:xls:file:extracttest.xls"/>
   <connection id="xlsx" url="jdbc:xls:file:extracttest.xlsx"/>
   <connection id="java" driver="janino"/>
-   
+
   <script connection-id="xls">
     CREATE TABLE "2009"(
       COL1 INT,
@@ -57,7 +56,7 @@ writeConnection.close();
       COL3 DATE
     );
   </script>
-      
+
   <script connection-id="xlsx">
     CREATE TABLE "2009"(
       COL1 INT,
@@ -65,20 +64,20 @@ writeConnection.close();
       COL3 DATE
     );
   </script>
-   
+
   <query connection-id="java">
-    set("COL1", 1);                     
+    set("COL1", 1);
     set("COL2", "Test");
     set("COL3", new java.util.Date());
     next();
     <script connection-id="xls">
       INSERT INTO "2009" (COL1, COL2, COL3) VALUES(?COL1, ?COL2, ?COL3);
-    </script>                                
+    </script>
     <script connection-id="xlsx">
       INSERT INTO "2009" (COL1, COL2, COL3) VALUES(?COL1, ?COL2, ?COL3);
-    </script>                                     
+    </script>
   </query>
-  
+
 </etl>
 ```
 
@@ -89,7 +88,7 @@ writeConnection.close();
   <connection id="xls" url="jdbc:xls:file:extracttest.xls"/>
   <connection id="xlsx" url="jdbc:xls:file:extracttest.xlsx"/>
   <connection id="java" driver="janino"/>
-   
+
   <query connection-id="xls">
     SELECT * FROM "2009";
     <script connection-id="java">
@@ -97,8 +96,8 @@ writeConnection.close();
       System.out.println((String)get("COL2"));
       System.out.println((java.util.Date) get("COL3"));
     </script>
-  </query>		
-  
+  </query>
+
   <query connection-id="xlsx">
     SELECT * FROM "2009";
     <script connection-id="java">
@@ -107,8 +106,7 @@ writeConnection.close();
       System.out.println((java.util.Date) get("COL3"));
     </script>
   </query>
-  
+
 </etl>
 ```
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/panchmp)
-

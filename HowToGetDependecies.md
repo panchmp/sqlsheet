@@ -22,7 +22,7 @@ You have several options:
  * [Latest POI]{http://poi.apache.org/download.html)
 
 
-### POI required libs for [XLS](http://poi.apache.org/download.html) 
+### POI required libs for [XLS](http://poi.apache.org/download.html)
  * poi-3.8.jar
 
 ### POI required libs for [XLSX](http://poi.apache.org/download.html)
