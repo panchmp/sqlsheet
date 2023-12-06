@@ -39,7 +39,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     /**
      * A map between the code ID and the type name
      */
-    static Map<Integer, String> columnTypeNameMap = new HashMap<Integer, String>();
+    public static Map<Integer, String> columnTypeNameMap = new HashMap<Integer, String>();
     /**
      * A map between the code ID and the type class
      */

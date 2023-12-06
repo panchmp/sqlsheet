@@ -29,7 +29,7 @@ configurations {
 }
 
 dependencies {
-    api 'com.github.jsqlparser:jsqlparser:4.7'
+    api 'com.github.jsqlparser:jsqlparser:+'
     api 'com.hrakaroo:glob:0.9.0'
     api 'org.apache.poi:poi:+'
     api 'org.apache.poi:poi-ooxml:+'
@@ -231,7 +231,7 @@ test {
 
     // set heap size for the test JVM(s)
     minHeapSize = "128m"
-    maxHeapSize = "1G"
+    maxHeapSize = "8G"
 }
 
 jacocoTestReport {

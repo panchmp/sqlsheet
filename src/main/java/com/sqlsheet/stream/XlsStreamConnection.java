@@ -14,9 +14,11 @@
 package com.sqlsheet.stream;
 
 import com.github.pjfanning.xlsx.StreamingReader;
+import com.sqlsheet.XlsDriver;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
@@ -36,8 +38,10 @@ import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.sqlsheet.XlsStatement.DEFAULT_FIRST_COL;
+import static com.sqlsheet.XlsStatement.DEFAULT_HEADLINE;
 
 /**
  * SqlSheet implementation of java.sql.Connection which uses steaming over XLS
@@ -51,7 +55,7 @@ public class XlsStreamConnection implements Connection {
     public Workbook workbook = null;
     public Properties info;
 
-    public XlsStreamConnection(URL xlsFile, Properties info) throws SQLException, IOException {
+    public XlsStreamConnection(URL xlsFile, Properties info) throws IOException {
         this.xlsFile = xlsFile;
         this.info = info;
 
@@ -59,14 +63,12 @@ public class XlsStreamConnection implements Connection {
                 .setThresholdBytesForTempFiles(16384); // 16KB
         org.apache.poi.openxml4j.opc.ZipPackage.setUseTempFilePackageParts(true);
 
-        try {
+        try (InputStream is = xlsFile.openStream()) {
             workbook = StreamingReader
                     .builder()
                     .rowCacheSize(100)
                     .bufferSize(4096)
-                    .open(xlsFile.openStream());
-        } catch (org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException ex) {
-            LOGGER.log(Level.FINER, "Failed to open XLSX stream workbook", ex);
+                    .open(is);
         }
     }
 
@@ -84,7 +86,9 @@ public class XlsStreamConnection implements Connection {
     }
 
     public PreparedStatement prepareStatement(String sql) throws SQLException {
-        return new XlsStreamPreparedStatement(this, sql);
+        return new XlsStreamPreparedStatement(this, sql,
+                this.getInt(XlsDriver.HEADLINE, DEFAULT_HEADLINE),
+                this.getInt(XlsDriver.FIRST_COL, DEFAULT_FIRST_COL));
     }
 
     public PreparedStatement prepareStatement(String sql, int resultSetType,
@@ -143,8 +147,7 @@ public class XlsStreamConnection implements Connection {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public Map getTypeMap() throws SQLException {
+    public Map<String, Class<?>> getTypeMap() throws SQLException {
         return null;
     }
 
@@ -340,5 +343,9 @@ public class XlsStreamConnection implements Connection {
 
     public int getNetworkTimeout() throws SQLException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Workbook getWorkBook() {
+        return workbook;
     }
 }

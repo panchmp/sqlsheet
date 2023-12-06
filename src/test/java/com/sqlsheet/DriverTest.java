@@ -63,24 +63,6 @@ public class DriverTest {
     }
 
     @Test
-    public void testXlsStreamSheetNameQuotes() throws Exception {
-        Connection conn = DriverManager
-                .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile()
-                                + "?readStreaming=true");
-        processBaseStreamingResultset(conn, "SELECT * FROM \"2009\"");
-    }
-
-    @Test
-    public void testXlsStreamSheetNameNoQuotes() throws Exception {
-        Connection conn = DriverManager
-                .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile()
-                                + "?readStreaming=true");
-        processBaseStreamingResultset(conn, "SELECT * FROM SHEET1");
-    }
-
-    @Test
     public void testXlsxSheetNameQuotes() throws Exception {
         Connection conn = DriverManager.getConnection(
                 "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile());
@@ -148,9 +130,9 @@ public class DriverTest {
         Assertions.assertEquals(results.getMetaData().getColumnCount(), 3L);
 
         ResultSetMetaData resultSetMetaData = results.getMetaData();
-        Assertions.assertEquals("java.lang.Double", resultSetMetaData.getColumnTypeName(1));
-        Assertions.assertEquals("java.lang.String", resultSetMetaData.getColumnTypeName(2));
-        Assertions.assertEquals("java.util.Date", resultSetMetaData.getColumnTypeName(3));
+        Assertions.assertEquals("DOUBLE", resultSetMetaData.getColumnTypeName(1));
+        Assertions.assertEquals("VARCHAR", resultSetMetaData.getColumnTypeName(2));
+        Assertions.assertEquals("DATE", resultSetMetaData.getColumnTypeName(3));
 
     }
 
@@ -179,7 +161,7 @@ public class DriverTest {
         while (results.next()) {
             Assertions.assertEquals(Double.class, results.getObject(1).getClass());
             Assertions.assertEquals(String.class, results.getObject(2).getClass());
-            Assertions.assertEquals(java.util.Date.class, results.getObject(3).getClass());
+            Assertions.assertEquals(java.sql.Date.class, results.getObject(3).getClass());
             count++;
         }
         Assertions.assertEquals(count, 3L);

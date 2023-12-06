@@ -13,10 +13,19 @@
  */
 package com.sqlsheet.stream;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Sheet;
+
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SqlSheet implementation of java.sql.ResultSetMetaData.
@@ -26,55 +35,203 @@ import java.util.Date;
  */
 public class XlsStreamingResultSetMetaData implements ResultSetMetaData {
 
-    private final AbstractXlsSheetIterator iterator;
+    /**
+     * A map between the code ID and the type name
+     */
+    public static Map<Integer, String> columnTypeNameMap = new HashMap<Integer, String>();
+    /**
+     * A map between the code ID and the type class
+     */
+    static Map<Integer, String> columnTypeClassMap = new HashMap<Integer, String>();
 
-    public XlsStreamingResultSetMetaData(AbstractXlsSheetIterator iterator) throws SQLException {
-        this.iterator = iterator;
+    static {
+        columnTypeNameMap.put(Types.VARCHAR, "VARCHAR");
+        columnTypeNameMap.put(Types.DOUBLE, "DOUBLE");
+        columnTypeNameMap.put(Types.DATE, "DATE");
+
+        columnTypeClassMap.put(Types.VARCHAR, "java.lang.String.class");
+        columnTypeClassMap.put(Types.DOUBLE, "java.lang.Double.class");
+        columnTypeClassMap.put(Types.DATE, "java.sql.Date.class");
+    }
+
+    private final DataFormatter formatter;
+    protected List<String> columnNames;
+
+    Map<Integer, Integer> columnTypeMap = new HashMap<>();
+
+    @SuppressWarnings("PMD.NPathComplexity")
+    public XlsStreamingResultSetMetaData(
+            Sheet sheet, XlsStreamResultSet resultset, int firstSheetRowOffset,
+            int firstSheetColOffset)
+            throws SQLException {
+
+        if (sheet == null) {
+            throw new IllegalArgumentException();
+        }
+        for (int i = 0; i < firstSheetRowOffset; i++) {
+            resultset.row = resultset.iterator.next();
+        }
+
+        if (resultset.row == null) {
+            throw new SQLException("No header row in sheet");
+        }
+        formatter = new DataFormatter();
+        columnNames = new ArrayList<String>();
+        for (short c = (short) firstSheetColOffset; c < resultset.row.getLastCellNum(); c++) {
+            Cell cell = resultset.row.getCell(c);
+            String columnName = formatter.formatCellValue(cell);
+            if (columnName != null && !columnName.isEmpty()) {
+                // Is it unique in the column name set
+                int suffix;
+                while (columnNames.contains(columnName)) {
+                    suffix = 1;
+                    columnName += "_" + suffix;
+                }
+
+                columnNames.add(columnName);
+            }
+        }
+
+        // A double map to back the relation between the column Id and the count of type
+        Map<Integer, Map<Integer, Integer>> columnTypeScan =
+                new HashMap<Integer, Map<Integer, Integer>>();
+        if (resultset.next()) {
+            int typeCode;
+            for (int columnId = 1; columnId <= getColumnCount(); columnId++) {
+
+                Cell cell = resultset.getCell(columnId);
+                if (cell != null) {
+
+                    CellType excelCellType = cell.getCellType();
+                    switch (excelCellType) {
+                        case BOOLEAN:
+                            typeCode = Types.BOOLEAN;
+                            break;
+                        case STRING:
+                            typeCode = Types.VARCHAR;
+                            break;
+                        case NUMERIC:
+                            if (DateUtil.isCellDateFormatted(cell)) {
+                                typeCode = Types.DATE;
+                            } else {
+                                typeCode = Types.DOUBLE;
+                            }
+                            break;
+                        case BLANK:
+                            typeCode = Types.NULL;
+                            break;
+                        case FORMULA:
+                            try {
+                                cell.getStringCellValue();
+                                typeCode = Types.VARCHAR;
+                            } catch (Exception e) {
+                                cell.getNumericCellValue();
+                                typeCode = Types.DOUBLE;
+                            }
+                            break;
+                        case ERROR:
+                            throw new RuntimeException(
+                                    "The ExcelType ( ERROR ) is not supported - Cell ("
+                                            + resultset.getRow()
+                                            + ","
+                                            + columnId
+                                            + ")");
+
+                        default:
+                            throw new RuntimeException(
+                                    "The ExcelType ("
+                                            + excelCellType
+                                            + ") is not supported - Cell ("
+                                            + resultset.getRow()
+                                            + ","
+                                            + columnId
+                                            + ")");
+                    }
+                } else {
+                    typeCode = Types.NULL;
+                }
+                Map<Integer, Integer> columnIdTypeMap = columnTypeScan.get(columnId);
+                if (columnIdTypeMap == null) {
+                    columnIdTypeMap = new HashMap<Integer, Integer>();
+                    columnIdTypeMap.put(typeCode, 1);
+                    columnTypeScan.put(columnId, columnIdTypeMap);
+                } else {
+                    Integer columnIdType = columnIdTypeMap.get(typeCode);
+                    if (columnIdType == null) {
+                        columnIdTypeMap.put(typeCode, 1);
+                    } else {
+                        int count = columnIdTypeMap.get(typeCode) + 1;
+                        columnIdTypeMap.put(typeCode, count);
+                    }
+                }
+            }
+            // Retrieve only one type
+            for (Map.Entry<Integer, Map<Integer, Integer>> columnIdEntry : columnTypeScan
+                    .entrySet()) {
+                Integer numberOfVarchar = 0;
+                Integer numberOfDouble = 0;
+                Integer numberOfDate = 0;
+                for (Map.Entry<Integer, Integer> columnIdTypeMap : columnIdEntry.getValue()
+                        .entrySet()) {
+                    if (columnIdTypeMap.getKey() == Types.VARCHAR) {
+                        numberOfVarchar = columnIdTypeMap.getValue();
+                    } else if (columnIdTypeMap.getKey() == Types.DOUBLE) {
+                        numberOfDouble = columnIdTypeMap.getValue();
+                    } else if (columnIdTypeMap.getKey() == Types.DATE) {
+                        numberOfDate = columnIdTypeMap.getValue();
+                    }
+                }
+                Integer finalColumnType = null;
+                if (numberOfVarchar != 0) {
+                    finalColumnType = Types.VARCHAR;
+                } else {
+                    if (numberOfDouble != 0 && numberOfDate == 0) {
+                        finalColumnType = Types.DOUBLE;
+                    }
+                    if (numberOfDouble == 0 && numberOfDate != 0) {
+                        finalColumnType = Types.DATE;
+                    }
+                }
+                if (finalColumnType == null) {
+                    finalColumnType = Types.VARCHAR;
+                }
+                columnTypeMap.put(columnIdEntry.getKey(), finalColumnType);
+            }
+        }
     }
 
     public int getColumnCount() {
-        return iterator.getColumns().size();
+        return columnNames.size();
     }
 
     public String getColumnLabel(int jdbcCol) {
-        return iterator.getColumns().get(jdbcCol - 1).stringValue;
+        return columnNames.get(jdbcCol - 1);
     }
 
     public String getColumnName(int jdbcCol) {
-        return iterator.getColumns().get(jdbcCol - 1).stringValue;
+        return columnNames.get(jdbcCol - 1);
     }
 
     public String getCatalogName(int arg0) throws SQLException {
-        return "";
+        return null;
     }
 
-    public String getColumnClassName(int jdbcCol) throws SQLException {
-        return iterator.getCurrentRowValue(jdbcCol - 1).getType().getName();
+    public String getColumnClassName(int jdbcColumn) throws SQLException {
+        return columnTypeClassMap.get(getColumnType(jdbcColumn));
     }
 
     public int getColumnDisplaySize(int arg0) {
         return 0;
     }
 
-    public int getColumnType(int jdbcCol) throws SQLException {
-        if (iterator.getCurrentRowValue(jdbcCol - 1).getType().isAssignableFrom(String.class)) {
-            return Types.VARCHAR;
-        } else if (iterator.getCurrentRowValue(jdbcCol - 1).getType()
-                .isAssignableFrom(Double.class)) {
-            return Types.DOUBLE;
-        } else if (iterator.getCurrentRowValue(jdbcCol - 1).getType()
-                .isAssignableFrom(Date.class)) {
-            return Types.DATE;
-        }
-        return Types.OTHER;
+    public int getColumnType(int jdbcColumn) throws SQLException {
+
+        return columnTypeMap.get(jdbcColumn);
     }
 
-    public String getColumnTypeName(int jdbcCol) throws SQLException {
-        if (iterator.getCurrentIteratorRowIndex() == 0) {
-            return iterator.getNextRowValue(jdbcCol - 1).getType().getName();
-        } else {
-            return iterator.getCurrentRowValue(jdbcCol - 1).getType().getName();
-        }
+    public String getColumnTypeName(int jdbcColumn) throws SQLException {
+
+        return columnTypeNameMap.get(getColumnType(jdbcColumn));
     }
 
     public int getPrecision(int arg0) throws SQLException {
@@ -86,11 +243,11 @@ public class XlsStreamingResultSetMetaData implements ResultSetMetaData {
     }
 
     public String getSchemaName(int arg0) throws SQLException {
-        return "";
+        return null;
     }
 
     public String getTableName(int arg0) throws SQLException {
-        return iterator.getSheetName();
+        return null;
     }
 
     public boolean isAutoIncrement(int arg0) throws SQLException {

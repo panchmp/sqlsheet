@@ -56,8 +56,8 @@ public class XlsStatement implements Statement {
         this.connection = c;
     }
 
-    private static Sheet getSheetNamed(Workbook wb, String name) throws SQLException {
-        if (name == null || name.trim().length() == 0) {
+    public static Sheet getSheetNamed(Workbook wb, String name) throws SQLException {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException();
         }
         StringBuilder allSheetNames = new StringBuilder();
