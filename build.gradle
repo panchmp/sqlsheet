@@ -95,8 +95,8 @@ description = 'JDBC Driver for xls/xlsx files using POI'
 java {
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
     // needed for XML-Doclet to work (since Doclet changed again with Java 13)
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
