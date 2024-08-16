@@ -440,7 +440,7 @@ public class XlsResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a boolean and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case STRING:
@@ -454,7 +454,7 @@ public class XlsResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a string cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case NUMERIC:
@@ -623,7 +623,7 @@ public class XlsResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a boolean and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case STRING:
@@ -637,7 +637,7 @@ public class XlsResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a string cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case NUMERIC:
@@ -646,7 +646,8 @@ public class XlsResultSet implements ResultSet {
                         wasNull = false;
                         return new Date(value.getTime()).toString();
                     } else {
-                        BigDecimal bd = BigDecimal.valueOf(cell.getNumericCellValue()).round(CTX_NN_15_EVEN).stripTrailingZeros();
+                        BigDecimal bd = BigDecimal.valueOf(cell.getNumericCellValue())
+                                .round(CTX_NN_15_EVEN).stripTrailingZeros();
                         return bd.toPlainString();
                     }
                 case FORMULA:
@@ -662,7 +663,7 @@ public class XlsResultSet implements ResultSet {
                                                 + ","
                                                 + columnIndex
                                                 + ") is a boolean and cannot be cast to ("
-                                                + XlsResultSetMetaData.columnTypeNameMap
+                                                + XlsResultSetMetaData.COLUMN_TYPE_NAMES
                                                         .get(columnType)
                                                 + ".");
                             }
@@ -691,7 +692,7 @@ public class XlsResultSet implements ResultSet {
                                                 + ","
                                                 + columnIndex
                                                 + ") is a string cell and cannot be cast to ("
-                                                + XlsResultSetMetaData.columnTypeNameMap
+                                                + XlsResultSetMetaData.COLUMN_TYPE_NAMES
                                                         .get(columnType)
                                                 + ".");
                             }

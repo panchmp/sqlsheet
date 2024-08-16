@@ -12,9 +12,12 @@
       </Or>
     </Match>
 
-    <!-- only Prio 1 and 2, ignore 3 as irrelevant -->
+    <!-- only Prio 1. ignore 2 and 3 as irrelevant -->
     <Match>
-        <Priority value="3" />
+        <Or>
+            <Priority value="2" />
+            <Priority value="3" />
+        </Or>
     </Match>
 
     <!-- Closables will be closed from outside and only after the call -->

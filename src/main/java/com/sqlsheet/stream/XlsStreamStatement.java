@@ -107,7 +107,6 @@ public class XlsStreamStatement implements Statement {
             Sheet sheet = getSheetNamed(connection.getWorkBook(), sanitizedTableName);
             out =
                     new XlsStreamResultSet(
-                            connection.getWorkBook(),
                             sheet,
                             connection.getInt(XlsDriver.HEADLINE, DEFAULT_HEADLINE),
                             connection.getInt(XlsDriver.FIRST_COL, DEFAULT_FIRST_COL));

@@ -24,6 +24,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,21 +40,16 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     /**
      * A map between the code ID and the type name
      */
-    public static Map<Integer, String> columnTypeNameMap = new HashMap<Integer, String>();
+    public final static Map<Integer, String> COLUMN_TYPE_NAMES = Collections.unmodifiableMap(
+            Map.of(
+                    Types.VARCHAR, "VARCHAR", Types.DOUBLE, "DOUBLE", Types.DATE, "DATE"));
     /**
      * A map between the code ID and the type class
      */
-    static Map<Integer, String> columnTypeClassMap = new HashMap<Integer, String>();
-
-    static {
-        columnTypeNameMap.put(Types.VARCHAR, "VARCHAR");
-        columnTypeNameMap.put(Types.DOUBLE, "DOUBLE");
-        columnTypeNameMap.put(Types.DATE, "DATE");
-
-        columnTypeClassMap.put(Types.VARCHAR, "java.lang.String.class");
-        columnTypeClassMap.put(Types.DOUBLE, "java.lang.Double.class");
-        columnTypeClassMap.put(Types.DATE, "java.sql.Date.class");
-    }
+    public final static Map<Integer, String> COLUMN_TYPE_CLASSES = Collections.unmodifiableMap(
+            Map.of(
+                    Types.VARCHAR, "java.lang.String.class", Types.DOUBLE, "java.lang.Double.class",
+                    Types.DATE, "java.sql.Date.class"));
 
     private final DataFormatter formatter;
     protected List<String> columnNames;
@@ -221,7 +217,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
     }
 
     public String getColumnClassName(int jdbcColumn) throws SQLException {
-        return columnTypeClassMap.get(getColumnType(jdbcColumn));
+        return COLUMN_TYPE_CLASSES.get(getColumnType(jdbcColumn));
     }
 
     public int getColumnDisplaySize(int arg0) {
@@ -235,7 +231,7 @@ public class XlsResultSetMetaData implements ResultSetMetaData {
 
     public String getColumnTypeName(int jdbcColumn) throws SQLException {
 
-        return columnTypeNameMap.get(getColumnType(jdbcColumn));
+        return COLUMN_TYPE_NAMES.get(getColumnType(jdbcColumn));
     }
 
     public int getPrecision(int arg0) throws SQLException {

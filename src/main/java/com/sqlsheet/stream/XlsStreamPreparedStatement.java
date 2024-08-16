@@ -55,16 +55,12 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
     private boolean closeOnCompletion;
 
     private final XlsStreamingResultSetMetaData metadata;
-    private final int firstSheetRowOffset;
-    private final int firstSheetColOffset;
     Iterator<Row> iterator;
 
     public XlsStreamPreparedStatement(XlsStreamConnection conn, String sql, int firstSheetRowOffset,
             int firstSheetColOffset) throws SQLException {
         super(conn);
         this.statement = super.parse(sql);
-        this.firstSheetRowOffset = firstSheetRowOffset;
-        this.firstSheetColOffset = firstSheetColOffset;
 
         if (this.statement instanceof SelectStarStatement) {
             String tableName = ((SelectStarStatement) this.statement).getTable();

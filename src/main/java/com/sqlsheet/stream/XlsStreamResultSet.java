@@ -19,7 +19,6 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -63,9 +62,7 @@ public class XlsStreamResultSet implements ResultSet {
     Row row = null;
     int rowNum = 0;
 
-    private boolean wasNull;
-
-    public XlsStreamResultSet(Workbook wb, Sheet sheet,
+    public XlsStreamResultSet(Sheet sheet,
             int firstSheetRowOffset, int firstSheetColOffset)
             throws SQLException {
 
@@ -110,17 +107,14 @@ public class XlsStreamResultSet implements ResultSet {
     public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
         if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-            wasNull = true;
             return null;
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
             nyi();
         } else {
-            wasNull = false;
             return BigDecimal.valueOf(cell.getNumericCellValue());
         }
 
         // this should never happen
-        wasNull = true;
         return null;
     }
 
@@ -146,16 +140,13 @@ public class XlsStreamResultSet implements ResultSet {
     public Date getDate(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
         if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-            wasNull = true;
             return null;
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
             nyi();
         } else {
-            wasNull = false;
             return new Date(cell.getDateCellValue().getTime());
         }
 
-        wasNull = true;
         return null;
     }
 
@@ -191,17 +182,14 @@ public class XlsStreamResultSet implements ResultSet {
     public boolean getBoolean(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
         if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-            wasNull = true;
             return false;
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
             nyi();
         } else {
-            wasNull = false;
             return cell.getBooleanCellValue();
         }
 
         // this should never happen
-        wasNull = true;
         return false;
     }
 
@@ -215,17 +203,14 @@ public class XlsStreamResultSet implements ResultSet {
     public double getDouble(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
         if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-            wasNull = true;
             return 0d;
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
             nyi();
         } else {
-            wasNull = false;
             return cell.getNumericCellValue();
         }
 
         // this should never happen
-        wasNull = true;
         return 0d;
     }
 
@@ -239,17 +224,14 @@ public class XlsStreamResultSet implements ResultSet {
     public byte getByte(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
         if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-            wasNull = true;
             return (byte) 0;
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
             nyi();
         } else {
-            wasNull = false;
             return Double.valueOf(cell.getNumericCellValue()).byteValue();
         }
 
         // this should never happen
-        wasNull = true;
         return (byte) 0;
     }
 
@@ -263,17 +245,14 @@ public class XlsStreamResultSet implements ResultSet {
     public float getFloat(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
         if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-            wasNull = true;
             return 0f;
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
             nyi();
         } else {
-            wasNull = false;
             return Double.valueOf(cell.getNumericCellValue()).floatValue();
         }
 
         // this should never happen
-        wasNull = true;
         return 0f;
     }
 
@@ -287,17 +266,14 @@ public class XlsStreamResultSet implements ResultSet {
     public int getInt(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
         if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-            wasNull = true;
             return 0;
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
             nyi();
         } else {
-            wasNull = false;
             return Double.valueOf(cell.getNumericCellValue()).intValue();
         }
 
         // this should never happen
-        wasNull = true;
         return 0;
     }
 
@@ -311,17 +287,14 @@ public class XlsStreamResultSet implements ResultSet {
     public long getLong(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
         if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-            wasNull = true;
             return 0;
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
             nyi();
         } else {
-            wasNull = false;
             return Double.valueOf(cell.getNumericCellValue()).longValue();
         }
 
         // this should never happen
-        wasNull = true;
         return 0L;
     }
 
@@ -337,13 +310,11 @@ public class XlsStreamResultSet implements ResultSet {
         int columnType = metadata.getColumnType(columnIndex);
         try {
             if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-                wasNull = true;
                 return null;
             }
             switch (cell.getCellType()) {
                 case BOOLEAN:
                     if (columnType == Types.VARCHAR || columnType == Types.BOOLEAN) {
-                        wasNull = false;
                         return cell.getBooleanCellValue();
                     } else {
                         throw new RuntimeException(
@@ -352,12 +323,11 @@ public class XlsStreamResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a boolean and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case STRING:
                     if (columnType == Types.VARCHAR) {
-                        wasNull = false;
                         return cell.getStringCellValue();
                     } else {
                         throw new RuntimeException(
@@ -366,23 +336,20 @@ public class XlsStreamResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a string cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case NUMERIC:
                     if (DateUtil.isCellDateFormatted(cell)) {
                         java.util.Date value = cell.getDateCellValue();
-                        wasNull = false;
                         return new Date(value.getTime());
                     } else {
-                        wasNull = false;
                         return new BigDecimal(Double.valueOf(cell.getNumericCellValue()).toString(),
                                 CTX_NN_15_EVEN)
                                 .doubleValue();
                     }
                 case FORMULA:
                 default:
-                    wasNull = true;
                     return null;
             }
         } catch (Exception e) {
@@ -410,7 +377,6 @@ public class XlsStreamResultSet implements ResultSet {
     public Timestamp getTimestamp(int columnIndex) throws SQLException {
         java.util.Date date = (java.util.Date) getObject(columnIndex);
         if (date == null) {
-            wasNull = true;
             return null;
         } else {
             return new Timestamp(date.getTime());
@@ -437,17 +403,14 @@ public class XlsStreamResultSet implements ResultSet {
     public short getShort(int columnIndex) throws SQLException {
         Cell cell = getCell(columnIndex);
         if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-            wasNull = true;
             return 0;
         } else if (cell.getCellType().equals(CellType.FORMULA)) {
             nyi();
         } else {
-            wasNull = false;
             return Double.valueOf(cell.getNumericCellValue()).shortValue();
         }
 
         // this should never happen
-        wasNull = true;
         return (short) 0;
     }
 
@@ -463,13 +426,11 @@ public class XlsStreamResultSet implements ResultSet {
         int columnType = metadata.getColumnType(columnIndex);
         try {
             if (cell == null || cell.getCellType().equals(CellType.BLANK)) {
-                wasNull = true;
                 return null;
             }
             switch (cell.getCellType()) {
                 case BOOLEAN:
                     if (columnType == Types.VARCHAR || columnType == Types.BOOLEAN) {
-                        wasNull = false;
                         return Boolean.toString(cell.getBooleanCellValue());
                     } else {
                         throw new RuntimeException(
@@ -478,12 +439,11 @@ public class XlsStreamResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a boolean and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case STRING:
                     if (columnType == Types.VARCHAR) {
-                        wasNull = false;
                         return cell.getStringCellValue();
                     } else {
                         throw new RuntimeException(
@@ -492,23 +452,21 @@ public class XlsStreamResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a string cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case NUMERIC:
                     if (DateUtil.isCellDateFormatted(cell)) {
                         java.util.Date value = cell.getDateCellValue();
-                        wasNull = false;
                         return new Date(value.getTime()).toString();
                     } else {
-                        wasNull = false;
-                        BigDecimal bd = BigDecimal.valueOf(cell.getNumericCellValue()).round(CTX_NN_15_EVEN).stripTrailingZeros();
+                        BigDecimal bd = BigDecimal.valueOf(cell.getNumericCellValue())
+                                .round(CTX_NN_15_EVEN).stripTrailingZeros();
                         return bd.toPlainString();
                     }
                 case FORMULA:
                     nyi();
                 default:
-                    wasNull = true;
                     return null;
             }
         } catch (Exception e) {
