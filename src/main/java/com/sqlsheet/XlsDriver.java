@@ -243,7 +243,8 @@ public class XlsDriver implements java.sql.Driver {
                 flushWorkbook(workbook, file);
             }
         }
-        org.apache.poi.openxml4j.util.ZipInputStreamZipEntrySource.setThresholdBytesForTempFiles(100_000_000);
+        org.apache.poi.openxml4j.util.ZipInputStreamZipEntrySource
+                .setThresholdBytesForTempFiles(100_000_000);
         IOUtils.setByteArrayMaxOverride(500_000_000);
         return WorkbookFactory.create(workbookUrl.openStream());
     }

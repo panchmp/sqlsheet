@@ -6,9 +6,9 @@ Changelog of sqlsheet.
 
 ### Features
 
--  use `ExcelStreamingReader` for reading SXFFS and obey firstColumn and firstRow parameters ([23e76](https://github.com/manticore-projects/sqlsheet/commit/23e762dd3c4f731) Andreas Reichel)  
--  ResultSetMetaData for Streaming PreparedStatement ([8ee1f](https://github.com/manticore-projects/sqlsheet/commit/8ee1fc5a26a34c2) Andreas Reichel)  
--  Streaming DatabaseMetaData support based on ExcelStreamingReader ([e23f5](https://github.com/manticore-projects/sqlsheet/commit/e23f50ffeee8693) Andreas Reichel)  
+-  use `ExcelStreamingReader` for reading SXFFS and obey firstColumn and firstRow parameters ([23e76](https://github.com/manticore-projects/sqlsheet/commit/23e762dd3c4f731) Andreas Reichel)
+-  ResultSetMetaData for Streaming PreparedStatement ([8ee1f](https://github.com/manticore-projects/sqlsheet/commit/8ee1fc5a26a34c2) Andreas Reichel)
+-  Streaming DatabaseMetaData support based on ExcelStreamingReader ([e23f5](https://github.com/manticore-projects/sqlsheet/commit/e23f50ffeee8693) Andreas Reichel)
 
 ### Other changes
 
@@ -124,21 +124,21 @@ Changelog of sqlsheet.
 
 **Update Apache POI 5.0.0 (#41)**
 
-* Update JSqlParser 4.0 
-* Format the java code with Google Code Formatter 
+* Update JSqlParser 4.0
+* Format the java code with Google Code Formatter
 
 [2c2d8](https://github.com/manticore-projects/sqlsheet/commit/2c2d83677734178) manticore-projects *2021-02-15 23:04:17*
 
 **Update Apache POI 5.0.0**
 
-* Update JSqlParser 4.0 
-* Format the java code with Google Code Formatter 
+* Update JSqlParser 4.0
+* Format the java code with Google Code Formatter
 
 [fa89d](https://github.com/manticore-projects/sqlsheet/commit/fa89de7f70bcb2e) Andreas Reichel *2021-01-20 07:23:04*
 
 **remove travis instruction to build project on specific (not any more supported) JDK versions**
 
-* we use TravisCI, CircleCI integration is not necessary 
+* we use TravisCI, CircleCI integration is not necessary
 
 [d5e60](https://github.com/manticore-projects/sqlsheet/commit/d5e6031f33ee1cd) Klaus Hauschild *2020-11-27 18:53:36*
 
@@ -154,47 +154,47 @@ Changelog of sqlsheet.
 
 **Implement support for relative Connection URLs, such as**
 
-* jdbc:xls:file://~/headline.xlsx  (tilde resolve to $HOME) 
-* jdbc:xls:file://${user.home}/headline.xlsx (system property resolves to $HOME} 
-* jdbc:xls:classpath:/headline.xlsx (resource in classpath) 
-* Resolves Issue #29 
-* Testcase provided 
+* jdbc:xls:file://~/headline.xlsx  (tilde resolve to $HOME)
+* jdbc:xls:file://${user.home}/headline.xlsx (system property resolves to $HOME}
+* jdbc:xls:classpath:/headline.xlsx (resource in classpath)
+* Resolves Issue #29
+* Testcase provided
 
 [f4719](https://github.com/manticore-projects/sqlsheet/commit/f471936cd5c31cd) Andreas Reichel *2020-11-25 11:54:28*
 
 **Implement Close(), isClosed(), wasNull() and rewrite most of the getXXXX() methods accordingly (#36)**
 
-* Update versions of POI and COMMONS IO 
-* Add GLOB for SQL like pattern matching 
-* Add test dependency ASCII Table for formatted test output 
-* Add author Andreas Reichel 
-* Implement DatabaseMetaData 
-* for some methods, throw SQLFeatureNotSupported instead of Not Yet Implemented so SQL Clients can continue instead of failing 
-* Provide separate DatabaseMetaData (work in progress) 
-* Test case for DatabaseMetaData 
-* Update Driver Class name and call it only before the test 
-* Reformat the tests 
-* exclude Netbeans config folders 
-* implement Statement.close(), Statement.isClosed() and Statement.closeOnCompletion() 
-* throw Unsupported SQL Feature Exception, where we won&#x27;t be able to implement a solution 
-* implement ResultSet.close(), ResultSet.isClosed() 
-* implement ResultSet.wasNull() because most methods return primitives on NULL 
-* rewrite most of the getXXXX() methods in order the set wasNull on empty rows and empty cells 
-* rewrite most of getXXXX() method parameters (using columnIndex and columnLabel from the API) 
-* avoid NPE on empty rows 
-* rewrite most of the getXXXX() methods returning Objects in order the set wasNull on empty rows and empty cells 
-* rewrite most of getXXXX() returning Objects method parameters (using columnIndex and columnLabel from the API) 
-* Testcase around Close(), isClosed(), closeOnCompletion, wasNull() 
-* Should close issue #1 
-* need to set wasNull&#x3D;false when value has been found 
-* avoid NPE in getTimestamp() 
-* enhance the Test and show the actual content 
-* Enhance test, particularly testing getXXXX(columnIndex) vs. getXXXX(columnLabel) 
-* Fix everything, we broke (sorry!) 
-* All tests passed. 
-* ensure Tests will have enough Memory available, avoid the large streaming tests to fail. 
-* fix JavaDoc 
-* Evaluate Cell formulas before reading the cell value 
+* Update versions of POI and COMMONS IO
+* Add GLOB for SQL like pattern matching
+* Add test dependency ASCII Table for formatted test output
+* Add author Andreas Reichel
+* Implement DatabaseMetaData
+* for some methods, throw SQLFeatureNotSupported instead of Not Yet Implemented so SQL Clients can continue instead of failing
+* Provide separate DatabaseMetaData (work in progress)
+* Test case for DatabaseMetaData
+* Update Driver Class name and call it only before the test
+* Reformat the tests
+* exclude Netbeans config folders
+* implement Statement.close(), Statement.isClosed() and Statement.closeOnCompletion()
+* throw Unsupported SQL Feature Exception, where we won&#x27;t be able to implement a solution
+* implement ResultSet.close(), ResultSet.isClosed()
+* implement ResultSet.wasNull() because most methods return primitives on NULL
+* rewrite most of the getXXXX() methods in order the set wasNull on empty rows and empty cells
+* rewrite most of getXXXX() method parameters (using columnIndex and columnLabel from the API)
+* avoid NPE on empty rows
+* rewrite most of the getXXXX() methods returning Objects in order the set wasNull on empty rows and empty cells
+* rewrite most of getXXXX() returning Objects method parameters (using columnIndex and columnLabel from the API)
+* Testcase around Close(), isClosed(), closeOnCompletion, wasNull()
+* Should close issue #1
+* need to set wasNull&#x3D;false when value has been found
+* avoid NPE in getTimestamp()
+* enhance the Test and show the actual content
+* Enhance test, particularly testing getXXXX(columnIndex) vs. getXXXX(columnLabel)
+* Fix everything, we broke (sorry!)
+* All tests passed.
+* ensure Tests will have enough Memory available, avoid the large streaming tests to fail.
+* fix JavaDoc
+* Evaluate Cell formulas before reading the cell value
 
 [38002](https://github.com/manticore-projects/sqlsheet/commit/38002e86df463be) manticore-projects *2020-11-21 15:18:17*
 
@@ -215,8 +215,8 @@ Changelog of sqlsheet.
 
 **Enhance test, particularly testing getXXXX(columnIndex) vs. getXXXX(columnLabel)**
 
-* Fix everything, we broke (sorry!) 
-* All tests passed. 
+* Fix everything, we broke (sorry!)
+* All tests passed.
 
 [3e66e](https://github.com/manticore-projects/sqlsheet/commit/3e66e99c63b5ea2) Andreas Reichel *2020-10-27 12:20:03*
 
@@ -227,50 +227,50 @@ Changelog of sqlsheet.
 
 **need to set wasNull=false when value has been found**
 
-* avoid NPE in getTimestamp() 
+* avoid NPE in getTimestamp()
 
 [0911b](https://github.com/manticore-projects/sqlsheet/commit/0911be325c6bcbd) Andreas Reichel *2020-10-27 10:35:24*
 
 **Testcase around Close(), isClosed(), closeOnCompletion, wasNull()**
 
-* Should close issue #1 
+* Should close issue #1
 
 [6d5f8](https://github.com/manticore-projects/sqlsheet/commit/6d5f89576a495a3) Andreas Reichel *2020-10-27 10:05:31*
 
 **rewrite most of the getXXXX() methods returning Objects in order the set wasNull on empty rows and empty cells**
 
-* rewrite most of getXXXX() returning Objects method parameters (using columnIndex and columnLabel from the API) 
+* rewrite most of getXXXX() returning Objects method parameters (using columnIndex and columnLabel from the API)
 
 [d9d03](https://github.com/manticore-projects/sqlsheet/commit/d9d03613e5efc59) Andreas Reichel *2020-10-27 10:02:45*
 
 **implement ResultSet.close(), ResultSet.isClosed()**
 
-* implement ResultSet.wasNull() because most methods return primitives on NULL 
-* rewrite most of the getXXXX() methods in order the set wasNull on empty rows and empty cells 
-* rewrite most of getXXXX() method parameters (using columnIndex and columnLabel from the API) 
-* avoid NPE on empty rows 
+* implement ResultSet.wasNull() because most methods return primitives on NULL
+* rewrite most of the getXXXX() methods in order the set wasNull on empty rows and empty cells
+* rewrite most of getXXXX() method parameters (using columnIndex and columnLabel from the API)
+* avoid NPE on empty rows
 
 [54406](https://github.com/manticore-projects/sqlsheet/commit/54406f7fa19cd05) Andreas Reichel *2020-10-27 09:51:05*
 
 **implement Statement.close(), Statement.isClosed() and Statement.closeOnCompletion()**
 
-* throw Unsupported SQL Feature Exception, where we won&#x27;t be able to implement a solution 
+* throw Unsupported SQL Feature Exception, where we won&#x27;t be able to implement a solution
 
 [d90fd](https://github.com/manticore-projects/sqlsheet/commit/d90fd9b031237c0) Andreas Reichel *2020-10-27 09:46:05*
 
 **Implement DatabaseMetaData (#35)**
 
-* Update versions of POI and COMMONS IO 
-* Add GLOB for SQL like pattern matching 
-* Add test dependency ASCII Table for formatted test output 
-* Add author Andreas Reichel 
-* Implement DatabaseMetaData 
-* for some methods, throw SQLFeatureNotSupported instead of Not Yet Implemented so SQL Clients can continue instead of failing 
-* Provide separate DatabaseMetaData (work in progress) 
-* Test case for DatabaseMetaData 
-* Update Driver Class name and call it only before the test 
-* Reformat the tests 
-* exclude Netbeans config folders 
+* Update versions of POI and COMMONS IO
+* Add GLOB for SQL like pattern matching
+* Add test dependency ASCII Table for formatted test output
+* Add author Andreas Reichel
+* Implement DatabaseMetaData
+* for some methods, throw SQLFeatureNotSupported instead of Not Yet Implemented so SQL Clients can continue instead of failing
+* Provide separate DatabaseMetaData (work in progress)
+* Test case for DatabaseMetaData
+* Update Driver Class name and call it only before the test
+* Reformat the tests
+* exclude Netbeans config folders
 
 [418ec](https://github.com/manticore-projects/sqlsheet/commit/418ecebf9cff76a) manticore-projects *2020-10-27 03:48:51*
 
@@ -281,8 +281,8 @@ Changelog of sqlsheet.
 
 **Test case for DatabaseMetaData**
 
-* Update Driver Class name and call it only before the test 
-* Reformat the tests 
+* Update Driver Class name and call it only before the test
+* Reformat the tests
 
 [a2b88](https://github.com/manticore-projects/sqlsheet/commit/a2b88a23d6a1a90) Andreas Reichel *2020-10-26 12:27:56*
 
@@ -293,26 +293,26 @@ Changelog of sqlsheet.
 
 **Implement DatabaseMetaData**
 
-* for some methods, throw SQLFeatureNotSupported instead of Not Yet Implemented so SQL Clients can continue instead of failing 
+* for some methods, throw SQLFeatureNotSupported instead of Not Yet Implemented so SQL Clients can continue instead of failing
 
 [2644e](https://github.com/manticore-projects/sqlsheet/commit/2644ed8a9d36410) Andreas Reichel *2020-10-26 12:26:08*
 
 **Update versions of POI and COMMONS IO**
 
-* Add GLOB for SQL like pattern matching 
-* Add test dependency ASCII Table for formatted test output 
-* Add author Andreas Reichel 
+* Add GLOB for SQL like pattern matching
+* Add test dependency ASCII Table for formatted test output
+* Add author Andreas Reichel
 
 [b9623](https://github.com/manticore-projects/sqlsheet/commit/b96233a4e927156) Andreas Reichel *2020-10-26 12:20:50*
 
 **Bump junit from 4.12 to 4.13.1 (#34)**
 
-* Bumps [junit](https://github.com/junit-team/junit4) from 4.12 to 4.13.1. 
-* - [Release notes](https://github.com/junit-team/junit4/releases) 
-* - [Changelog](https://github.com/junit-team/junit4/blob/main/doc/ReleaseNotes4.12.md) 
-* - [Commits](https://github.com/junit-team/junit4/compare/r4.12...r4.13.1) 
-* Signed-off-by: dependabot[bot] &lt;support@github.com&gt; 
-* Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; 
+* Bumps [junit](https://github.com/junit-team/junit4) from 4.12 to 4.13.1.
+* - [Release notes](https://github.com/junit-team/junit4/releases)
+* - [Changelog](https://github.com/junit-team/junit4/blob/main/doc/ReleaseNotes4.12.md)
+* - [Commits](https://github.com/junit-team/junit4/compare/r4.12...r4.13.1)
+* Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+* Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt;
 
 [81fa8](https://github.com/manticore-projects/sqlsheet/commit/81fa8fe291655f8) dependabot[bot] *2020-10-12 23:02:07*
 
@@ -343,8 +343,8 @@ Changelog of sqlsheet.
 
 **- update to JDK8**
 
-* - update dependencies 
-* - update plugins 
+* - update dependencies
+* - update plugins
 
 [1a053](https://github.com/manticore-projects/sqlsheet/commit/1a053f131df432e) Michael Panchenko *2019-10-21 23:48:04*
 
@@ -355,8 +355,8 @@ Changelog of sqlsheet.
 
 **update JSQLParser to 3.0**
 
-* update POI to 4.1.1 
-* add a switch to skip tests 
+* update POI to 4.1.1
+* add a switch to skip tests
 
 [6dcad](https://github.com/manticore-projects/sqlsheet/commit/6dcad19fa2b20de) Andreas Reichel *2019-10-21 02:47:05*
 
@@ -392,7 +392,7 @@ Changelog of sqlsheet.
 
 **add firstColumn connection parameter**
 
-* update POI to 4.1.1 
+* update POI to 4.1.1
 
 [36ffc](https://github.com/manticore-projects/sqlsheet/commit/36ffc350b3fa516) Andreas Reichel *2019-10-21 02:43:22*
 
@@ -413,7 +413,7 @@ Changelog of sqlsheet.
 
 **Fix the endless recursive loop on getObject(String columnName)**
 
-* Fix reading double values 
+* Fix reading double values
 
 [86d80](https://github.com/manticore-projects/sqlsheet/commit/86d80e27e536b2d) Andreas Reichel *2019-10-21 01:40:47*
 
@@ -424,26 +424,26 @@ Changelog of sqlsheet.
 
 **Move to more fitting package #26**
 
-* restore SCM 
+* restore SCM
 
 [2a5ac](https://github.com/manticore-projects/sqlsheet/commit/2a5acf91618e26a) Klaus Hauschild *2017-05-22 17:24:23*
 
 **Move to more fitting package #26**
 
-* realign GAV coordinates to match new package 
+* realign GAV coordinates to match new package
 
 [56aa7](https://github.com/manticore-projects/sqlsheet/commit/56aa726d95f5fa2) Klaus Hauschild *2017-05-22 17:20:01*
 
 **Move to more fitting package #26**
 
-* fix compile and test failures 
-* reformat whole soruce code 
+* fix compile and test failures
+* reformat whole soruce code
 
 [53a5e](https://github.com/manticore-projects/sqlsheet/commit/53a5e9860d476df) Klaus Hauschild *2017-05-22 17:20:00*
 
 **Move to more fitting package #26**
 
-* move XlsDriver to package com.sqlsheet 
+* move XlsDriver to package com.sqlsheet
 
 [caca4](https://github.com/manticore-projects/sqlsheet/commit/caca4abcb54346a) Klaus Hauschild *2017-05-22 17:18:30*
 
@@ -499,20 +499,20 @@ Changelog of sqlsheet.
 
 **File backups on XlsConnection.close() breaks the CI builds #24**
 
-* simplified peristing-to-file mechanism (deactivate backup strategy); may cause other problems but hopefully fix the CI builds 
+* simplified peristing-to-file mechanism (deactivate backup strategy); may cause other problems but hopefully fix the CI builds
 
 [aae89](https://github.com/manticore-projects/sqlsheet/commit/aae893fd4aefc30) Klaus Hauschild *2017-04-18 18:53:42*
 
 **Missing artifact net.sf:jsqlparser:jar:0.8.0 #23**
 
-* revert failed release attempt 
+* revert failed release attempt
 
 [65e41](https://github.com/manticore-projects/sqlsheet/commit/65e410daa34873b) Klaus Hauschild *2017-04-18 17:45:10*
 
 **Missing artifact net.sf:jsqlparser:jar:0.8.0 #23**
 
-* update some plugin versions 
-* update urls 
+* update some plugin versions
+* update urls
 
 [3965f](https://github.com/manticore-projects/sqlsheet/commit/3965fefe41bb922) Klaus Hauschild *2017-04-18 17:38:38*
 
@@ -793,7 +793,7 @@ Changelog of sqlsheet.
 
 **(Fixes issue 3)**
 
-* - null cell detection fixed for XLSX 
+* - null cell detection fixed for XLSX
 
 [0abdd](https://github.com/manticore-projects/sqlsheet/commit/0abdd58f144e1af) vasilievip@gmail.com *2012-05-19 08:55:45*
 
@@ -814,9 +814,9 @@ Changelog of sqlsheet.
 
 **(Fixes issue 1)**
 
-* - read streaming implemented 
-* - write streaming implemented 
-* - minor bug fix 
+* - read streaming implemented
+* - write streaming implemented
+* - minor bug fix
 
 [dbc35](https://github.com/manticore-projects/sqlsheet/commit/dbc35bbb0916b10) vasilievip@gmail.com *2012-05-02 21:34:32*
 
@@ -827,8 +827,8 @@ Changelog of sqlsheet.
 
 **(Fixes issue 2)**
 
-* - backup file before rewrite 
-* - detect that changes introduced and optionally skip rewrite 
+* - backup file before rewrite
+* - detect that changes introduced and optionally skip rewrite
 
 [77905](https://github.com/manticore-projects/sqlsheet/commit/77905a8d0da3472) vasilievip@gmail.com *2012-04-30 09:54:04*
 
@@ -854,8 +854,8 @@ Changelog of sqlsheet.
 
 **- testcase added**
 
-* - system dep removed 
-* - new jsqlparser added 
+* - system dep removed
+* - new jsqlparser added
 
 [f14f5](https://github.com/manticore-projects/sqlsheet/commit/f14f56475c8f45e) vasilievip@gmail.com *2012-04-06 18:42:32*
 
@@ -898,5 +898,3 @@ Changelog of sqlsheet.
 
 
 [6eaa4](https://github.com/manticore-projects/sqlsheet/commit/6eaa47d7ec4e8d8) Michael *2010-09-28 20:16:51*
-
-

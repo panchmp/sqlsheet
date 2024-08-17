@@ -45,15 +45,15 @@ public class XlsDriverStreamingTest {
     @Test
     public void testXlsConnectReadStream() throws Exception {
         Assertions.assertThrows(java.sql.SQLException.class, new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        Connection conn = DriverManager
-                                .getConnection(
-                                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile()
-                                                + "?readStreaming=true");
-                    }
-                }
-        );
+            @Override
+            public void execute() throws Throwable {
+                Connection conn = DriverManager
+                        .getConnection(
+                                "jdbc:xls:file:"
+                                        + ClassLoader.getSystemResource("test.xls").getFile()
+                                        + "?readStreaming=true");
+            }
+        });
     }
 
     @Test
