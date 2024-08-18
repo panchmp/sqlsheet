@@ -57,6 +57,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     private final ParsedStatement statement;
     private final List<Object> parameters = new ArrayList<>();
     private boolean closeOnCompletion;
+    private ResultSet resultSet = null;
 
     public XlsPreparedStatement(XlsConnection conn, String sql) throws SQLException {
         super(conn);
@@ -72,7 +73,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     }
 
     public boolean execute() throws SQLException {
-        ResultSet resultSet = executeQuery();
+        this.resultSet = executeQuery();
         if (closeOnCompletion) {
             resultSet.close();
         }
@@ -80,7 +81,7 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     }
 
     public int executeUpdate() throws SQLException {
-        ResultSet resultSet = executeQuery();
+        this.resultSet = executeQuery();
         if (closeOnCompletion) {
             resultSet.close();
         }
@@ -88,6 +89,8 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     }
 
     public ResultSet executeQuery() throws SQLException {
+        this.resultSet = null;
+
         if (statement == null) {
             throw new IllegalStateException("null statement");
         }
@@ -99,13 +102,12 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
         }
         if (statement instanceof InsertIntoStatement) {
             final InsertIntoStatement iis = (InsertIntoStatement) statement;
-            final List<Object> substitutedValues = new ArrayList<Object>();
-            substitutedValues.addAll(iis.getValues());
+            final List<Object> substitutedValues = new ArrayList<Object>(iis.getValues());
             int paramIndex = 0;
             for (int i = 0; i < substitutedValues.size(); i++) {
                 Object val = substitutedValues.get(i);
                 LOGGER.log(Level.FINE,
-                        "execute Query Insertintostatement: " + substitutedValues.get(i));
+                        "execute Insert Into Statement: " + substitutedValues.get(i));
                 if (val instanceof JdbcParameter) {
                     substitutedValues.set(i, parameters.get(paramIndex++));
                 }
@@ -306,6 +308,10 @@ public class XlsPreparedStatement extends XlsStatement implements PreparedStatem
     public ParameterMetaData getParameterMetaData() throws SQLException {
         nyi();
         return null;
+    }
+
+    public ResultSet getResultSet() {
+        return resultSet;
     }
 
     public void setRowId(int parameterIndex, RowId x) throws SQLException {

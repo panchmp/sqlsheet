@@ -15,6 +15,8 @@ package com.sqlsheet.stream;
 
 import com.sqlsheet.parser.ParsedStatement;
 import com.sqlsheet.parser.SelectStarStatement;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +40,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -52,19 +55,20 @@ public class XlsStreamPreparedStatement extends XlsStreamStatement implements Pr
     private boolean closeOnCompletion;
 
     private final XlsStreamingResultSetMetaData metadata;
-    AbstractXlsSheetIterator iterator;
+    Iterator<Row> iterator;
 
-    public XlsStreamPreparedStatement(XlsStreamConnection conn, String sql) throws SQLException {
+    public XlsStreamPreparedStatement(XlsStreamConnection conn, String sql, int firstSheetRowOffset,
+            int firstSheetColOffset) throws SQLException {
         super(conn);
         this.statement = super.parse(sql);
 
         if (this.statement instanceof SelectStarStatement) {
             String tableName = ((SelectStarStatement) this.statement).getTable();
+            Sheet sheet = conn.workbook.getSheet(tableName);
+            this.iterator = sheet.rowIterator();
+            metadata = new XlsStreamingResultSetMetaData(sheet, null, firstSheetRowOffset,
+                    firstSheetColOffset);
 
-            iterator = conn.workbook != null
-                    ? new XlsxSheetIterator(conn.xlsFile, tableName)
-                    : new XlsSheetIterator(conn.xlsFile, tableName);
-            metadata = new XlsStreamingResultSetMetaData(iterator);
         } else {
             iterator = null;
             metadata = null;

@@ -13,9 +13,11 @@
  */
 package com.sqlsheet.stream;
 
+import com.sqlsheet.XlsDriver;
 import com.sqlsheet.parser.ParsedStatement;
 import com.sqlsheet.parser.SelectStarStatement;
 import com.sqlsheet.parser.SqlSheetParser;
+import org.apache.poi.ss.usermodel.Sheet;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,6 +25,12 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.sqlsheet.XlsStatement.DEFAULT_FIRST_COL;
+import static com.sqlsheet.XlsStatement.DEFAULT_HEADLINE;
+import static com.sqlsheet.XlsStatement.getSheetNamed;
 
 /**
  * SqlSheet implementation of java.sql.Statement which uses steaming over XLS
@@ -32,6 +40,7 @@ import java.sql.Statement;
 public class XlsStreamStatement implements Statement {
 
     private final XlsStreamConnection connection;
+    private final Map<String, XlsStreamResultSet> sheet2rs = new HashMap<>();
     private SqlSheetParser parser;
     private boolean closeOneCompletion = false;
 
@@ -87,12 +96,24 @@ public class XlsStreamStatement implements Statement {
 
     protected ResultSet doSelect(SelectStarStatement sss) throws SQLException {
         XlsStreamResultSet out = findOrCreateResultSetFor(sss.getTable());
-        out.beforeFirst();
+        out.statement = this;
         return out;
     }
 
     private XlsStreamResultSet findOrCreateResultSetFor(String tableName) throws SQLException {
-        return new XlsStreamResultSet(tableName, connection);
+        String sanitizedTableName = tableName.trim().toUpperCase();
+        XlsStreamResultSet out = sheet2rs.get(sanitizedTableName);
+        if (out == null) {
+            Sheet sheet = getSheetNamed(connection.getWorkBook(), sanitizedTableName);
+            out =
+                    new XlsStreamResultSet(
+                            sheet,
+                            connection.getInt(XlsDriver.HEADLINE, DEFAULT_HEADLINE),
+                            connection.getInt(XlsDriver.FIRST_COL, DEFAULT_FIRST_COL));
+            out.statement = this;
+            sheet2rs.put(sanitizedTableName, out);
+        }
+        return out;
     }
 
     public void setEscapeProcessing(boolean p0) throws SQLException {

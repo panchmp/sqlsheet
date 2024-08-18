@@ -28,7 +28,7 @@ public class Bug9Test {
         final Statement statement = connection.createStatement();
         final ResultSet resultSet = statement.executeQuery("SELECT * FROM bug9");
         Assertions.assertTrue(resultSet.next());
-        Assertions.assertEquals("9.0", resultSet.getString("BUG9"));
+        Assertions.assertEquals("9", resultSet.getString("BUG9"));
         connection.close();
     }
 

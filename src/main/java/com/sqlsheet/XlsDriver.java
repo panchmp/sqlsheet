@@ -17,6 +17,7 @@ import com.sqlsheet.stream.XlsStreamConnection;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -242,6 +243,9 @@ public class XlsDriver implements java.sql.Driver {
                 flushWorkbook(workbook, file);
             }
         }
+        org.apache.poi.openxml4j.util.ZipInputStreamZipEntrySource
+                .setThresholdBytesForTempFiles(100_000_000);
+        IOUtils.setByteArrayMaxOverride(500_000_000);
         return WorkbookFactory.create(workbookUrl.openStream());
     }
 

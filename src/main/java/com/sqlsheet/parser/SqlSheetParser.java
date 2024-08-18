@@ -103,7 +103,8 @@ public class SqlSheetParser {
             }
             return new SelectStarStatement() {
                 public String getTable() {
-                    String tableName = ((Table) from).getName();
+                    Table table = (Table) from;
+                    String tableName = table.getName().replace("\"", "");
                     return prepareTableIdentifier(tableName);
                 }
             };

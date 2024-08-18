@@ -56,7 +56,7 @@ import java.util.Map;
  */
 public class XlsResultSet implements ResultSet {
 
-    private static final MathContext CTX_NN_15_EVEN = new MathContext(15, RoundingMode.HALF_EVEN);
+    public static final MathContext CTX_NN_15_EVEN = new MathContext(15, RoundingMode.HALF_EVEN);
 
     private static final double BAD_DOUBLE = 0;
     private final int firstSheetRowOffset;
@@ -94,7 +94,7 @@ public class XlsResultSet implements ResultSet {
         dateStyle.setDataFormat(workbook.createDataFormat().getFormat("yyyy-mm-dd"));
     }
 
-    private static SQLException wrapped(Throwable t) {
+    public static SQLException wrapped(Throwable t) {
         SQLException out = new SQLException(t.getMessage(), t);
         return out;
     }
@@ -440,7 +440,7 @@ public class XlsResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a boolean and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case STRING:
@@ -454,7 +454,7 @@ public class XlsResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a string cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case NUMERIC:
@@ -623,7 +623,7 @@ public class XlsResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a boolean and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case STRING:
@@ -637,7 +637,7 @@ public class XlsResultSet implements ResultSet {
                                         + ","
                                         + columnIndex
                                         + ") is a string cell and cannot be cast to ("
-                                        + XlsResultSetMetaData.columnTypeNameMap.get(columnType)
+                                        + XlsResultSetMetaData.COLUMN_TYPE_NAMES.get(columnType)
                                         + ".");
                     }
                 case NUMERIC:
@@ -646,10 +646,9 @@ public class XlsResultSet implements ResultSet {
                         wasNull = false;
                         return new Date(value.getTime()).toString();
                     } else {
-                        wasNull = false;
-                        return new BigDecimal(Double.valueOf(cell.getNumericCellValue()).toString(),
-                                CTX_NN_15_EVEN)
-                                .toPlainString();
+                        BigDecimal bd = BigDecimal.valueOf(cell.getNumericCellValue())
+                                .round(CTX_NN_15_EVEN).stripTrailingZeros();
+                        return bd.toPlainString();
                     }
                 case FORMULA:
                     switch (evaluator.evaluateFormulaCell(cell)) {
@@ -664,7 +663,7 @@ public class XlsResultSet implements ResultSet {
                                                 + ","
                                                 + columnIndex
                                                 + ") is a boolean and cannot be cast to ("
-                                                + XlsResultSetMetaData.columnTypeNameMap
+                                                + XlsResultSetMetaData.COLUMN_TYPE_NAMES
                                                         .get(columnType)
                                                 + ".");
                             }
@@ -693,7 +692,7 @@ public class XlsResultSet implements ResultSet {
                                                 + ","
                                                 + columnIndex
                                                 + ") is a string cell and cannot be cast to ("
-                                                + XlsResultSetMetaData.columnTypeNameMap
+                                                + XlsResultSetMetaData.COLUMN_TYPE_NAMES
                                                         .get(columnType)
                                                 + ".");
                             }

@@ -29,7 +29,7 @@ configurations {
 }
 
 dependencies {
-    api 'com.github.jsqlparser:jsqlparser:4.7'
+    api 'com.github.jsqlparser:jsqlparser:+'
     api 'com.hrakaroo:glob:0.9.0'
     api 'org.apache.poi:poi:+'
     api 'org.apache.poi:poi-ooxml:+'
@@ -95,8 +95,8 @@ description = 'JDBC Driver for xls/xlsx files using POI'
 java {
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
     // needed for XML-Doclet to work (since Doclet changed again with Java 13)
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
@@ -229,9 +229,13 @@ test {
     environment = [ 'EXPORT_TEST_TO_FILE': 'True' ]
     useJUnitPlatform()
 
+    jacoco {
+        excludes = ['net/sf/jsqlparser/parser/CCJSqlParserTokenManager']
+    }
+
     // set heap size for the test JVM(s)
     minHeapSize = "128m"
-    maxHeapSize = "1G"
+    maxHeapSize = "8G"
 }
 
 jacocoTestReport {

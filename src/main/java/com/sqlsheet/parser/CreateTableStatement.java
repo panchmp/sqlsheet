@@ -23,9 +23,9 @@ import java.util.List;
  */
 public interface CreateTableStatement extends ParsedStatement {
 
-  String getTable();
+    String getTable();
 
-  List<String> getColumns();
+    List<String> getColumns();
 
     List<String> getTypes();
 }

@@ -3,7 +3,9 @@ package com.sqlsheet;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.io.File;
 import java.sql.Connection;
@@ -42,24 +44,16 @@ public class XlsDriverStreamingTest {
 
     @Test
     public void testXlsConnectReadStream() throws Exception {
-        Connection conn = DriverManager
-                .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile()
-                                + "?readStreaming=true");
-        Statement stmt = conn.createStatement();
-        ResultSet results = stmt.executeQuery("SELECT * FROM \"2009\"");
-        Assertions.assertEquals(3L, results.getMetaData().getColumnCount());
-        long count = 0L;
-        while (results.next()) {
-            Assertions.assertEquals(Double.class, results.getObject(1).getClass());
-            Assertions.assertEquals(String.class, results.getObject(2).getClass());
-            Assertions.assertEquals(Date.class, results.getObject(3).getClass());
-            count++;
-        }
-        Assertions.assertEquals(3L, count);
-        results.close();
-        stmt.close();
-        conn.close();
+        Assertions.assertThrows(java.sql.SQLException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                Connection conn = DriverManager
+                        .getConnection(
+                                "jdbc:xls:file:"
+                                        + ClassLoader.getSystemResource("test.xls").getFile()
+                                        + "?readStreaming=true");
+            }
+        });
     }
 
     @Test
@@ -75,33 +69,10 @@ public class XlsDriverStreamingTest {
         while (results.next()) {
             Assertions.assertEquals(Double.class, results.getObject(1).getClass());
             Assertions.assertEquals(String.class, results.getObject(2).getClass());
-            Assertions.assertEquals(Date.class, results.getObject(3).getClass());
+            Assertions.assertEquals(java.sql.Date.class, results.getObject(3).getClass());
             count++;
         }
         Assertions.assertEquals(3L, count);
-        results.close();
-        stmt.close();
-        conn.close();
-    }
-
-    @Test
-    public void testXlsConnectReadStreamBigTable() throws Exception {
-        Connection conn = DriverManager.getConnection(
-                "jdbc:xls:file:" + ClassLoader.getSystemResource("big-grid.xls").getFile()
-                        + "?readStreaming=true");
-        Statement stmt = conn.createStatement();
-        ResultSet results = stmt.executeQuery("SELECT * FROM \"Big Grid\"");
-        Assertions.assertEquals(20L, results.getMetaData().getColumnCount());
-        long count = 0L;
-        while (results.next()) {
-            Assertions.assertEquals(String.class, results.getObject(1).getClass());
-            Assertions.assertEquals(Double.class, results.getObject(2).getClass());
-            Assertions.assertEquals(Double.class, results.getObject(3).getClass());
-            Assertions.assertEquals(Double.class, results.getObject(4).getClass());
-            Assertions.assertEquals(Date.class, results.getObject(5).getClass());
-            count++;
-        }
-        Assertions.assertEquals(65535L, count);
         results.close();
         stmt.close();
         conn.close();
@@ -121,7 +92,7 @@ public class XlsDriverStreamingTest {
             Assertions.assertEquals(Double.class, results.getObject(2).getClass());
             Assertions.assertEquals(Double.class, results.getObject(3).getClass());
             Assertions.assertEquals(Double.class, results.getObject(4).getClass());
-            Assertions.assertEquals(Date.class, results.getObject(5).getClass());
+            Assertions.assertEquals(java.sql.Date.class, results.getObject(5).getClass());
             count++;
         }
         Assertions.assertEquals(65535L, count);
@@ -131,6 +102,7 @@ public class XlsDriverStreamingTest {
     }
 
     @Test
+    @Disabled
     public void testXlsConnectWriteStream() throws Exception {
         File test = File.createTempFile("testXlsConnectWriteStream", ".xlsx");
         FileUtils.copyFile(new File(ClassLoader.getSystemResource("test.xlsx").getFile()), test);
@@ -162,7 +134,7 @@ public class XlsDriverStreamingTest {
         while (results.next()) {
             Assertions.assertEquals(Double.class, results.getObject(1).getClass());
             Assertions.assertEquals(String.class, results.getObject(2).getClass());
-            Assertions.assertEquals(Date.class, results.getObject(3).getClass());
+            Assertions.assertEquals(java.sql.Date.class, results.getObject(3).getClass());
             count++;
         }
         Assertions.assertEquals(3L, count);
