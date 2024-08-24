@@ -131,7 +131,7 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.638"
-     inkscape:cx="500"
+     inkscape:cx="18.025078"
      inkscape:cy="269.59248"
      inkscape:window-width="1920"
      inkscape:window-height="1050"
@@ -160,7 +160,7 @@
   <g
      id="g40"
      transform="translate(16.00024,39.944276)"
-     style="fill:#d40000;filter:url(#filter42)">
+     style="fill:#d40000">
     <path
        d="m 86.304619,61.228087 c -0.36133,0 -0.72266,-0.108608 -1.034908,-0.33 -0.689242,-0.488736 -0.941964,-1.397282 -0.602565,-2.173202 2.326715,-5.32074 -1.388927,-8.223912 -13.48826,-15.818107 C 61.34361,36.725529 59.75522,30.385545 60.158322,26.157149 60.808925,19.293968 67.237674,12.995757 77.792478,8.8759682 c 0.925255,-0.3602857 1.958074,0.09712 2.315227,1.0150657 0.359242,0.9189891 -0.09399,1.9559861 -1.014021,2.3131381 -9.254643,3.611212 -14.85839,8.819167 -15.377411,14.290288 -0.438608,4.631498 2.798741,9.260908 9.363251,13.385918 8.351317,5.242418 14.593136,9.158566 15.679215,14.36861 3.013868,-3.693711 4.582416,-7.309099 4.674315,-10.791861 0.09816,-3.793965 -1.58839,-7.516917 -5.016848,-11.066514 -1.163357,-1.196775 -2.298518,-2.316271 -3.380419,-3.382508 -2.749659,-2.713108 -5.125456,-5.056531 -6.869447,-7.559733 -0.561837,-0.809338 -0.363419,-1.923612 0.444874,-2.486494 0.814559,-0.567058 1.922568,-0.363418 2.489626,0.444875 1.552884,2.232727 3.821117,4.468587 6.444415,7.057422 1.097566,1.082946 2.252568,2.221239 3.437856,3.439945 4.121877,4.26808 6.147831,8.857806 6.022514,13.64595 -0.149335,5.692514 -3.340735,11.479015 -9.484389,17.197636 -0.340444,0.318514 -0.778009,0.480381 -1.216617,0.480381 z"
        fill="#d90000"
@@ -336,7 +336,7 @@
      style="stroke-width:2.66337" />
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;line-height:1.25;font-family:'Roboto Slab';-inkscape-font-specification:'Roboto Slab';font-variant-ligatures:none;fill:#d40000;filter:url(#filter44)"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.3333px;line-height:1.25;font-family:'Roboto Slab';-inkscape-font-specification:'Roboto Slab';font-variant-ligatures:none;fill:#d40000"
      x="152.79355"
      y="196.89369"
      id="text40"><tspan
@@ -347,7 +347,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Roboto;-inkscape-font-specification:Roboto;fill:#d40000">SQL Sheet</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:64px;line-height:0.85;font-family:'Century Gothic';-inkscape-font-specification:'Century Gothic, Normal';font-variant-ligatures:none;filter:url(#filter43)"
+     style="font-size:64px;line-height:0.85;font-family:'Century Gothic';-inkscape-font-specification:'Century Gothic, Normal';font-variant-ligatures:none"
      x="153.33644"
      y="85.623459"
      id="text41"><tspan
