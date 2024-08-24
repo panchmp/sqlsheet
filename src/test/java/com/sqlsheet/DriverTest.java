@@ -24,7 +24,7 @@ public class DriverTest {
     @Test
     public void testXlsSheetCRUD() throws Exception {
         Connection conn = DriverManager.getConnection(
-                "jdbc:xls:file:" + DriverTest.class.getResource("/test.xls").getFile());
+                "jdbc:xls:classpath:/test.xls");
 
         Statement create = conn.createStatement();
         create.executeUpdate(
@@ -51,28 +51,28 @@ public class DriverTest {
     @Test
     public void testXlsSheetNameQuotes() throws Exception {
         Connection conn = DriverManager.getConnection(
-                "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile());
+                "jdbc:xls:classpath:/test.xls");
         processBaseResultset(conn, "SELECT * FROM \"2009\"");
     }
 
     @Test
     public void testXlsSheetNameNoQuotes() throws Exception {
         Connection conn = DriverManager.getConnection(
-                "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile());
+                "jdbc:xls:classpath:/test.xls");
         processBaseResultset(conn, "SELECT * FROM SHEET1");
     }
 
     @Test
     public void testXlsxSheetNameQuotes() throws Exception {
         Connection conn = DriverManager.getConnection(
-                "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile());
+                "jdbc:xls:classpath:/test.xlsx");
         processBaseResultset(conn, "SELECT * FROM \"2009\"");
     }
 
     @Test
     public void testXlsxSheetNameNoQuotes() throws Exception {
         Connection conn = DriverManager.getConnection(
-                "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile());
+                "jdbc:xls:classpath:/test.xlsx");
         processBaseResultset(conn, "SELECT * FROM SHEET1");
     }
 
@@ -80,8 +80,7 @@ public class DriverTest {
     public void testXlsxStreamSheetNameQuotes() throws Exception {
         Connection conn = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile()
-                                + "?readStreaming=true");
+                        "jdbc:xls:classpath:/test.xlsx?readStreaming=true");
         processBaseStreamingResultset(conn, "SELECT * FROM \"2009\"");
     }
 
@@ -89,8 +88,7 @@ public class DriverTest {
     public void testXlsxStreamSheetNameNoQuotes() throws Exception {
         Connection conn = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile()
-                                + "?readStreaming=true");
+                        "jdbc:xls:classpath:/test.xlsx?readStreaming=true");
         processBaseStreamingResultset(conn, "SELECT * FROM SHEET1");
     }
 
@@ -98,8 +96,7 @@ public class DriverTest {
     public void testBugNo7() throws Exception {
         Connection conn = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("bug7.xlsx").getFile()
-                                + "?readStreaming=true");
+                        "jdbc:xls:classpath:/bug7.xlsx?readStreaming=true");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM bug7");
         Assertions.assertEquals(results.getMetaData().getColumnCount(), 13L);
@@ -109,8 +106,7 @@ public class DriverTest {
 
         conn = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("bug7.xlsx").getFile()
-                                + "?readStreaming=no");
+                        "jdbc:xls:classpath:/bug7.xlsx?readStreaming=no");
         stmt = conn.createStatement();
         results = stmt.executeQuery("SELECT * FROM bug7");
         Assertions.assertEquals(results.getMetaData().getColumnCount(), 13L);
@@ -123,8 +119,7 @@ public class DriverTest {
     public void testBugNo6() throws Exception {
         Connection conn = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile()
-                                + "?readStreaming=true");
+                        "jdbc:xls:classpath:/test.xlsx?readStreaming=true");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM SHEET1");
         Assertions.assertEquals(results.getMetaData().getColumnCount(), 3L);

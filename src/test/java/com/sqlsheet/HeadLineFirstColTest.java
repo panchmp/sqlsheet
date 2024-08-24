@@ -20,9 +20,8 @@ public class HeadLineFirstColTest {
     @Test
     public void headLineTest() throws Exception {
         final XlsConnection connection = (XlsConnection) DriverManager
-                .getConnection("jdbc:xls:file:"
-                        + ClassLoader.getSystemResource("headline_firstcol.xlsx").getFile()
-                        + "?headLine=3&firstColumn=1");
+                .getConnection(
+                        "jdbc:xls:classpath:/headline_firstcol.xlsx?headLine=3&firstColumn=1");
         final XlsStatement statement = (XlsStatement) connection.createStatement();
         final XlsResultSet resultSet = (XlsResultSet) statement.executeQuery("SELECT * FROM data");
         if (resultSet.next()) {

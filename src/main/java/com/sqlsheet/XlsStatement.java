@@ -32,6 +32,8 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * SqlSheet implementation of java.sql.Statement.
@@ -42,6 +44,7 @@ import java.util.Map;
 public class XlsStatement implements Statement {
     public static final int DEFAULT_HEADLINE = 1;
     public static final int DEFAULT_FIRST_COL = 0;
+    public static final Pattern SHEET_INDEX_PATTERN = Pattern.compile("(?i)sheet\\[(\\d+)]");
 
     private final XlsConnection connection;
     private final Map<String, XlsResultSet> sheet2rs = new HashMap<>();
@@ -60,6 +63,13 @@ public class XlsStatement implements Statement {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException();
         }
+
+        Matcher matcher = SHEET_INDEX_PATTERN.matcher(name);
+        if (matcher.find()) {
+            int i = Integer.parseInt(matcher.group(1));
+            return wb.getSheetAt(i);
+        }
+
         StringBuilder allSheetNames = new StringBuilder();
         int count = wb.getNumberOfSheets();
         for (int i = 0; i < count; i++) {

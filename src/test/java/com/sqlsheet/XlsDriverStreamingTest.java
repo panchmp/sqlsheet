@@ -25,7 +25,7 @@ public class XlsDriverStreamingTest {
     @Test
     public void testConnect() throws Exception {
         Connection conn = DriverManager.getConnection(
-                "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xls").getFile());
+                "jdbc:xls:classpath:/test.xls");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM \"2009\"");
         Assertions.assertEquals(results.getMetaData().getColumnCount(), 3L);
@@ -49,9 +49,7 @@ public class XlsDriverStreamingTest {
             public void execute() throws Throwable {
                 Connection conn = DriverManager
                         .getConnection(
-                                "jdbc:xls:file:"
-                                        + ClassLoader.getSystemResource("test.xls").getFile()
-                                        + "?readStreaming=true");
+                                "jdbc:xls:classpath:/test.xls?readStreaming=true");
             }
         });
     }
@@ -60,8 +58,7 @@ public class XlsDriverStreamingTest {
     public void testXlsxConnectReadStream() throws Exception {
         Connection conn = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("test.xlsx").getFile()
-                                + "?readStreaming=true");
+                        "jdbc:xls:classpath:/test.xlsx?readStreaming=true");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM \"2009\"");
         Assertions.assertEquals(3L, results.getMetaData().getColumnCount());
@@ -81,8 +78,7 @@ public class XlsDriverStreamingTest {
     @Test
     public void testXlsxConnectReadStreamBigTable() throws Exception {
         Connection conn = DriverManager.getConnection(
-                "jdbc:xls:file:" + ClassLoader.getSystemResource("big-grid.xlsx").getFile()
-                        + "?readStreaming=true");
+                "jdbc:xls:classpath:/big-grid.xlsx?readStreaming=true");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM \"Big Grid\"");
         Assertions.assertEquals(20L, results.getMetaData().getColumnCount());

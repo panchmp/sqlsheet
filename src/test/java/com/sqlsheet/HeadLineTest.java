@@ -25,8 +25,7 @@ public class HeadLineTest {
     public void headLineTest() throws Exception {
         final Connection connection = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("headline.xlsx").getFile()
-                                + "?headLine=5");
+                        "jdbc:xls:classpath:/headline.xlsx?headLine=5");
         final Statement statement = connection.createStatement();
         final ResultSet resultSet = statement.executeQuery("SELECT * FROM headline");
         int line = 1;

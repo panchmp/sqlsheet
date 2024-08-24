@@ -33,9 +33,7 @@ public class DubbleHeaderNameTest {
     @BeforeEach
     public void before() throws Exception {
         connection = DriverManager.getConnection(
-                "jdbc:xls:file:"
-                        + ClassLoader.getSystemResource("duplicateHeaderName.xlsx").getFile()
-                        + "?readStreaming=false");
+                "jdbc:xls:classpath:/duplicateHeaderName.xlsx?readStreaming=false");
     }
 
     @Test
