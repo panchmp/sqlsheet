@@ -35,9 +35,10 @@ public class SheetAccessTest {
         String urlStr = "jdbc:xls:classpath:/bug9.xlsx?readStreaming=true";
         String sqlStr = "SELECT * from \"sheet[0]\"";
 
-        try (final Connection connection = DriverManager.getConnection(urlStr);
-                final Statement statement = connection.createStatement();
-                final ResultSet resultSet = statement.executeQuery(sqlStr)) {
+        try (
+                Connection connection = DriverManager.getConnection(urlStr);
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sqlStr)) {
             Assertions.assertTrue(resultSet.next());
             Assertions.assertEquals("9", resultSet.getString("BUG9"));
         }
