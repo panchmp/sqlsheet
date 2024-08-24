@@ -1,9 +1,7 @@
-name: Gradle CI
+name: Publish Snapshot
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
     branches: [ "master" ]
 
 permissions:
@@ -24,4 +22,4 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: 'gradle'
-    - run: ./gradlew check jacocoTestCoverageVerification
+    - run: ./gradlew publish

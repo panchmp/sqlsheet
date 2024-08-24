@@ -1,16 +1,45 @@
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/panchmp) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f40e9d9550494e53bdcb1523a6a074a9)](https://app.codacy.com/gh/manticore-projects/sqlsheet/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+# [SQL Sheet 7 Website](https://manticore-projects.com/sqlsheet) <img src="src/site/sphinx/_images/logo-no-background.svg" alt="drawing" width="200" align="right"/>
 
-Simple, POI based JDBC driver for XLS/XLSX files. Currently supports basic SELECT ( 'select `*`' only, w/o where clause), CREATE,  INSERT operations. The driver is pure Java - no native Windows components are required. From version 6.1 streaming implemented to process large files.
+[![Publish Snapshot](https://github.com/panchmp/sqlsheet/actions/workflows/publish.yml/badge.svg)](https://github.com/panchmp/sqlsheet/actions/workflows/maven_deploy.yml)
+[![Gradle CI](https://github.com/panchmp/sqlsheet/actions/workflows/gradle.yml/badge.svg)](https://github.com/panchmp/sqlsheet/actions/workflows/gradle.yml)
+[![Coverage Status](https://coveralls.io/repos/panchmp/sqlsheet/badge.svg?branch=master)](https://coveralls.io/r/panchmp/sqlsheet?branch=master)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6f9a2d7eb98f45969749e101322634a1)](https://www.codacy.com/gh/panchmp/sqlsheet/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=panchmp/sqlsheet&amp;utm_campaign=Badge_Grade)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.google.code.sqlsheet/sqlsheet/badge.svg)](http://maven-badges.herokuapp.com/maven-central/com.google.code.sqlsheet/sqlsheet)
+[![Javadocs](https://www.javadoc.io/badge/com.google.code.sqlsheet/sqlsheet/sqlsheet.svg)](https://www.javadoc.io/doc/com.google.code.sqlsheet/sqlsheet)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f40e9d9550494e53bdcb1523a6a074a9)](https://app.codacy.com/gh/manticore-projects/sqlsheet/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-Fork of http://www.pcal.net/downloads/sqlsheet/
+## Summary
 
+**SQLSheet** is a **JDBC driver for Excel XLS/XLSX spreadsheets** based Apache POI and JSQLParser with support for:
 
-First Header|Second Header
--------------|-------------
-Database | XLS/XLSX file
-Table | Sheet in XLS/XLSX file
-Column | Column in sheet (first row must have column names)
-Row | Row in sheet starting from second
+- `SELECT FROM` statements
+- `INSERT INTO` statements
+- `DELETE FROM` statements
+- `CREATE TABLE` statements
+- `DROP TABLE` statements
+- Custom Sheet Headers
+- Streaming Mode of large data sets
+- Database and ResultSet MetaData
+- Formula Evaluation
+
+A `Catalog` defines the folder of the ``*.xls(x)`` files and the `Schema` sets the filename of each ``*.xls(x)`` file. Every sheet represents a `Table` and its `Fields` are defined by the sheet columns.
+
+The goal is to **extract or insert data** from and into the spreadsheets with SQL statements only. There is **no DB Engine or support for any advanced SQL features** beyond access of simple data frames.
+Although it would be very easy to transfer data to a Java In Memory Database like H2, HyperSQL or DuckDB for this purpose.
+
+## License
+
+**SQLSheet** is licensed under the Apache License, Version 2.0 (the "License").
+
+## Maven Artifact:
+```xml
+<dependency>
+    <groupId>com.google.code.sqlsheet</groupId>
+    <artifactId>sqlsheet</artifactId>
+    <version>[7.1,]</version>
+</dependency>
+```
+
 
 ## Usage example:
  * [Java code example](http://code.google.com/p/sqlsheet/wiki/HowToMaven)
@@ -109,4 +138,6 @@ writeConnection.close();
 
 </etl>
 ```
+
+## Donate
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/panchmp)

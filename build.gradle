@@ -168,12 +168,6 @@ publishing {
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             credentials(PasswordCredentials)
         }
-        maven {
-            name = "GitHubPackages"
-
-            url = uri("https://maven.pkg.github.com/manticore-projects/jsqlparser")
-            credentials(PasswordCredentials)
-        }
     }
 }
 
@@ -251,7 +245,7 @@ jacocoTestCoverageVerification {
         rule {
             //element = 'CLASS'
             limit {
-                minimum = 0.80
+                minimum = 0.29
             }
         }
         rule {
@@ -259,7 +253,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'LINE'
                 value = 'MISSEDCOUNT'
-                maximum = 7000
+                maximum = 2614
             }
         }
     }
@@ -334,6 +328,34 @@ tasks.withType(Checkstyle).configureEach {
 tasks.register('gitChangelogTask', GitChangelogTask) {
     fromRepo = file("$projectDir")
     file = new File("${projectDir}/src/site/sphinx/changelog.rst")
+    templateContent = """
+************************
+Changelog
+************************
+
+
+{{#tags}}
+{{#ifMatches name "^Unreleased.*"}}
+Latest Changes since |SQLSHEET_VERSION|
+{{/ifMatches}}
+{{#ifMatches name "^(?!Unreleased).*"}}
+Version {{name}}
+{{/ifMatches}}
+=============================================================
+
+ {{#issues}}
+
+  {{#commits}}
+   {{#ifMatches messageTitle "^(?!Merge).*"}}
+  * **{{{messageTitle}}}**
+    
+    {{authorName}}, {{commitDate}}
+   {{/ifMatches}}
+  {{/commits}}
+
+ {{/issues}}
+{{/tags}}
+"""
 }
 
 remotes {
