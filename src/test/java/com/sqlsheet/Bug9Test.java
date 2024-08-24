@@ -23,8 +23,7 @@ public class Bug9Test {
     public void testWithoutStreaming() throws Exception {
         final Connection connection = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("bug9.xlsx").getFile()
-                                + "?readStreaming=false");
+                        "jdbc:xls:classpath:/bug9.xlsx?readStreaming=false");
         final Statement statement = connection.createStatement();
         final ResultSet resultSet = statement.executeQuery("SELECT * FROM bug9");
         Assertions.assertTrue(resultSet.next());
@@ -36,8 +35,7 @@ public class Bug9Test {
     public void testWithStreaming() throws Exception {
         final Connection connection = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("bug9.xlsx").getFile()
-                                + "?readStreaming=true");
+                        "jdbc:xls:classpath:/bug9.xlsx?readStreaming=true");
         final Statement statement = connection.createStatement();
         final ResultSet resultSet = statement.executeQuery("SELECT * FROM bug9");
         Assertions.assertTrue(resultSet.next());

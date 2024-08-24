@@ -30,8 +30,7 @@ public class CreateTableTest {
     @BeforeEach
     public void before() throws Exception {
         connection = DriverManager
-                .getConnection("jdbc:xls:file:"
-                        + ClassLoader.getSystemResource("create_table_test.xlsx").getFile());
+                .getConnection("jdbc:xls:classpath:/create_table_test.xlsx");
     }
 
     @Test

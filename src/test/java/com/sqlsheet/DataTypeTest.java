@@ -1,6 +1,5 @@
 package com.sqlsheet;
 
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -28,8 +27,7 @@ public class DataTypeTest {
     public void dataTypeTest() throws Exception {
         final Connection conn = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("dataType.xlsx").getFile()
-                                + "?readStreaming=no");
+                        "jdbc:xls:classpath:/dataType.xlsx?readStreaming=no");
         Statement stmt = conn.createStatement();
         ResultSet results = stmt.executeQuery("SELECT * FROM datatype");
         assertEquals(7, results.getMetaData().getColumnCount(), "We expect 7 columns");
@@ -58,5 +56,4 @@ public class DataTypeTest {
 
         conn.close();
     }
-
 }

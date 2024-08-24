@@ -34,8 +34,7 @@ public class Bug8Test {
     public void before() throws Exception {
         connection = DriverManager
                 .getConnection(
-                        "jdbc:xls:file:" + ClassLoader.getSystemResource("bug8.xlsx").getFile()
-                                + "?readStreaming=true");
+                        "jdbc:xls:classpath:/bug8.xlsx?readStreaming=true");
     }
 
     @Test
