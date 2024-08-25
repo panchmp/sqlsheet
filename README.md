@@ -1,12 +1,14 @@
 # [SQL Sheet 7 Website](https://manticore-projects.com/sqlsheet) <img src="src/site/sphinx/_images/logo-no-background.svg" alt="drawing" width="200" align="right"/>
 
-[![Publish Snapshot](https://github.com/panchmp/sqlsheet/actions/workflows/publish.yml/badge.svg)](https://github.com/panchmp/sqlsheet/actions/workflows/maven_deploy.yml)
-[![Gradle CI](https://github.com/panchmp/sqlsheet/actions/workflows/gradle.yml/badge.svg)](https://github.com/panchmp/sqlsheet/actions/workflows/gradle.yml)
-[![Coverage Status](https://coveralls.io/repos/panchmp/sqlsheet/badge.svg?branch=master)](https://coveralls.io/r/panchmp/sqlsheet?branch=master)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6f9a2d7eb98f45969749e101322634a1)](https://www.codacy.com/gh/panchmp/sqlsheet/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=panchmp/sqlsheet&amp;utm_campaign=Badge_Grade)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.google.code.sqlsheet/sqlsheet/badge.svg)](http://maven-badges.herokuapp.com/maven-central/com.google.code.sqlsheet/sqlsheet)
-[![Javadocs](https://www.javadoc.io/badge/com.google.code.sqlsheet/sqlsheet/sqlsheet.svg)](https://www.javadoc.io/doc/com.google.code.sqlsheet/sqlsheet)
+[![Gradle CI](https://github.com/panchmp/sqlsheet/actions/workflows/gradle.yml/badge.svg)](https://github.com/panchmp/sqlsheet/actions/workflows/gradle.yml)
+[![Publish Snapshot](https://github.com/panchmp/sqlsheet/actions/workflows/publish.yml/badge.svg)](https://github.com/panchmp/sqlsheet/actions/workflows/maven_deploy.yml)
+[![Coverage Status](https://coveralls.io/repos/panchmp/sqlsheet/badge.svg?branch=master)](https://coveralls.io/r/panchmp/sqlsheet?branch=master)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f40e9d9550494e53bdcb1523a6a074a9)](https://app.codacy.com/gh/manticore-projects/sqlsheet/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Javadocs](https://www.javadoc.io/badge/com.google.code.sqlsheet/sqlsheet/sqlsheet.svg)](https://www.javadoc.io/doc/com.google.code.sqlsheet/sqlsheet)
+[![License](https://img.shields.io/badge/License-Apache-blue)](#LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github?af=5236ad)
+
 
 ## Summary
 
