@@ -154,7 +154,7 @@
      font-weight="none"
      font-size="none"
      text-anchor="none"
-     style="mix-blend-mode:normal;fill:#4491c7;opacity:1;fill-opacity:1"
+     style="mix-blend-mode:normal;fill:#4493f8;opacity:1;fill-opacity:1"
      data-fill-palette-color="tertiary"
      id="path1" />
   <g
@@ -347,7 +347,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Roboto;-inkscape-font-specification:Roboto;fill:#ff0000">SQL Sheet</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:64px;line-height:0.85;font-family:'Century Gothic';-inkscape-font-specification:'Century Gothic, Normal';font-variant-ligatures:none;fill:#4491c7;fill-opacity:1"
+     style="font-size:64px;line-height:0.85;font-family:'Century Gothic';-inkscape-font-specification:'Century Gothic, Normal';font-variant-ligatures:none;fill:#4493f8;fill-opacity:1"
      x="153.33644"
      y="85.623459"
      id="text41"><tspan
@@ -355,10 +355,10 @@
        id="tspan41"
        x="153.33644"
        y="85.623459"
-       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:64px;line-height:0.85;font-family:'Roboto Slab';-inkscape-font-specification:'Roboto Slab, Ultra-Bold';font-variant-ligatures:none;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#4491c7;fill-opacity:1">Excel</tspan><tspan
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:64px;line-height:0.85;font-family:'Roboto Slab';-inkscape-font-specification:'Roboto Slab, Ultra-Bold';font-variant-ligatures:none;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#4493f8;fill-opacity:1">Excel</tspan><tspan
        sodipodi:role="line"
        x="153.33644"
        y="140.64076"
        id="tspan42"
-       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:64px;line-height:0.85;font-family:'Roboto Slab';-inkscape-font-specification:'Roboto Slab, Ultra-Bold';font-variant-ligatures:none;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#4491c7;fill-opacity:1">JDBC</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:64px;line-height:0.85;font-family:'Roboto Slab';-inkscape-font-specification:'Roboto Slab, Ultra-Bold';font-variant-ligatures:none;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#4493f8;fill-opacity:1">JDBC</tspan></text>
 </svg>
