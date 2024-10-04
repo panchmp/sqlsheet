@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.code.sqlsheet</groupId>
   <artifactId>sqlsheet</artifactId>
-  <version>7.2-SNAPSHOT</version>
+  <version>7.3-SNAPSHOT</version>
   <name>sqlsheet</name>
 
   <description>Jdbc API for xls/xlsx files using POI</description>
@@ -13,33 +13,31 @@
     <dependency>
       <groupId>com.github.jsqlparser</groupId>
       <artifactId>jsqlparser</artifactId>
-      <version>4.0</version>
+      <version>5.0</version>
     </dependency>
-        
     <dependency>
       <groupId>com.hrakaroo</groupId>
       <artifactId>glob</artifactId>
       <version>0.9.0</version>
     </dependency>
-
     <!-- Same version between all poi -->
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
-      <version>5.0.0</version>
+      <version>5.3.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
-      <version>5.0.0</version>
+      <version>5.3.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.github.pjfanning/excel-streaming-reader -->
+    <dependency>
+      <groupId>com.github.pjfanning</groupId>
+      <artifactId>excel-streaming-reader</artifactId>
+      <version>5.0.2</version>
     </dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>com.javaforge.scriptella</groupId>
       <artifactId>scriptella-core</artifactId>
@@ -55,8 +53,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.8.0</version>
-      <scope>test</scope>
+      <version>2.17.0</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.janino</groupId>
@@ -70,6 +67,29 @@
       <version>0.3.2</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.11.1</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.11.1</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.11.1</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <properties>
